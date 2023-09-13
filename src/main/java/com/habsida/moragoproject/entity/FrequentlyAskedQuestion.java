@@ -1,15 +1,15 @@
 package com.habsida.moragoproject.entity;
 
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.time.LocalDateTime;
 
+@Entity
 public class FrequentlyAskedQuestion extends AbstractAuditable{
 
-    private String answer;
-
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private FAQCategory category;
+    private String answer;
     private String question;
 
     public FrequentlyAskedQuestion() {

@@ -1,7 +1,6 @@
 package com.habsida.moragoproject.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ public class TranslatorProfile extends AbstractAuditable{
     private String email;
     private Boolean isAvailable;
     private Boolean isOnline;
-    private String levelOfKoran;
+    private String levelOfKorean;
     private Boolean isActive;
 
     @OneToMany
@@ -25,12 +24,12 @@ public class TranslatorProfile extends AbstractAuditable{
     public TranslatorProfile() {
     }
 
-    public TranslatorProfile(String dateOfBirth, String email, Boolean isAvailable, Boolean isOnline, String levelOfKoran, Boolean isActive, List<Language> languageList, List<Theme> themeList) {
+    public TranslatorProfile(String dateOfBirth, String email, Boolean isAvailable, Boolean isOnline, String levelOfKorean, Boolean isActive, List<Language> languageList, List<Theme> themeList) {
         this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.isAvailable = isAvailable;
         this.isOnline = isOnline;
-        this.levelOfKoran = levelOfKoran;
+        this.levelOfKorean = levelOfKorean;
         this.isActive = isActive;
         this.languageList = languageList;
         this.themeList = themeList;
@@ -68,12 +67,12 @@ public class TranslatorProfile extends AbstractAuditable{
         isOnline = online;
     }
 
-    public String getLevelOfKoran() {
-        return levelOfKoran;
+    public String getLevelOfKorean() {
+        return levelOfKorean;
     }
 
-    public void setLevelOfKoran(String levelOfKoran) {
-        this.levelOfKoran = levelOfKoran;
+    public void setLevelOfKorean(String levelOfKoran) {
+        this.levelOfKorean = levelOfKoran;
     }
 
     public Boolean getActive() {

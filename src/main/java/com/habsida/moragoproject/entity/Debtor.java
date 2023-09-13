@@ -1,9 +1,6 @@
 package com.habsida.moragoproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,7 +10,17 @@ public class Debtor extends AbstractAuditable{
     private Boolean isPaid;
     private String nameOfBank;
 
+    @ManyToOne
+    private User user;
+
     public Debtor() {
+    }
+
+    public Debtor(String accountHolder, Boolean isPaid, String nameOfBank, User user) {
+        this.accountHolder = accountHolder;
+        this.isPaid = isPaid;
+        this.nameOfBank = nameOfBank;
+        this.user = user;
     }
 
     public String getAccountHolder() {
@@ -38,5 +45,13 @@ public class Debtor extends AbstractAuditable{
 
     public void setNameOfBank(String nameOfBank) {
         this.nameOfBank = nameOfBank;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

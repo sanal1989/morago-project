@@ -1,10 +1,9 @@
 package com.habsida.moragoproject.entity;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,46 +16,29 @@ public class User extends AbstractAuditable{
     private Boolean isActive;
     private Boolean isDebtor;
     private String lastName;
-    private Integer on_boarding_status;
+    private Integer onBoardingStatus;
     private String password;
     private String phone;
     private Double ratings;
     private Integer totalRatings;
 
-    @OneToMany
-    private List<Deposit> depositList = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Role> roles = new HashSet<>();
 
-    @OneToMany
-    private List<Notification> notificationList = new ArrayList<>();
-
-    @OneToMany
-    private List<Call> callList = new ArrayList<>();
-
-    @OneToMany
-    private List<Debtor> debtorList = new ArrayList<>();
-
-    @OneToMany
-    private List<Withdrawal> withdrawalList = new ArrayList<>();
-
-    @OneToOne
-    private Rating rating = new Rating();
-
-    @OneToMany
-    private List<File> fileList = new ArrayList<>();
-
-    @ManyToOne
-    private Role role = new Role();
-
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private UserProfile userProfile = new UserProfile();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private TranslatorProfile translatorProfile = new TranslatorProfile();
 
     public User() {
     }
 
-    public User(String apnToken, Double balance, String fcmToken, String firstName, Boolean isActive, Boolean isDebtor, String lastName, Integer on_boarding_status, String password, String phone, Double ratings, Integer totalRatings, List<Deposit> depositList, List<Notification> notificationList, List<Call> callList, List<Debtor> debtorList, List<Withdrawal> withdrawalList, Rating rating, List<File> fileList, Role role, UserProfile userProfile, TranslatorProfile translatorProfile) {
+    public User(String apnToken, Double balance, String fcmToken,
+                String firstName, Boolean isActive, Boolean isDebtor,
+                String lastName, Integer onBoardingStatus, String password,
+                String phone, Double ratings, Integer totalRatings,
+                Set<Role> roles, UserProfile userProfile, TranslatorProfile translatorProfile) {
         this.apnToken = apnToken;
         this.balance = balance;
         this.fcmToken = fcmToken;
@@ -64,21 +46,14 @@ public class User extends AbstractAuditable{
         this.isActive = isActive;
         this.isDebtor = isDebtor;
         this.lastName = lastName;
-        this.on_boarding_status = on_boarding_status;
+        this.onBoardingStatus = onBoardingStatus;
         this.password = password;
         this.phone = phone;
         this.ratings = ratings;
         this.totalRatings = totalRatings;
-        this.depositList = depositList;
-        this.notificationList = notificationList;
-        this.callList = callList;
-        this.debtorList = debtorList;
-        this.withdrawalList = withdrawalList;
-        this.rating = rating;
-        this.fileList = fileList;
-        this.role = role;
         this.userProfile = userProfile;
         this.translatorProfile = translatorProfile;
+        this.roles = roles;
     }
 
     public String getApnToken() {
@@ -137,12 +112,12 @@ public class User extends AbstractAuditable{
         this.lastName = lastName;
     }
 
-    public Integer getOn_boarding_status() {
-        return on_boarding_status;
+    public Integer getOnBoardingStatus() {
+        return onBoardingStatus;
     }
 
-    public void setOn_boarding_status(Integer on_boarding_status) {
-        this.on_boarding_status = on_boarding_status;
+    public void setOnBoardingStatus(Integer onBoardingStatus) {
+        this.onBoardingStatus = onBoardingStatus;
     }
 
     public String getPassword() {
@@ -177,70 +152,6 @@ public class User extends AbstractAuditable{
         this.totalRatings = totalRatings;
     }
 
-    public List<Deposit> getDepositList() {
-        return depositList;
-    }
-
-    public void setDepositList(List<Deposit> depositList) {
-        this.depositList = depositList;
-    }
-
-    public List<Notification> getNotificationList() {
-        return notificationList;
-    }
-
-    public void setNotificationList(List<Notification> notificationList) {
-        this.notificationList = notificationList;
-    }
-
-    public List<Call> getCallList() {
-        return callList;
-    }
-
-    public void setCallList(List<Call> callList) {
-        this.callList = callList;
-    }
-
-    public List<Debtor> getDebtorList() {
-        return debtorList;
-    }
-
-    public void setDebtorList(List<Debtor> debtorList) {
-        this.debtorList = debtorList;
-    }
-
-    public List<Withdrawal> getWithdrawalList() {
-        return withdrawalList;
-    }
-
-    public void setWithdrawalList(List<Withdrawal> withdrawalList) {
-        this.withdrawalList = withdrawalList;
-    }
-
-    public Rating getRating() {
-        return rating;
-    }
-
-    public void setRating(Rating rating) {
-        this.rating = rating;
-    }
-
-    public List<File> getFileList() {
-        return fileList;
-    }
-
-    public void setFileList(List<File> fileList) {
-        this.fileList = fileList;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public UserProfile getUserProfile() {
         return userProfile;
     }
@@ -255,5 +166,34 @@ public class User extends AbstractAuditable{
 
     public void setTranslatorProfile(TranslatorProfile translatorProfile) {
         this.translatorProfile = translatorProfile;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "apnToken='" + apnToken + '\'' +
+                ", balance=" + balance +
+                ", fcmToken='" + fcmToken + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", isActive=" + isActive +
+                ", isDebtor=" + isDebtor +
+                ", lastName='" + lastName + '\'' +
+                ", onBoardingStatus=" + onBoardingStatus +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", ratings=" + ratings +
+                ", totalRatings=" + totalRatings +
+                ", roles=" + roles +
+                ", userProfile=" + userProfile +
+                ", translatorProfile=" + translatorProfile +
+                '}';
     }
 }

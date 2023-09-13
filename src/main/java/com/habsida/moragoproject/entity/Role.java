@@ -7,7 +7,8 @@ import javax.persistence.Enumerated;
 
 @Entity
 public class Role extends AbstractAuditable{
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated(EnumType.ORDINAL)
     private ERole name;
 
     public Role() {

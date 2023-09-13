@@ -1,12 +1,11 @@
 package com.habsida.moragoproject.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 public class Call extends AbstractAuditable{
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     private CallStatus callStatus;
     private String channelName;
     private Double commission;
@@ -18,12 +17,24 @@ public class Call extends AbstractAuditable{
     private Boolean userHasRated;
 
     @OneToOne
+    private User userCall;
+
+    @OneToOne
+    private User userAnswer;
+
+    @OneToOne
     private Theme theme;
+
+    @ManyToOne
+    private User user;
 
     public Call() {
     }
 
-    public Call(CallStatus callStatus, String channelName, Double commission, Integer duration, Boolean isEndCall, Boolean status, Double sum, Boolean translatorHasRated, Boolean userHasRated, Theme theme) {
+    public Call(CallStatus callStatus, String channelName, Double commission,
+                Integer duration, Boolean isEndCall, Boolean status,
+                Double sum, Boolean translatorHasRated, Boolean userHasRated,
+                Theme theme, User user,User userCalls, User userAnswers) {
         this.callStatus = callStatus;
         this.channelName = channelName;
         this.commission = commission;
@@ -34,6 +45,9 @@ public class Call extends AbstractAuditable{
         this.translatorHasRated = translatorHasRated;
         this.userHasRated = userHasRated;
         this.theme = theme;
+        this.user = user;
+        this.userCall = userCalls;
+        this.userAnswer = userAnswers;
     }
 
     public CallStatus getCallStatus() {
@@ -114,5 +128,29 @@ public class Call extends AbstractAuditable{
 
     public void setTheme(Theme theme) {
         this.theme = theme;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUserCall() {
+        return userCall;
+    }
+
+    public void setUserCall(User userCalls) {
+        this.userCall = userCalls;
+    }
+
+    public User getUserAnswer() {
+        return userAnswer;
+    }
+
+    public void setUserAnswer(User userAnswers) {
+        this.userAnswer = userAnswers;
     }
 }

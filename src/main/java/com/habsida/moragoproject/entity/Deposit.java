@@ -1,9 +1,6 @@
 package com.habsida.moragoproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,15 +12,19 @@ public class Deposit extends AbstractAuditable{
     private EStatus status;
     private Double won;
 
+    @ManyToOne
+    private User user;
+
     public Deposit() {
     }
 
-    public Deposit(String accountHolder, Double coin, String nameOfBank, EStatus status, Double won) {
+    public Deposit(String accountHolder, Double coin, String nameOfBank, EStatus status, Double won,User user) {
         this.accountHolder = accountHolder;
         this.coin = coin;
         this.nameOfBank = nameOfBank;
         this.status = status;
         this.won = won;
+        this.user = user;
     }
 
     public String getAccountHolder() {
@@ -64,5 +65,13 @@ public class Deposit extends AbstractAuditable{
 
     public void setWon(Double won) {
         this.won = won;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

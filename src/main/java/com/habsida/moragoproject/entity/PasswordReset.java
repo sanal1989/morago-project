@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 
 @Entity
 public class PasswordReset {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreatedDate
     private LocalDateTime createdAt;
+
     private String phone;
     private Integer resetCode;
     private String token;

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Theme extends AbstractAuditable{
+
     private String description;
     private Boolean isActive;
     private Boolean isPopular;

@@ -1,27 +1,34 @@
 package com.habsida.moragoproject.entity;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Withdrawal extends AbstractAuditable{
 
+    @Enumerated(EnumType.ORDINAL)
+    private EStatus status;
+
     private String accountHolder;
     private String accountNumber;
     private String nameOfBank;
-    @Enumerated(EnumType.STRING)
-    private EStatus status;
     private Double sum;
+
+    @ManyToOne
+    private User user;
 
     public Withdrawal() {
     }
 
-    public Withdrawal(String accountHolder, String accountNumber, String nameOfBank, EStatus status, Double sum) {
+    public Withdrawal(String accountHolder, String accountNumber, String nameOfBank, EStatus status, Double sum, User user) {
         this.accountHolder = accountHolder;
         this.accountNumber = accountNumber;
         this.nameOfBank = nameOfBank;
         this.status = status;
         this.sum = sum;
+        this.user = user;
     }
 
     public String getAccountHolder() {

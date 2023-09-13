@@ -1,9 +1,6 @@
 package com.habsida.moragoproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,13 +10,17 @@ public class File extends AbstractAuditable{
     private String path;
     private String type;
 
+    @OneToOne
+    User user;
+
     public File() {
     }
 
-    public File(String originalTitle, String path, String type) {
+    public File(String originalTitle, String path, String type, User user) {
         this.originalTitle = originalTitle;
         this.path = path;
         this.type = type;
+        this.user = user;
     }
 
     public String getOriginalTitle() {
