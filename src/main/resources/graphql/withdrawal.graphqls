@@ -1,0 +1,30 @@
+extend type Query{
+    findAllWithdrawalService:[Withdrawal]
+    findWithdrawalById(id: ID): Withdrawal
+}
+extend type  Mutation{
+    addWithdrawal(withdrawalInput: WithdrawalInput): Withdrawal
+    deleteWithdrawal(id: ID):Boolean
+    editWithdrawal(id: ID
+        withdrawalInput: WithdrawalInput): Withdrawal
+}
+
+type Withdrawal{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    status: String
+    accountHolder: String
+    accountNumber: String
+    nameOfBank: String
+    sum: Float
+    user: User
+}
+input WithdrawalInput{
+    status: String
+    accountHolder: String
+    accountNumber: String
+    nameOfBank: String
+    sum: Float
+    user: Int
+}

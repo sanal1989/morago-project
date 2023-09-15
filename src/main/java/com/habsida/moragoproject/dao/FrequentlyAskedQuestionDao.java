@@ -1,13 +1,9 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.FrequentlyAskedQuestionRepository;
-import com.habsida.moragoproject.entity.FAQCategory;
-import com.habsida.moragoproject.entity.File;
-import com.habsida.moragoproject.entity.FrequentlyAskedQuestion;
+import com.habsida.moragoproject.repository.FrequentlyAskedQuestionRepository;
+import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.util.List;
 
 @Component

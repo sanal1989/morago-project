@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.LanguagesRepository;
-import com.habsida.moragoproject.entity.Language;
+import com.habsida.moragoproject.repository.LanguagesRepository;
+import com.habsida.moragoproject.model.entity.Language;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class LanguageDao {
 
     public Language editLanguage(Language language){
         Language languageFromDB = languagesRepository.findById(language.getId()).get();
-        if(!language.getName().equals(languageFromDB.getName())){
+        if(!language.getName().equals("EMPTY")){
             languageFromDB.setName(language.getName());
         }
         return languagesRepository.save(languageFromDB);

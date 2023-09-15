@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.RatingRepository;
-import com.habsida.moragoproject.entity.Language;
-import com.habsida.moragoproject.entity.Rating;
+import com.habsida.moragoproject.repository.RatingRepository;
+import com.habsida.moragoproject.model.entity.Rating;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class RatingDao {
 
     public Rating editRating(Rating rating){
         Rating ratingFromDB = ratingRepository.findById(rating.getId()).get();
-        if(rating.getGrade() != ratingFromDB.getGrade()){
+        if(rating.getGrade() != 0 && rating.getGrade() != ratingFromDB.getGrade()){
             ratingFromDB.setGrade(rating.getGrade());
         }
         return ratingRepository.save(ratingFromDB);

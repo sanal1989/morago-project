@@ -1,0 +1,23 @@
+extend type Query{
+    findAllFile: [File]
+    findFileById(id: ID): File
+}
+extend type  Mutation{
+    addFile(originalTitle: String
+        path: String
+        fileType: String): File
+    deleteFile(id: ID):Boolean
+    editFile(id: ID
+        originalTitle: String
+        path: String
+        fileType: String): File
+}
+
+type File{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    originalTitle: String
+    path: String
+    fileType: String
+}

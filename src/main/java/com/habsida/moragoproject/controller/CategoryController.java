@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Category;
+import com.habsida.moragoproject.model.entity.Category;
 import com.habsida.moragoproject.service.CategoryService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -31,7 +31,7 @@ public class CategoryController {
     @MutationMapping
     public Category addCategory(@Argument Boolean isActive, @Argument String name){
         Category category = new Category();
-        category.setActive(isActive);
+        category.setIsActive(isActive);
         category.setName(name);
         return categoryService.addCategory(category);
     }

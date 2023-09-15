@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.FileRepository;
-import com.habsida.moragoproject.entity.Deposit;
-import com.habsida.moragoproject.entity.File;
+import com.habsida.moragoproject.repository.FileRepository;
+import com.habsida.moragoproject.model.entity.File;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.TranslatorProfileRepository;
-import com.habsida.moragoproject.entity.Role;
-import com.habsida.moragoproject.entity.TranslatorProfile;
+import com.habsida.moragoproject.repository.TranslatorProfileRepository;
+import com.habsida.moragoproject.model.entity.TranslatorProfile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -40,17 +39,17 @@ public class TranslatorProfileDao {
         if(!translatorProfile.getEmail().equals(translatorProfileFromDB.getEmail())){
             translatorProfileFromDB.setEmail(translatorProfile.getEmail());
         }
-        if(translatorProfile.getAvailable() != translatorProfileFromDB.getAvailable()){
-            translatorProfileFromDB.setAvailable(translatorProfile.getAvailable());
+        if(translatorProfile.getIsAvailable() != translatorProfileFromDB.getIsAvailable()){
+            translatorProfileFromDB.setIsAvailable(translatorProfile.getIsAvailable());
         }
-        if(translatorProfile.getOnline() != translatorProfileFromDB.getOnline()){
-            translatorProfileFromDB.setOnline(translatorProfile.getOnline());
+        if(translatorProfile.getIsOnline() != translatorProfileFromDB.getIsOnline()){
+            translatorProfileFromDB.setIsOnline(translatorProfile.getIsOnline());
         }
         if(!translatorProfile.getLevelOfKorean().equals(translatorProfileFromDB.getLevelOfKorean())){
             translatorProfileFromDB.setLevelOfKorean(translatorProfile.getLevelOfKorean());
         }
-        if(translatorProfile.getActive() != translatorProfileFromDB.getActive()){
-            translatorProfileFromDB.setActive(translatorProfile.getActive());
+        if(translatorProfile.getIsActive() != translatorProfileFromDB.getIsActive()){
+            translatorProfileFromDB.setIsActive(translatorProfile.getIsActive());
         }
         return translatorProfileRepository.save(translatorProfileFromDB);
     }

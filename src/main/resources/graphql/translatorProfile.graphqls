@@ -1,0 +1,32 @@
+extend type Query{
+    findAllTranslatorProfile: [TranslatorProfile]
+    findTranslatorProfileById(id: ID): TranslatorProfile
+}
+extend type  Mutation{
+    addTranslatorProfile(dateOfBirth: String
+        email: String
+        isAvailable: Boolean
+        isOnline: Boolean
+        levelOfKorean: String
+        isActive: Boolean):TranslatorProfile
+    deleteTranslatorProfile(id: ID):Boolean
+    editTranslatorProfile(id:ID
+        dateOfBirth: String
+        email: String
+        isAvailable: Boolean
+        isOnline: Boolean
+        levelOfKorean: String
+        isActive: Boolean): TranslatorProfile
+}
+
+type TranslatorProfile{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    dateOfBirth: String
+    email: String
+    isAvailable: Boolean
+    isOnline: Boolean
+    levelOfKorean: String
+    isActive: Boolean
+}

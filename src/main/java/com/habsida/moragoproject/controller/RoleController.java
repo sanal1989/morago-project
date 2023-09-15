@@ -1,7 +1,8 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.ERole;
-import com.habsida.moragoproject.entity.Role;
+import com.habsida.moragoproject.model.enums.ERole;
+import com.habsida.moragoproject.model.entity.Role;
+import com.habsida.moragoproject.model.input.RoleInput;
 import com.habsida.moragoproject.service.RoleService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -30,8 +31,8 @@ public class RoleController {
     }
 
     @MutationMapping
-    public Role addRole(@Argument String name){
-        return roleService.addRole(new Role(ERole.valueOf(name)));
+    public Role addRole(@Argument RoleInput roleInput){
+        return roleService.addRole(roleInput);
     }
 
     @MutationMapping
@@ -40,10 +41,7 @@ public class RoleController {
     }
 
     @MutationMapping
-    public Role editRole(@Argument Long id, @Argument String name){
-        Role role = new Role();
-        role.setId(id);
-        role.setName(ERole.valueOf(name));
-        return roleService.editRole(role);
+    public Role editRole(@Argument Long id, @Argument RoleInput roleInput){
+        return roleService.editRole(id, roleInput);
     }
 }

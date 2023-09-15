@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.dao.DebtorDao;
-import com.habsida.moragoproject.entity.Debtor;
+import com.habsida.moragoproject.model.entity.Debtor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,0 +1,37 @@
+extend type Query{
+    findAllTheme:[Theme]
+    findThemeById(id: ID): Theme
+}
+extend type  Mutation{
+    addTheme(themeInput:ThemeInput):Theme
+    deleteTheme(id: ID):Boolean
+    editTheme(id: ID
+        themeInput:ThemeInput):Theme
+}
+
+type Theme{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    description: String
+    isActive: Boolean
+    isPopular: Boolean
+    koreanTitle: String
+    name: String
+    nightPrice: Float
+    price: Float
+    category: Category
+    file:File
+}
+
+input ThemeInput{
+    description: String
+    isActive: Boolean
+    isPopular: Boolean
+    koreanTitle: String
+    name: String
+    nightPrice: Float
+    price: Float
+    category: Int
+    file: Int
+}

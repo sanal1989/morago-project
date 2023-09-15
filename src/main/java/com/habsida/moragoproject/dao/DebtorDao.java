@@ -1,9 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.DebtorRepository;
-import com.habsida.moragoproject.entity.Coin;
-import com.habsida.moragoproject.entity.Debtor;
-import com.habsida.moragoproject.entity.EStatus;
+import com.habsida.moragoproject.repository.DebtorRepository;
+import com.habsida.moragoproject.model.entity.Debtor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,8 +39,8 @@ public class DebtorDao {
         if(!debtor.getNameOfBank().equals(debtorFromDB.getNameOfBank())){
             debtorFromDB.setNameOfBank(debtor.getNameOfBank());
         }
-        if(debtor.getPaid() != debtorFromDB.getPaid()){
-            debtorFromDB.setPaid(debtor.getPaid());
+        if(debtor.getIsPaid() != debtorFromDB.getIsPaid()){
+            debtorFromDB.setIsPaid(debtor.getIsPaid());
         }
 
         return debtorRepository.save(debtorFromDB);

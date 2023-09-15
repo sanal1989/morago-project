@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.CoinRepository;
-import com.habsida.moragoproject.entity.Category;
-import com.habsida.moragoproject.entity.Coin;
+import com.habsida.moragoproject.repository.CoinRepository;
+import com.habsida.moragoproject.model.entity.Coin;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

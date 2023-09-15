@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Theme;
+import com.habsida.moragoproject.model.entity.Theme;
+import com.habsida.moragoproject.model.input.ThemeInput;
 import com.habsida.moragoproject.service.ThemeService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,17 +30,8 @@ public class ThemeController {
     }
 
     @MutationMapping
-    public Theme addTheme(@Argument String description, @Argument Boolean isActive, @Argument Boolean isPopular,
-                          @Argument String koreanTitle, @Argument String name, @Argument Double nightPrice, @Argument Double price){
-        Theme theme = new Theme();
-        theme.setDescription(description);
-        theme.setActive(isActive);
-        theme.setPopular(isPopular);
-        theme.setKoreanTitle(koreanTitle);
-        theme.setName(name);
-        theme.setNightPrice(nightPrice);
-        theme.setPrice(price);
-        return themeService.addTheme(theme);
+    public Theme addTheme(@Argument ThemeInput themeInput){
+        return themeService.addTheme(themeInput);
     }
 
     @MutationMapping
@@ -48,17 +40,7 @@ public class ThemeController {
     }
 
     @MutationMapping
-    public Theme editTheme(@Argument Long id, @Argument String description, @Argument Boolean isActive, @Argument Boolean isPopular,
-                           @Argument String koreanTitle, @Argument String name, @Argument Double nightPrice, @Argument Double price){
-        Theme theme = new Theme();
-        theme.setId(id);
-        theme.setDescription(description);
-        theme.setActive(isActive);
-        theme.setPopular(isPopular);
-        theme.setKoreanTitle(koreanTitle);
-        theme.setName(name);
-        theme.setNightPrice(nightPrice);
-        theme.setPrice(price);
-        return themeService.editTheme(theme);
+    public Theme editTheme(@Argument Long id, @Argument ThemeInput themeInput){
+        return themeService.editTheme(id, themeInput);
     }
 }

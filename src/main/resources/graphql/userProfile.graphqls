@@ -1,0 +1,20 @@
+extend type Query{
+    findAllUserProfile: [UserProfile]
+    findUserProfileById(id: ID): UserProfile
+}
+extend type  Mutation{
+    addUserProfile(userProfileInput: UserProfileInput): UserProfile
+    deleteUserProfile(id: ID):Boolean
+    editUserProfile(id:ID
+        userProfileInput: UserProfileInput): UserProfile
+}
+
+type UserProfile{
+    id:ID
+    isFreeCallMade: Boolean
+    createdAt: String
+    updatedAt: String
+}
+input UserProfileInput{
+    isFreeCallMade: Boolean
+}

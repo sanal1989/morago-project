@@ -1,0 +1,29 @@
+extend type Query{
+    findAllDeposit: [Deposit]
+    findDepositById(id: ID): Deposit
+}
+extend type  Mutation{
+    addDeposit(accountHolder: String
+        coin: Float
+        nameOfBank: String
+        status: String
+        won:Float): Deposit
+    deleteDeposit(id: ID):Boolean
+    editDeposit(id: ID
+        accountHolder: String
+        coin: Float
+        nameOfBank: String
+        status: String
+        won:Float): Deposit
+}
+
+type Deposit{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    accountHolder: String
+    coin: Float
+    nameOfBank: String
+    status: String
+    won:Float
+}

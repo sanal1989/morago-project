@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.File;
+import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.service.FileService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

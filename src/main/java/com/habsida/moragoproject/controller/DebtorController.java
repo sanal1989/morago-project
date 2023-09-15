@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Debtor;
+import com.habsida.moragoproject.model.entity.Debtor;
 import com.habsida.moragoproject.service.DebtorService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -31,7 +31,7 @@ public class DebtorController {
     @MutationMapping
     public Debtor addDebtor(@Argument String accountHolder, @Argument Boolean isPaid, @Argument String nameOfBank){
         Debtor debtor = new Debtor();
-        debtor.setPaid(isPaid);
+        debtor.setIsPaid(isPaid);
         debtor.setAccountHolder(accountHolder);
         debtor.setNameOfBank(nameOfBank);
         return debtorService.addDebtor(debtor);
@@ -46,7 +46,7 @@ public class DebtorController {
     public Debtor editDebtor(@Argument Long id, @Argument String accountHolder, @Argument Boolean isPaid, @Argument String nameOfBank){
         Debtor debtor = new Debtor();
         debtor.setId(id);
-        debtor.setPaid(isPaid);
+        debtor.setIsPaid(isPaid);
         debtor.setAccountHolder(accountHolder);
         debtor.setNameOfBank(nameOfBank);
         return debtorService.editDebtor(debtor);

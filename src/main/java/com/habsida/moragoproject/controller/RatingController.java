@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Rating;
+import com.habsida.moragoproject.model.entity.Rating;
+import com.habsida.moragoproject.model.input.RatingInput;
 import com.habsida.moragoproject.service.RatingService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -25,15 +26,13 @@ public class RatingController {
     }
 
     @QueryMapping
-    public Rating findRatingById(Long id){
+    public Rating findRatingById(@Argument Long id){
         return ratingService.findById(id);
     }
 
     @MutationMapping
-    public Rating addRating(@Argument Double grade){
-        Rating rating = new Rating();
-        rating.setGrade(grade);
-        return ratingService.addRating(rating);
+    public Rating addRating(@Argument RatingInput ratingInput){
+        return ratingService.addRating(ratingInput);
     }
 
     @MutationMapping
@@ -42,10 +41,7 @@ public class RatingController {
     }
 
     @MutationMapping
-    public Rating editRating(@Argument Long id, @Argument Double grade){
-        Rating rating = new Rating();
-        rating.setId(id);
-        rating.setGrade(grade);
-        return ratingService.editRating(rating);
+    public Rating editRating(@Argument Long id, @Argument RatingInput ratingInput){
+        return ratingService.editRating(id, ratingInput);
     }
 }

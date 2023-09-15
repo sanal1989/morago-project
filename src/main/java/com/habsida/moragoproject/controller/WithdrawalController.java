@@ -1,7 +1,8 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.EStatus;
-import com.habsida.moragoproject.entity.Withdrawal;
+import com.habsida.moragoproject.model.enums.EStatus;
+import com.habsida.moragoproject.model.entity.Withdrawal;
+import com.habsida.moragoproject.model.input.WithdrawalInput;
 import com.habsida.moragoproject.service.WithdrawalService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -30,15 +31,8 @@ public class WithdrawalController {
     }
 
     @MutationMapping
-    public Withdrawal addWithdrawal(@Argument String status, @Argument String accountHolder, @Argument String accountNumber,
-                                    @Argument String nameOfBank, @Argument Double sum){
-        Withdrawal withdrawal = new Withdrawal();
-        withdrawal.setStatus(EStatus.valueOf(status));
-        withdrawal.setAccountNumber(accountNumber);
-        withdrawal.setAccountHolder(accountHolder);
-        withdrawal.setNameOfBank(nameOfBank);
-        withdrawal.setSum(sum);
-        return withdrawalService.addWithdrawal(withdrawal);
+    public Withdrawal addWithdrawal(@Argument WithdrawalInput withdrawalInput){
+        return withdrawalService.addWithdrawal(withdrawalInput);
     }
 
     @MutationMapping
@@ -47,15 +41,7 @@ public class WithdrawalController {
     }
 
     @MutationMapping
-    public Withdrawal editWithdrawal(@Argument Long id, @Argument String status, @Argument String accountHolder, @Argument String accountNumber,
-                                     @Argument String nameOfBank, @Argument Double sum){
-        Withdrawal withdrawal = new Withdrawal();
-        withdrawal.setId(id);
-        withdrawal.setStatus(EStatus.valueOf(status));
-        withdrawal.setAccountNumber(accountNumber);
-        withdrawal.setAccountHolder(accountHolder);
-        withdrawal.setNameOfBank(nameOfBank);
-        withdrawal.setSum(sum);
-        return withdrawalService.editWithdrawal(withdrawal);
+    public Withdrawal editWithdrawal(@Argument Long id, @Argument WithdrawalInput withdrawalInput){
+        return withdrawalService.editWithdrawal(id, withdrawalInput);
     }
 }

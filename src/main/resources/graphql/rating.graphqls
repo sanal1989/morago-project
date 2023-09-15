@@ -1,0 +1,27 @@
+extend type Query{
+    findAllRating:[Rating]
+    findRatingById(id: ID): Rating
+}
+extend type  Mutation{
+    addRating(ratingInput:RatingInput): Rating
+    deleteRating(id: ID):Boolean
+    editRating(id: ID
+        ratingInput:RatingInput): Rating
+}
+
+type Rating{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    grade: Float
+    userGivesRating: User
+    userTakesRating: User
+    user: User
+}
+
+input RatingInput{
+    grade: Float
+    userGivesRating: Int
+    userTakesRating: Int
+    user: Int
+}

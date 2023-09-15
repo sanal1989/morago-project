@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Deposit;
-import com.habsida.moragoproject.entity.EStatus;
+import com.habsida.moragoproject.model.entity.Deposit;
+import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.service.DepositService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

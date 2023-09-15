@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.UserProfileRepository;
-import com.habsida.moragoproject.entity.Role;
-import com.habsida.moragoproject.entity.UserProfile;
+import com.habsida.moragoproject.repository.UserProfileRepository;
+import com.habsida.moragoproject.model.entity.UserProfile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,8 +33,8 @@ public class UserProfileDao {
 
     public UserProfile editUserProfile(UserProfile userProfile){
         UserProfile userProfileFromDB = userProfileRepository.findById(userProfile.getId()).get();
-        if(userProfile.getFreeCallMade() != userProfileFromDB.getFreeCallMade()){
-            userProfileFromDB.setFreeCallMade(userProfile.getFreeCallMade());
+        if(userProfile.getIsFreeCallMade() != userProfileFromDB.getIsFreeCallMade()){
+            userProfileFromDB.setIsFreeCallMade(userProfile.getIsFreeCallMade());
         }
         return userProfileRepository.save(userProfileFromDB);
     }

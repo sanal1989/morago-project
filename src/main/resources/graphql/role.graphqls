@@ -1,0 +1,21 @@
+extend type Query{
+    findAllRole: [Role]
+    findRoleById(id: ID): Role
+}
+extend type  Mutation{
+    addRole(roleInput:RoleInput): Role
+    deleteRole(id: ID): Boolean
+    editRole(id: ID
+        roleInput:RoleInput): Role
+}
+
+type Role{
+    id:ID
+    name: String
+    createdAt: String
+    updatedAt: String
+}
+
+input RoleInput{
+    name: String
+}

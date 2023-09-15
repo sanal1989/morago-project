@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.dao.CallDao;
-import com.habsida.moragoproject.entity.Call;
+import com.habsida.moragoproject.model.entity.Call;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

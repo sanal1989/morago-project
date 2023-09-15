@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.PasswordResetRepository;
-import com.habsida.moragoproject.entity.Language;
-import com.habsida.moragoproject.entity.PasswordReset;
+import com.habsida.moragoproject.repository.PasswordResetRepository;
+import com.habsida.moragoproject.model.entity.PasswordReset;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,13 +33,13 @@ public class PasswordResetDao {
 
     public PasswordReset editPasswordReset(PasswordReset passwordReset){
         PasswordReset passwordResetFromDB = passwordResetRepository.findById(passwordReset.getId()).get();
-        if(!passwordReset.getPhone().equals(passwordResetFromDB.getPhone())){
+        if(!passwordReset.getPhone().equals("EMPTY")){
             passwordResetFromDB.setPhone(passwordReset.getPhone());
         }
-        if(!passwordReset.getToken().equals(passwordResetFromDB.getToken())){
+        if(!passwordReset.getToken().equals("EMPTY")){
             passwordResetFromDB.setToken(passwordReset.getToken());
         }
-        if(passwordReset.getResetCode() != passwordResetFromDB.getResetCode()){
+        if(passwordReset.getResetCode() != 0 && passwordReset.getResetCode() != passwordResetFromDB.getResetCode()){
             passwordResetFromDB.setResetCode(passwordReset.getResetCode());
         }
         return passwordResetRepository.save(passwordResetFromDB);

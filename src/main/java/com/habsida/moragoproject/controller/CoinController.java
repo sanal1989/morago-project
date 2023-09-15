@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Coin;
+import com.habsida.moragoproject.model.entity.Coin;
 import com.habsida.moragoproject.service.CoinService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

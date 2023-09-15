@@ -1,0 +1,23 @@
+extend type Query{
+    findAllDebtor: [Debtor]
+    findDebtorById(id: ID): Debtor
+}
+extend type  Mutation{
+    addDebtor(accountHolder: String
+        isPaid: Boolean
+        nameOfBank: String): Debtor
+    deleteDebtor(id: ID):Boolean
+    editDebtor(id:ID
+        accountHolder: String
+        isPaid: Boolean
+        nameOfBank: String): Debtor
+}
+
+type Debtor{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    accountHolder: String
+    isPaid: Boolean
+    nameOfBank: String
+}

@@ -1,9 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.CallRepository;
-import com.habsida.moragoproject.dao.repository.CategoryRepository;
-import com.habsida.moragoproject.entity.Call;
-import com.habsida.moragoproject.entity.Category;
+import com.habsida.moragoproject.repository.CategoryRepository;
+import com.habsida.moragoproject.model.entity.Category;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,8 +33,8 @@ public class CategoryDao {
 
     public Category editCategory(Category category){
         Category categoryFromDB = categoryRepository.findById(category.getId()).get();
-        if(category.getActive() != categoryFromDB.getActive()){
-            categoryFromDB.setActive(category.getActive());
+        if(category.getIsActive() != categoryFromDB.getIsActive()){
+            categoryFromDB.setIsActive(category.getIsActive());
         }
         if(!category.getName().equals(categoryFromDB.getName())){
             categoryFromDB.setName(category.getName());

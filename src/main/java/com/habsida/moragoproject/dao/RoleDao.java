@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.RoleRepository;
-import com.habsida.moragoproject.entity.Role;
+import com.habsida.moragoproject.repository.RoleRepository;
+import com.habsida.moragoproject.model.entity.Role;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

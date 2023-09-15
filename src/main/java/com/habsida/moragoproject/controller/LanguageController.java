@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Language;
+import com.habsida.moragoproject.model.entity.Language;
+import com.habsida.moragoproject.model.input.LanguageInput;
 import com.habsida.moragoproject.service.LanguageService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,10 +30,8 @@ public class LanguageController {
     }
 
     @MutationMapping
-    public Language addLanguage(@Argument String name){
-        Language language = new Language();
-        language.setName(name);
-        return languageService.addLanguage(language);
+    public Language addLanguage(@Argument LanguageInput languageInput){
+        return languageService.addLanguage(languageInput);
     }
 
     @MutationMapping
@@ -41,10 +40,7 @@ public class LanguageController {
     }
 
     @MutationMapping
-    public Language editLanguage(@Argument Long id, @Argument String name){
-        Language language = new Language();
-        language.setId(id);
-        language.setName(name);
-        return languageService.editLanguage(language);
+    public Language editLanguage(@Argument Long id, @Argument LanguageInput languageInput){
+        return languageService.editLanguage(id, languageInput);
     }
 }

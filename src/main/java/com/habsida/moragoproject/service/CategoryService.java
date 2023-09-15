@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.dao.CategoryDao;
-import com.habsida.moragoproject.entity.Category;
+import com.habsida.moragoproject.model.entity.Category;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

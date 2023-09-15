@@ -1,12 +1,12 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.CallRepository;
-import com.habsida.moragoproject.entity.Call;
-import com.habsida.moragoproject.entity.CallStatus;
-import com.habsida.moragoproject.entity.Role;
+import com.habsida.moragoproject.repository.CallRepository;
+import com.habsida.moragoproject.model.entity.Call;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class CallDao {
@@ -44,13 +44,13 @@ public class CallDao {
         if(call.getUserHasRated() != callFromDB.getUserHasRated()){
             callFromDB.setUserHasRated(call.getUserHasRated());
         }
-        if(call.getEndCall() != callFromDB.getEndCall()){
-            callFromDB.setEndCall(call.getEndCall());
+        if(call.getIsEndCall() != callFromDB.getIsEndCall()){
+            callFromDB.setIsEndCall(call.getIsEndCall());
         }
         if(call.getStatus() != callFromDB.getStatus()){
             callFromDB.setStatus(call.getStatus());
         }
-        if(!call.getChannelName().isEmpty()){
+        if(!call.getChannelName().isEmpty() && !isNull(call.getChannelName())){
             callFromDB.setChannelName(call.getChannelName());
         }
         if(call.getCommission() != callFromDB.getCommission()){
@@ -62,17 +62,14 @@ public class CallDao {
         if(call.getDuration() != callFromDB.getDuration()){
             callFromDB.setDuration(call.getDuration());
         }
-        if(!call.getUserCall().equals(callFromDB.getUserCall())){
-            callFromDB.setUserCall(call.getUserCall());
+        if(!call.getCaller().equals(callFromDB.getCaller())){
+            callFromDB.setCaller(call.getCaller());
         }
-        if(!call.getUserAnswer().equals(callFromDB.getUserAnswer())){
-            callFromDB.setUserAnswer(call.getUserAnswer());
+        if(!call.getAnswerer().equals(callFromDB.getAnswerer())){
+            callFromDB.setAnswerer(call.getAnswerer());
         }
         if(!call.getTheme().equals(callFromDB.getTheme())){
             callFromDB.setTheme(call.getTheme());
-        }
-        if(!call.getUser().equals(callFromDB.getUser())){
-            callFromDB.setUser(call.getUser());
         }
         return callRepository.save(callFromDB);
     }

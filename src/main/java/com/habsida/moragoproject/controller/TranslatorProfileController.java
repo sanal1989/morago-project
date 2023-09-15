@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.TranslatorProfile;
+import com.habsida.moragoproject.model.entity.TranslatorProfile;
 import com.habsida.moragoproject.service.TranslatorProfileService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -34,10 +34,10 @@ public class TranslatorProfileController {
         TranslatorProfile translatorProfile = new TranslatorProfile();
         translatorProfile.setDateOfBirth(dateOfBirth);
         translatorProfile.setEmail(email);
-        translatorProfile.setAvailable(isAvailable);
-        translatorProfile.setOnline(isOnline);
+        translatorProfile.setIsAvailable(isAvailable);
+        translatorProfile.setIsOnline(isOnline);
         translatorProfile.setLevelOfKorean(levelOfKorean);
-        translatorProfile.setActive(isActive);
+        translatorProfile.setIsActive(isActive);
         return translatorProfileService.addTranslatorProfile(translatorProfile);
     }
 
@@ -53,10 +53,10 @@ public class TranslatorProfileController {
         translatorProfile.setId(id);
         translatorProfile.setDateOfBirth(dateOfBirth);
         translatorProfile.setEmail(email);
-        translatorProfile.setAvailable(isAvailable);
-        translatorProfile.setOnline(isOnline);
+        translatorProfile.setIsAvailable(isAvailable);
+        translatorProfile.setIsOnline(isOnline);
         translatorProfile.setLevelOfKorean(levelOfKorean);
-        translatorProfile.setActive(isActive);
+        translatorProfile.setIsActive(isActive);
         return translatorProfileService.editTranslatorProfile(translatorProfile);
     }
 }

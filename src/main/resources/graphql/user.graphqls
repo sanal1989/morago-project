@@ -1,0 +1,49 @@
+extend type Query{
+    findAllUser: [User]
+    findUserById(id: ID): User
+}
+extend type  Mutation{
+    addUser(userInput: UserInput): User
+    deleteUser(id: ID): Boolean
+    editUser(id: ID
+        userInput: UserInput): User
+}
+
+type User{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    firstName: String
+    lastName: String
+    apnToken: String
+    fcmToken: String
+    password: String
+    phone: String
+    balance: Float
+    ratings: Float
+    isActive: Boolean
+    isDebtor: Boolean
+    onBoardingStatus: Int
+    totalRatings: Int
+    roles: [Role]
+    userProfile: UserProfile
+    translatorProfile: TranslatorProfile
+}
+
+input UserInput{
+    firstName: String
+    lastName: String
+    apnToken: String
+    fcmToken: String
+    password: String
+    phone: String
+    balance: Float
+    ratings: Float
+    isActive: Boolean
+    isDebtor: Boolean
+    onBoardingStatus: Int
+    totalRatings: Int
+    roles: [String]
+    userProfile: Int
+    translatorProfile: Int
+}

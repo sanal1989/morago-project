@@ -1,0 +1,21 @@
+extend type Query{
+    findAllLanguage: [Language]
+    findLanguageById(id: ID): Language
+}
+extend type  Mutation{
+    addLanguage(languageInput:LanguageInput): Language
+    deleteLanguage(id: ID):Boolean
+    editLanguage(id: ID
+        languageInput:LanguageInput): Language
+}
+
+type Language{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    name: String
+}
+
+input LanguageInput{
+    name: String
+}

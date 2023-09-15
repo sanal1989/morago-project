@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.dao.DepositDao;
-import com.habsida.moragoproject.entity.Deposit;
+import com.habsida.moragoproject.model.entity.Deposit;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

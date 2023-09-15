@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.dao.UserProfileDao;
-import com.habsida.moragoproject.entity.UserProfile;
+import com.habsida.moragoproject.model.entity.UserProfile;
+import com.habsida.moragoproject.model.input.UserProfileInput;
 import com.habsida.moragoproject.service.UserProfileService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -30,8 +30,8 @@ public class UserProfileController {
     }
 
     @MutationMapping
-    public UserProfile addUserProfile(@Argument Boolean isFreeCallMade){
-        return userProfileService.addUserProfile(new UserProfile(isFreeCallMade));
+    public UserProfile addUserProfile(@Argument UserProfileInput userProfileInput){
+        return userProfileService.addUserProfile(userProfileInput);
     }
 
     @MutationMapping
@@ -40,10 +40,7 @@ public class UserProfileController {
     }
 
     @MutationMapping
-    public UserProfile editUserProfile(@Argument Long id, @Argument Boolean isFreeCallMade){
-        UserProfile userProfile = new UserProfile();
-        userProfile.setId(id);
-        userProfile.setFreeCallMade(isFreeCallMade);
-        return userProfileService.editUserProfile(userProfile);
+    public UserProfile editUserProfile(@Argument Long id, @Argument UserProfileInput userProfileInput){
+        return userProfileService.editUserProfile(id, userProfileInput);
     }
 }

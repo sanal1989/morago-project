@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.Call;
-import com.habsida.moragoproject.entity.CallStatus;
-import com.habsida.moragoproject.entity.User;
+import com.habsida.moragoproject.model.entity.Call;
+import com.habsida.moragoproject.model.enums.CallStatus;
 import com.habsida.moragoproject.service.CallService;
 import com.habsida.moragoproject.service.ThemeService;
 import com.habsida.moragoproject.service.UserService;
@@ -49,15 +48,14 @@ public class CallController {
         call.setChannelName(channelName);
         call.setCommission(commission);
         call.setDuration(duration);
-        call.setEndCall(isEndCall);
+        call.setIsEndCall(isEndCall);
         call.setStatus(status);
         call.setSum(sum);
         call.setTranslatorHasRated(translatorHasRated);
         call.setUserHasRated(userHasRated);
-        call.setUserCall(userService.findById(userCall));
-        call.setUserAnswer(userService.findById(userAnswer));
+        call.setCaller(userService.findById(userCall));
+        call.setAnswerer(userService.findById(userAnswer));
         call.setTheme(themeService.findById(theme));
-        call.setUser(userService.findById(user));
         return callService.addCall(call);
     }
 
@@ -78,15 +76,15 @@ public class CallController {
         call.setChannelName(channelName);
         call.setCommission(commission);
         call.setDuration(duration);
-        call.setEndCall(isEndCall);
+        call.setIsEndCall(isEndCall);
         call.setStatus(status);
         call.setSum(sum);
         call.setTranslatorHasRated(translatorHasRated);
         call.setUserHasRated(userHasRated);
-        call.setUserCall(userService.findById(userCall));
-        call.setUserAnswer(userService.findById(userAnswer));
+        call.setCaller(userService.findById(userCall));
+        call.setAnswerer(userService.findById(userAnswer));
         if(isNull(theme))call.setTheme(themeService.findById(theme));
-        call.setUser(userService.findById(user));
+
         return callService.editCall(call);
     }
 }

@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.FAQCategory;
-import com.habsida.moragoproject.entity.FrequentlyAskedQuestion;
+import com.habsida.moragoproject.model.enums.FAQCategory;
+import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
 import com.habsida.moragoproject.service.FrequentlyAskedQuestionService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

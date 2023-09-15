@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.dao.TranslatorProfileDao;
-import com.habsida.moragoproject.entity.TranslatorProfile;
+import com.habsida.moragoproject.model.entity.TranslatorProfile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

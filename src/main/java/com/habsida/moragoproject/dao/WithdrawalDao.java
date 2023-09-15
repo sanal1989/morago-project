@@ -1,12 +1,14 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.WithdrawalRepository;
-import com.habsida.moragoproject.entity.EStatus;
-import com.habsida.moragoproject.entity.UserProfile;
-import com.habsida.moragoproject.entity.Withdrawal;
+import com.habsida.moragoproject.model.enums.EStatus;
+import com.habsida.moragoproject.model.input.WithdrawalInput;
+import com.habsida.moragoproject.repository.WithdrawalRepository;
+import com.habsida.moragoproject.model.entity.Withdrawal;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 @Component
 public class WithdrawalDao {
@@ -35,19 +37,19 @@ public class WithdrawalDao {
 
     public Withdrawal editWithdrawal(Withdrawal withdrawal){
         Withdrawal withdrawalFromDB = withdrawalRepository.findById(withdrawal.getId()).get();
-        if(!withdrawal.getAccountHolder().isEmpty()){
+        if(!withdrawal.getAccountHolder().equals("EMPTY")){
             withdrawalFromDB.setAccountHolder(withdrawal.getAccountHolder());
         }
         if(withdrawal.getStatus() != withdrawalFromDB.getStatus()){
             withdrawalFromDB.setStatus(withdrawal.getStatus());
         }
-        if(!withdrawal.getAccountNumber().isEmpty()){
+        if(!withdrawal.getAccountNumber().equals("EMPTY")){
             withdrawalFromDB.setAccountNumber(withdrawal.getAccountNumber());
         }
-        if(!withdrawal.getNameOfBank().isEmpty()){
+        if(!withdrawal.getNameOfBank().equals("EMPTY")){
             withdrawalFromDB.setNameOfBank(withdrawal.getNameOfBank());
         }
-        if(withdrawal.getSum() != withdrawalFromDB.getSum()){
+        if(withdrawal.getSum() != 0d && withdrawal.getSum() != withdrawalFromDB.getSum() ){
             withdrawalFromDB.setSum(withdrawal.getSum());
         }
         return withdrawalRepository.save(withdrawalFromDB);

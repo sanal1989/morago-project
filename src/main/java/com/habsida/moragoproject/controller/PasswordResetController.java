@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.entity.PasswordReset;
+import com.habsida.moragoproject.model.entity.PasswordReset;
+import com.habsida.moragoproject.model.input.PasswordInput;
 import com.habsida.moragoproject.service.PasswordResetService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,12 +30,8 @@ public class PasswordResetController {
     }
 
     @MutationMapping
-    public PasswordReset addPasswordReset(@Argument String phone, @Argument Integer resetCode, @Argument String token){
-        PasswordReset passwordReset = new PasswordReset();
-        passwordReset.setPhone(phone);
-        passwordReset.setResetCode(resetCode);
-        passwordReset.setToken(token);
-        return passwordResetService.addPasswordReset(passwordReset);
+    public PasswordReset addPasswordReset(@Argument PasswordInput passwordInput){
+        return passwordResetService.addPasswordReset(passwordInput);
     }
 
     @MutationMapping
@@ -43,12 +40,7 @@ public class PasswordResetController {
     }
 
     @MutationMapping
-    public PasswordReset editPasswordReset(@Argument Long id, @Argument String phone, @Argument Integer resetCode, @Argument String token){
-        PasswordReset passwordReset = new PasswordReset();
-        passwordReset.setId(id);
-        passwordReset.setPhone(phone);
-        passwordReset.setResetCode(resetCode);
-        passwordReset.setToken(token);
-        return passwordResetService.editPasswordReset(passwordReset);
+    public PasswordReset editPasswordReset(@Argument Long id, @Argument PasswordInput passwordInput){
+        return passwordResetService.editPasswordReset(id, passwordInput);
     }
 }

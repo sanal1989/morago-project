@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.dao;
 
-import com.habsida.moragoproject.dao.repository.ThemeRepository;
-import com.habsida.moragoproject.entity.Rating;
-import com.habsida.moragoproject.entity.Theme;
+import com.habsida.moragoproject.repository.ThemeRepository;
+import com.habsida.moragoproject.model.entity.Theme;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -34,25 +33,26 @@ public class ThemeDao {
 
     public Theme editTheme(Theme theme){
         Theme themeFromDB = themeRepository.findById(theme.getId()).get();
-        if(!theme.getDescription().isEmpty()){
+        if(!theme.getDescription().equals("EMPTY")){
             themeFromDB.setDescription(theme.getDescription());
         }
-        if(theme.getPopular() != themeFromDB.getPopular()){
-            themeFromDB.setPopular(theme.getPopular());
-        }
-        if(theme.getActive() != themeFromDB.getActive()){
-            themeFromDB.setActive(theme.getActive());
-        }
-        if(!theme.getKoreanTitle().isEmpty()){
+        if(!theme.getKoreanTitle().equals("EMPTY")){
             themeFromDB.setKoreanTitle(theme.getKoreanTitle());
         }
-        if(!theme.getName().isEmpty()){
+        if(!theme.getName().equals("EMPTY")){
             themeFromDB.setName(theme.getName());
         }
-        if(theme.getNightPrice() != themeFromDB.getNightPrice()){
+        if(theme.getIsPopular() != themeFromDB.getIsPopular()){
+            themeFromDB.setIsPopular(theme.getIsPopular());
+        }
+        if(theme.getIsActive() != themeFromDB.getIsActive()){
+            themeFromDB.setIsActive(theme.getIsActive());
+        }
+
+        if(theme.getNightPrice() !=0 && theme.getNightPrice() != themeFromDB.getNightPrice()){
             themeFromDB.setNightPrice(theme.getNightPrice());
         }
-        if(theme.getPrice() != themeFromDB.getPrice()){
+        if(theme.getPrice()!=0 && theme.getPrice() != themeFromDB.getPrice()){
             themeFromDB.setPrice(theme.getPrice());
         }
         return themeRepository.save(themeFromDB);

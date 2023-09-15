@@ -1,0 +1,53 @@
+extend type Query{
+    findAllCall: [Call]
+    findCallById(id: ID): Call
+}
+extend type  Mutation{
+    addCall(callStatus: String
+        channelName: String
+        commission: Float
+        duration: Int
+        isEndCall: Boolean
+        status: Boolean
+        sum: Float
+        translatorHasRated: Boolean
+        userHasRated: Boolean
+        userCall: Int
+        userAnswer: Int
+        theme: Int
+        user: Int): Call
+    deleteCall(id: ID):Boolean
+    editCall(id:ID
+        callStatus: String
+        channelName: String
+        commission: Float
+        duration: Int
+        isEndCall: Boolean
+        status: Boolean
+        sum: Float
+        translatorHasRated: Boolean
+        userHasRated: Boolean
+        userCall: Int
+        userAnswer: Int
+        theme: Int
+        user: Int): Call
+}
+
+type Call{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    callStatus: String
+    channelName: String
+    commission: Float
+    duration: Int
+    isEndCall: Boolean
+    status: Boolean
+    sum: Float
+    translatorHasRated: Boolean
+    userHasRated: Boolean
+    userCall: User
+    userAnswer: User
+    theme: Theme
+    user: User
+}

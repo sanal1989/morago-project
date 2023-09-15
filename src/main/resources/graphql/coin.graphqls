@@ -1,0 +1,20 @@
+extend type Query{
+    findAllCoin: [Coin]
+    findCoinById(id: ID): Coin
+}
+extend type  Mutation{
+    addCoin(coin: Float
+        won: Float): Coin
+    deleteCoin(id: ID):Boolean
+    editCoin(id:ID
+        coin: Float
+        won: Float): Coin
+}
+
+type Coin{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    coin: Float
+    won: Float
+}
