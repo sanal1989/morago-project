@@ -1,8 +1,8 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.UserProfileDao;
 import com.habsida.moragoproject.model.entity.UserProfile;
 import com.habsida.moragoproject.model.input.UserProfileInput;
+import com.habsida.moragoproject.repository.UserProfileRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,42 +12,43 @@ import static java.util.Objects.isNull;
 @Service
 public class UserProfileService {
 
-    UserProfileDao userProfileDao;
+    UserProfileRepository userProfileRepository;
 
-    public UserProfileService(UserProfileDao userProfileDao) {
-        this.userProfileDao = userProfileDao;
+    public UserProfileService(UserProfileRepository userProfileRepository) {
+        this.userProfileRepository = userProfileRepository;
     }
 
     public List<UserProfile> findAll(){
-        return userProfileDao.findAll();
+        return userProfileRepository.findAll();
     }
 
     public UserProfile findById(Long id){
-        return userProfileDao.findById(id);
+        return userProfileRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("UserProfile -> UserProfile doesn't find by Id"));
     }
 
-    public UserProfile addUserProfile(UserProfileInput userProfileInput){
+    public UserProfile createUserProfile(UserProfileInput userProfileInput){
         UserProfile userProfile = new UserProfile();
-        if(isNull(userProfileInput.getIsFreeCallMade())){
-            userProfile.setIsFreeCallMade(false);
-        }else{
+        if(!isNull(userProfileInput.getIsFreeCallMade())){
             userProfile.setIsFreeCallMade(userProfileInput.getIsFreeCallMade());
+        }else{
+            userProfile.setIsFreeCallMade(false);
         }
-        return userProfileDao.addUserProfile(userProfile);
+        return userProfileRepository.save(userProfile);
     }
 
-    public void deleteUserProfile(Long id){
-        userProfileDao.deleteUserProfile(id);
+    public void deleteUserProfileById(Long id){
+        userProfileRepository.deleteById(id);
     }
 
-    public UserProfile editUserProfile(Long id, UserProfileInput userProfileInput){
-        UserProfile userProfile = new UserProfile();
+    public UserProfile updateUserProfile(Long id, UserProfileInput userProfileInput){
+        UserProfile userProfile = userProfileRepository.findById(id).get();
         userProfile.setId(id);
         if(isNull(userProfileInput.getIsFreeCallMade())){
-            userProfile.setIsFreeCallMade(false);
-        }else{
             userProfile.setIsFreeCallMade(userProfileInput.getIsFreeCallMade());
+        }else{
+            userProfile.setIsFreeCallMade(false);
         }
-        return userProfileDao.editUserProfile(userProfile);
+        return userProfileRepository.save(userProfile);
     }
 }

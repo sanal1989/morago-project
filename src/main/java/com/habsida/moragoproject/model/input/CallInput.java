@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class CallInput {
 
-    private CallStatus callStatus;
+    private String callStatus;
     private String channelName;
     private Double commission;
     private Integer duration;

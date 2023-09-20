@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Coin;
+import com.habsida.moragoproject.model.input.CoinInput;
 import com.habsida.moragoproject.service.CoinService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,24 +30,17 @@ public class CoinController {
     }
 
     @MutationMapping
-    public Coin addCoin(@Argument Double coins, @Argument Double won){
-        Coin coin = new Coin();
-        coin.setCoin(coins);
-        coin.setWon(won);
-        return coinService.addCoin(coin);
+    public Coin createCoin(@Argument CoinInput coinInput){
+        return coinService.createCoin(coinInput);
     }
 
     @MutationMapping
-    public void deleteCoin(@Argument Long id){
-        coinService.deleteCoin(id);
+    public void deleteCoinById(@Argument Long id){
+        coinService.deleteCoinById(id);
     }
 
     @MutationMapping
-    public Coin editCoin(@Argument Long id, @Argument Double coins, @Argument Double won){
-        Coin coin = new Coin();
-        coin.setId(id);
-        coin.setCoin(coins);
-        coin.setWon(won);
-        return coinService.editCoin(coin);
+    public Coin updateCoin(@Argument Long id, @Argument CoinInput coinInput){
+        return coinService.updateCoin(id, coinInput);
     }
 }

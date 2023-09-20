@@ -1,11 +1,10 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.CategoryDao;
-import com.habsida.moragoproject.dao.FileDao;
-import com.habsida.moragoproject.dao.ThemeDao;
-import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.model.entity.Theme;
 import com.habsida.moragoproject.model.input.ThemeInput;
+import com.habsida.moragoproject.repository.CategoryRepository;
+import com.habsida.moragoproject.repository.FileRepository;
+import com.habsida.moragoproject.repository.ThemeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,112 +14,121 @@ import static java.util.Objects.isNull;
 @Service
 public class ThemeService {
 
-    ThemeDao themeDao;
-    CategoryDao categoryDao;
-    FileDao fileDao;
+    ThemeRepository themeRepository;
+    CategoryRepository categoryRepository;
+    FileRepository fileRepository;
 
-    public ThemeService(ThemeDao themeDao, CategoryDao categoryDao, FileDao fileDao) {
-        this.themeDao = themeDao;
-        this.categoryDao = categoryDao;
-        this.fileDao = fileDao;
+    public ThemeService(ThemeRepository themeRepository, CategoryRepository categoryRepository, FileRepository fileRepository) {
+        this.themeRepository = themeRepository;
+        this.categoryRepository = categoryRepository;
+        this.fileRepository = fileRepository;
     }
 
     public List<Theme> findAll(){
-        return themeDao.findAll();
+        return themeRepository.findAll();
     }
 
     public Theme findById(Long id){
-        return themeDao.findById(id);
+        return themeRepository.findById(id).orElseThrow(()->new RuntimeException("Theme-> Theme doesn't find by Id"));
     }
 
-    public Theme addTheme(ThemeInput themeInput){
+    public Theme createTheme(ThemeInput themeInput){
         Theme theme = new Theme();
-        if(isNull(themeInput.getDescription()) || themeInput.getDescription().isEmpty()){
-            theme.setDescription("EMPTY");
-        }else {
+        if(!isNull(themeInput.getDescription()) && !themeInput.getDescription().isEmpty()){
             theme.setDescription(themeInput.getDescription());
-        }
-        if(isNull(themeInput.getKoreanTitle()) || themeInput.getKoreanTitle().isEmpty()){
-            theme.setKoreanTitle("EMPTY");
         }else {
+            theme.setDescription("EMPTY");
+        }
+        if(!isNull(themeInput.getKoreanTitle()) && !themeInput.getKoreanTitle().isEmpty()){
             theme.setKoreanTitle(themeInput.getKoreanTitle());
-        }
-        if(isNull(themeInput.getName()) || themeInput.getName().isEmpty()){
-            theme.setName("EMPTY");
         }else {
+            theme.setKoreanTitle("EMPTY");
+        }
+        if(!isNull(themeInput.getName()) && !themeInput.getName().isEmpty()){
             theme.setName(themeInput.getName());
-        }
-        if(isNull(themeInput.getIsActive())){
-            theme.setIsActive(false);
         }else {
+            theme.setName("EMPTY");
+        }
+        if(!isNull(themeInput.getIsActive())){
             theme.setIsActive(themeInput.getIsActive());
-        }
-        if(isNull(themeInput.getIsPopular())){
-            theme.setIsPopular(false);
         }else {
+            theme.setIsActive(false);
+        }
+        if(!isNull(themeInput.getIsPopular())){
             theme.setIsPopular(themeInput.getIsPopular());
-        }
-        if(isNull(themeInput.getNightPrice())){
-            theme.setNightPrice(0d);
         }else {
+            theme.setIsPopular(false);
+        }
+        if(!isNull(themeInput.getNightPrice())){
             theme.setNightPrice(themeInput.getNightPrice());
-        }
-        if(isNull(themeInput.getPrice())){
-            theme.setPrice(0d);
         }else {
+            theme.setNightPrice(0d);
+        }
+        if(!isNull(themeInput.getPrice())){
             theme.setPrice(themeInput.getPrice());
+        }else {
+            theme.setPrice(0d);
         }
         if(!isNull(themeInput.getCategory())){
-            theme.setCategory(categoryDao.findById(themeInput.getCategory()));
+            theme.setCategory(categoryRepository.findById(themeInput.getCategory())
+                    .orElseThrow(()->new RuntimeException("Theme-> Category doesn't find By Id")));
         }
         if(!isNull(themeInput.getFile())){
-            theme.setFile(fileDao.findById(themeInput.getFile()));
+            theme.setFile(fileRepository.findById(themeInput.getFile())
+                    .orElseThrow(()->new RuntimeException("Theme-> File doesn't find By Id")));
         }
-        return themeDao.addTheme(theme);
+        return themeRepository.save(theme);
     }
 
-    public void deleteTheme(Long id){
-        themeDao.deleteTheme(id);
+    public void deleteThemeById(Long id){
+        themeRepository.deleteById(id);
     }
 
-    public Theme editTheme(Long id, ThemeInput themeInput){
-        Theme theme = new Theme();
-        theme.setId(id);
-        if(isNull(themeInput.getDescription()) || themeInput.getDescription().isEmpty()){
-            theme.setDescription("EMPTY");
-        }else {
+    public Theme updateTheme(Long id, ThemeInput themeInput){
+        Theme theme = themeRepository.findById(id).get();
+        if(!isNull(themeInput.getDescription()) && !themeInput.getDescription().isEmpty()){
             theme.setDescription(themeInput.getDescription());
-        }
-        if(isNull(themeInput.getKoreanTitle()) || themeInput.getKoreanTitle().isEmpty()){
-            theme.setKoreanTitle("EMPTY");
         }else {
+            theme.setDescription("EMPTY");
+        }
+        if(!isNull(themeInput.getKoreanTitle()) && !themeInput.getKoreanTitle().isEmpty()){
             theme.setKoreanTitle(themeInput.getKoreanTitle());
-        }
-        if(isNull(themeInput.getName()) || themeInput.getName().isEmpty()){
-            theme.setName("EMPTY");
         }else {
+            theme.setKoreanTitle("EMPTY");
+        }
+        if(!isNull(themeInput.getName()) && !themeInput.getName().isEmpty()){
             theme.setName(themeInput.getName());
-        }
-        if(isNull(themeInput.getIsActive())){
-            theme.setIsActive(false);
         }else {
+            theme.setName("EMPTY");
+        }
+        if(!isNull(themeInput.getIsActive())){
             theme.setIsActive(themeInput.getIsActive());
-        }
-        if(isNull(themeInput.getIsPopular())){
-            theme.setIsPopular(false);
         }else {
+            theme.setIsActive(false);
+        }
+        if(!isNull(themeInput.getIsPopular())){
             theme.setIsPopular(themeInput.getIsPopular());
-        }
-        if(isNull(themeInput.getNightPrice())){
-            theme.setNightPrice(0d);
         }else {
+            theme.setIsPopular(false);
+        }
+        if(!isNull(themeInput.getNightPrice())){
             theme.setNightPrice(themeInput.getNightPrice());
-        }
-        if(isNull(themeInput.getPrice())){
-            theme.setPrice(0d);
         }else {
-            theme.setPrice(themeInput.getPrice());
+            theme.setNightPrice(0d);
         }
-        return themeDao.editTheme(theme);
+        if(!isNull(themeInput.getPrice())){
+            theme.setPrice(themeInput.getPrice());
+        }else {
+            theme.setPrice(0d);
+        }
+        if(!isNull(themeInput.getCategory())){
+            theme.setCategory(categoryRepository.findById(themeInput.getCategory())
+                    .orElseThrow(()->new RuntimeException("Theme-> Category doesn't find By Id")));
+        }
+        if(!isNull(themeInput.getFile())){
+            theme.setFile(fileRepository.findById(themeInput.getFile())
+                    .orElseThrow(()->new RuntimeException("Theme-> File doesn't find By Id")));
+        }
+        return themeRepository.save(theme);
     }
 }

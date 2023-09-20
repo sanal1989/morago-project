@@ -1,189 +1,199 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.TranslatorProfileDao;
-import com.habsida.moragoproject.dao.UserDao;
-import com.habsida.moragoproject.dao.UserProfileDao;
 import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.enums.ERole;
 import com.habsida.moragoproject.model.input.UserInput;
+import com.habsida.moragoproject.repository.RoleRepository;
+import com.habsida.moragoproject.repository.TranslatorProfileRepository;
+import com.habsida.moragoproject.repository.UserProfileRepository;
+import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.UserTransaction;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static java.util.Objects.isNull;
 
 @Service
 public class UserService {
 
-    UserDao userDao;
-    UserProfileDao userProfileDao;
-    TranslatorProfileDao translatorProfileDao;
+    UserRepository userRepository;
+    UserProfileRepository userProfileRepository;
+    TranslatorProfileRepository translatorProfileRepository;
+    RoleRepository roleRepository;
 
-    public UserService(UserDao userDao, UserProfileDao userProfileDao, TranslatorProfileDao translatorProfileDao) {
-        this.userDao = userDao;
-        this.userProfileDao = userProfileDao;
-        this.translatorProfileDao = translatorProfileDao;
+    public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, TranslatorProfileRepository translatorProfileRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.userProfileRepository = userProfileRepository;
+        this.translatorProfileRepository = translatorProfileRepository;
+        this.roleRepository = roleRepository;
     }
 
     public List<User> findAll(){
-        return userDao.findAll();
+        return userRepository.findAll();
     }
 
     public User findById(Long id){
-        return userDao.findById(id);
+        return userRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("User -> User doesn't find by Id"));
     }
 
-    public User addUser(UserInput userInput){
+    public User createUser(UserInput userInput){
         User user = new User();
-        if(isNull(userInput.getFirstName()) || userInput.getFirstName().isEmpty()){
-            user.setFirstName("EMPTY");
-        }else {
+        if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
             user.setFirstName(userInput.getFirstName());
-        }
-        if(isNull(userInput.getLastName()) || userInput.getLastName().isEmpty()){
-            user.setLastName("EMPTY");
         }else {
+            user.setFirstName("EMPTY");
+        }
+        if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
-        }
-        if(isNull(userInput.getApnToken()) || userInput.getApnToken().isEmpty()){
-            user.setApnToken("EMPTY");
         }else {
+            user.setLastName("EMPTY");
+        }
+        if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
             user.setApnToken(userInput.getApnToken());
-        }
-        if(isNull(userInput.getFcmToken()) || userInput.getFcmToken().isEmpty()){
-            user.setFcmToken("EMPTY");
         }else {
+            user.setApnToken("EMPTY");
+        }
+        if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
             user.setFcmToken(userInput.getFcmToken());
-        }
-        if(isNull(userInput.getPassword()) || userInput.getPassword().isEmpty()){
-            user.setPassword("EMPTY");
         }else {
+            user.setFcmToken("EMPTY");
+        }
+        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
             user.setPassword(userInput.getPassword());
-        }
-        if(isNull(userInput.getPhone()) || userInput.getPhone().isEmpty()){
-            user.setPhone("EMPTY");
         }else {
+            user.setPassword("EMPTY");
+        }
+        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
-        }
-        if(isNull(userInput.getBalance())){
-            user.setBalance(0d);
         }else {
+            user.setPhone("EMPTY");
+        }
+        if(!isNull(userInput.getBalance())){
             user.setBalance(userInput.getBalance());
-        }
-        if(isNull(userInput.getRatings())){
-            user.setRatings(0d);
         }else {
+            user.setBalance(0d);
+        }
+        if(!isNull(userInput.getRatings())){
             user.setRatings(userInput.getRatings());
-        }
-        if(isNull(userInput.getIsActive())){
-            user.setIsActive(false);
         }else {
+            user.setRatings(0d);
+        }
+        if(!isNull(userInput.getIsActive())){
             user.setIsActive(userInput.getIsActive());
-        }
-        if(isNull(userInput.getIsDebtor())){
-            user.setIsDebtor(false);
         }else {
+            user.setIsActive(false);
+        }
+        if(!isNull(userInput.getIsDebtor())){
             user.setIsDebtor(userInput.getIsDebtor());
-        }
-        if(isNull(userInput.getOnBoardingStatus())){
-            user.setOnBoardingStatus(0);
         }else {
+            user.setIsDebtor(false);
+        }
+        if(!isNull(userInput.getOnBoardingStatus())){
             user.setOnBoardingStatus(userInput.getOnBoardingStatus());
-        }
-        if(isNull(userInput.getTotalRatings())){
-            user.setTotalRatings(0);
         }else {
+            user.setOnBoardingStatus(0);
+        }
+        if(!isNull(userInput.getTotalRatings())){
             user.setTotalRatings(userInput.getTotalRatings());
+        }else {
+            user.setTotalRatings(0);
         }
         if(!isNull(userInput.getUserProfile())){
-            user.setUserProfile(userProfileDao.findById(userInput.getUserProfile()));
+            user.setUserProfile(userProfileRepository.findById(userInput.getUserProfile())
+                    .orElseThrow(()->new RuntimeException("User- > UserProfile doesn't find by Id")));
         }
         if(!isNull(userInput.getTranslatorProfile())){
-            user.setTranslatorProfile(translatorProfileDao.findById(userInput.getTranslatorProfile()));
+            user.setTranslatorProfile(translatorProfileRepository.findById(userInput.getTranslatorProfile())
+                    .orElseThrow(()->new RuntimeException("User- > TranslatorProfile doesn't find by Id")));
         }
         if(!isNull(userInput.getRoles())){
             List<String> roles = userInput.getRoles();
-            List<Role> rolestoBD = new ArrayList<>();
-            if(roles.contains("ADMIN"))rolestoBD.add(new Role(ERole.ADMIN));
-            if(roles.contains("USER"))rolestoBD.add(new Role(ERole.USER));
-            if(roles.contains("TRANSLATOR"))rolestoBD.add(new Role(ERole.TRANSLATOR));
-            user.setRoles(rolestoBD);
+            List<Role> rolestoBD = user.getRoles();
+            if(roles.contains("ADMIN")) {
+                rolestoBD.add(roleRepository.findByName(ERole.ADMIN)
+                        .orElseThrow(()-> new RuntimeException("User -> Role.ADMIN doesn't exist")));
+            }
+            if(roles.contains("USER")){
+                rolestoBD.add(roleRepository.findByName(ERole.USER)
+                        .orElseThrow(()-> new RuntimeException("User -> Role.USER doesn't exist")));
+            }
+            if(roles.contains("TRANSLATOR")){
+                rolestoBD.add(roleRepository.findByName(ERole.TRANSLATOR)
+                        .orElseThrow(()-> new RuntimeException("User -> Role.TRANSLATOR doesn't exist")));
+            }
         }
-        return userDao.addUser(user);
+        return userRepository.save(user);
     }
 
-    public void deleteUser(Long id){
-        userDao.deleteUser(id);
+    public void deleteUserById(Long id){
+        userRepository.deleteById(id);
     }
 
-    public User editUser(Long id, UserInput userInput){
-        User user = new User();
-        user.setId(id);
-        if(isNull(userInput.getFirstName()) || userInput.getFirstName().isEmpty()){
-            user.setFirstName("EMPTY");
-        }else {
+    public User updateUser(Long id, UserInput userInput){
+        User user = userRepository.findById(id).get();
+        if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
             user.setFirstName(userInput.getFirstName());
-        }
-        if(isNull(userInput.getLastName()) || userInput.getLastName().isEmpty()){
-            user.setLastName("EMPTY");
         }else {
+            user.setFirstName("EMPTY");
+        }
+        if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
-        }
-        if(isNull(userInput.getApnToken()) || userInput.getApnToken().isEmpty()){
-            user.setApnToken("EMPTY");
         }else {
+            user.setLastName("EMPTY");
+        }
+        if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
             user.setApnToken(userInput.getApnToken());
-        }
-        if(isNull(userInput.getFcmToken()) || userInput.getFcmToken().isEmpty()){
-            user.setFcmToken("EMPTY");
         }else {
+            user.setApnToken("EMPTY");
+        }
+        if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
             user.setFcmToken(userInput.getFcmToken());
-        }
-        if(isNull(userInput.getPassword()) || userInput.getPassword().isEmpty()){
-            user.setPassword("EMPTY");
         }else {
+            user.setFcmToken("EMPTY");
+        }
+        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
             user.setPassword(userInput.getPassword());
-        }
-        if(isNull(userInput.getPhone()) || userInput.getPhone().isEmpty()){
-            user.setPhone("EMPTY");
         }else {
+            user.setPassword("EMPTY");
+        }
+        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
-        }
-        if(isNull(userInput.getBalance())){
-            user.setBalance(0d);
         }else {
+            user.setPhone("EMPTY");
+        }
+        if(!isNull(userInput.getBalance())){
             user.setBalance(userInput.getBalance());
-        }
-        if(isNull(userInput.getRatings())){
-            user.setRatings(0d);
         }else {
+            user.setBalance(0d);
+        }
+        if(!isNull(userInput.getRatings())){
             user.setRatings(userInput.getRatings());
-        }
-        if(isNull(userInput.getIsActive())){
-            user.setIsActive(false);
         }else {
+            user.setRatings(0d);
+        }
+        if(!isNull(userInput.getIsActive())){
             user.setIsActive(userInput.getIsActive());
-        }
-        if(isNull(userInput.getIsDebtor())){
-            user.setIsDebtor(false);
         }else {
+            user.setIsActive(false);
+        }
+        if(!isNull(userInput.getIsDebtor())){
             user.setIsDebtor(userInput.getIsDebtor());
-        }
-        if(isNull(userInput.getOnBoardingStatus())){
-            user.setOnBoardingStatus(0);
         }else {
+            user.setIsDebtor(false);
+        }
+        if(!isNull(userInput.getOnBoardingStatus())){
             user.setOnBoardingStatus(userInput.getOnBoardingStatus());
-        }
-        if(isNull(userInput.getTotalRatings())){
-            user.setTotalRatings(0);
         }else {
-            user.setTotalRatings(userInput.getTotalRatings());
+            user.setOnBoardingStatus(0);
         }
-        return userDao.editUser(user);
+        if(!isNull(userInput.getTotalRatings())){
+            user.setTotalRatings(userInput.getTotalRatings());
+        }else {
+            user.setTotalRatings(0);
+        }
+        return userRepository.save(user);
     }
 }

@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Call;
-import com.habsida.moragoproject.model.enums.CallStatus;
+import com.habsida.moragoproject.model.input.CallInput;
 import com.habsida.moragoproject.service.CallService;
 import com.habsida.moragoproject.service.ThemeService;
 import com.habsida.moragoproject.service.UserService;
@@ -11,8 +11,6 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @Controller
 public class CallController {
@@ -38,53 +36,17 @@ public class CallController {
     }
 
     @MutationMapping
-    public Call addCall(@Argument String callStatus, @Argument String channelName, @Argument Double commission,
-                        @Argument Integer duration, @Argument Boolean isEndCall, @Argument Boolean status,
-                        @Argument Double sum, @Argument Boolean translatorHasRated, @Argument Boolean userHasRated,
-                        @Argument Long userCall, @Argument Long userAnswer, @Argument Long theme,
-                        @Argument Long user){
-        Call call = new Call();
-        call.setCallStatus(CallStatus.valueOf(callStatus));
-        call.setChannelName(channelName);
-        call.setCommission(commission);
-        call.setDuration(duration);
-        call.setIsEndCall(isEndCall);
-        call.setStatus(status);
-        call.setSum(sum);
-        call.setTranslatorHasRated(translatorHasRated);
-        call.setUserHasRated(userHasRated);
-        call.setCaller(userService.findById(userCall));
-        call.setAnswerer(userService.findById(userAnswer));
-        call.setTheme(themeService.findById(theme));
-        return callService.addCall(call);
+    public Call createCall(@Argument CallInput callInput){
+        return callService.createCall(callInput);
     }
 
     @MutationMapping
-    public void deleteCall(@Argument Long id){
-        callService.deleteCall(id);
+    public void deleteCallById(@Argument Long id){
+        callService.deleteCallById(id);
     }
 
     @MutationMapping
-    public Call editCall(@Argument Long id, @Argument String callStatus, @Argument String channelName, @Argument Double commission,
-                         @Argument Integer duration, @Argument Boolean isEndCall, @Argument Boolean status,
-                         @Argument Double sum, @Argument Boolean translatorHasRated, @Argument Boolean userHasRated,
-                         @Argument Long userCall, @Argument Long userAnswer, @Argument Long theme,
-                         @Argument Long user){
-        Call call = new Call();
-        call.setId(id);
-        call.setCallStatus(CallStatus.valueOf(callStatus));
-        call.setChannelName(channelName);
-        call.setCommission(commission);
-        call.setDuration(duration);
-        call.setIsEndCall(isEndCall);
-        call.setStatus(status);
-        call.setSum(sum);
-        call.setTranslatorHasRated(translatorHasRated);
-        call.setUserHasRated(userHasRated);
-        call.setCaller(userService.findById(userCall));
-        call.setAnswerer(userService.findById(userAnswer));
-        if(isNull(theme))call.setTheme(themeService.findById(theme));
-
-        return callService.editCall(call);
+    public Call updateCall(@Argument Long id, @Argument CallInput callInput){
+        return callService.updateCall(id, callInput);
     }
 }

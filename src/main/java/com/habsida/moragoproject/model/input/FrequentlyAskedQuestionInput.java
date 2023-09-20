@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FrequentlyAskedQuestionInput {
 
-    private FAQCategory category;
+    private String category;
     private String answer;
     private String question;
 }

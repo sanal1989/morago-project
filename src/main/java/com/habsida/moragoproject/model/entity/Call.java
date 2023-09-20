@@ -17,11 +17,12 @@ public class Call extends AbstractAuditable{
     @Enumerated(EnumType.ORDINAL)
     private CallStatus callStatus;
     private String channelName;
+    private Double sum;
     private Double commission;
     private Integer duration;
     private Boolean isEndCall;
     private Boolean status;
-    private Double sum;
+
     private Boolean translatorHasRated;
     private Boolean userHasRated;
 

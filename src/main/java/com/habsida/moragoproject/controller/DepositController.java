@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Deposit;
-import com.habsida.moragoproject.model.enums.EStatus;
+import com.habsida.moragoproject.model.input.DepositInput;
 import com.habsida.moragoproject.service.DepositService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -30,32 +30,17 @@ public class DepositController {
     }
 
     @MutationMapping
-    public Deposit addDeposit(@Argument String accountHolder, @Argument Double coin, @Argument String nameOfBank,
-                              @Argument String status, @Argument Double won){
-        Deposit deposit = new Deposit();
-        deposit.setAccountHolder(accountHolder);
-        deposit.setCoin(coin);
-        deposit.setNameOfBank(nameOfBank);
-        deposit.setStatus(EStatus.valueOf(status));
-        deposit.setWon(won);
-        return depositService.addDeposit(deposit);
+    public Deposit createDeposit(@Argument DepositInput depositInput){
+        return depositService.createDeposit(depositInput);
     }
 
     @MutationMapping
-    public void deleteDeposit(@Argument Long id){
-        depositService.deleteDeposit(id);
+    public void deleteDepositById(@Argument Long id){
+        depositService.deleteDepositById(id);
     }
 
     @MutationMapping
-    public Deposit editDeposit(@Argument Long id, @Argument String accountHolder, @Argument Double coin, @Argument String nameOfBank,
-                               @Argument String status, @Argument Double won){
-        Deposit deposit = new Deposit();
-        deposit.setId(id);
-        deposit.setAccountHolder(accountHolder);
-        deposit.setCoin(coin);
-        deposit.setNameOfBank(nameOfBank);
-        deposit.setStatus(EStatus.valueOf(status));
-        deposit.setWon(won);
-        return depositService.editDeposit(deposit);
+    public Deposit updateDeposit(@Argument Long id, @Argument DepositInput depositInput){
+        return depositService.updateDeposit(id, depositInput);
     }
 }

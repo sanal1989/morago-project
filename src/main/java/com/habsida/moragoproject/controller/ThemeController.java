@@ -30,17 +30,17 @@ public class ThemeController {
     }
 
     @MutationMapping
-    public Theme addTheme(@Argument ThemeInput themeInput){
-        return themeService.addTheme(themeInput);
+    public Theme createTheme(@Argument ThemeInput themeInput){
+        return themeService.createTheme(themeInput);
     }
 
     @MutationMapping
-    public void deleteTheme(@Argument Long id){
-        themeService.deleteTheme(id);
+    public void deleteThemeById(@Argument Long id){
+        themeService.deleteThemeById(id);
     }
 
     @MutationMapping
-    public Theme editTheme(@Argument Long id, @Argument ThemeInput themeInput){
-        return themeService.editTheme(id, themeInput);
+    public Theme updateTheme(@Argument Long id, @Argument ThemeInput themeInput){
+        return themeService.updateTheme(id, themeInput);
     }
 }

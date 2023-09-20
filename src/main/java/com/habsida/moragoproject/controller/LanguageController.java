@@ -30,17 +30,17 @@ public class LanguageController {
     }
 
     @MutationMapping
-    public Language addLanguage(@Argument LanguageInput languageInput){
-        return languageService.addLanguage(languageInput);
+    public Language createLanguage(@Argument LanguageInput languageInput){
+        return languageService.createLanguage(languageInput);
     }
 
     @MutationMapping
-    public void deleteLanguage(@Argument Long id){
-        languageService.deleteLanguage(id);
+    public void deleteLanguageById(@Argument Long id){
+        languageService.deleteLanguageById(id);
     }
 
     @MutationMapping
-    public Language editLanguage(@Argument Long id, @Argument LanguageInput languageInput){
-        return languageService.editLanguage(id, languageInput);
+    public Language updateLanguage(@Argument Long id, @Argument LanguageInput languageInput){
+        return languageService.updateLanguage(id, languageInput);
     }
 }

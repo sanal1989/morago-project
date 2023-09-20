@@ -30,18 +30,18 @@ public class UserController {
     }
 
     @MutationMapping
-    public void deleteUser(@Argument Long id){
-        userService.deleteUser(id);
+    public void deleteUserById(@Argument Long id){
+        userService.deleteUserById(id);
     }
 
     @MutationMapping
-    public User addUser(@Argument UserInput userInput){
-        return userService.addUser(userInput);
+    public User createUser(@Argument UserInput userInput){
+        return userService.createUser(userInput);
     }
 
     @MutationMapping
-    public User editUser(@Argument Long id,@Argument UserInput userInput ){
-        return userService.editUser(id, userInput);
+    public User updateUser(@Argument Long id, @Argument UserInput userInput ){
+        return userService.updateUser(id, userInput);
     }
 
 

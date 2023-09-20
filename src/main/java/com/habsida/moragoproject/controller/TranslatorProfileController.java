@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.TranslatorProfile;
+import com.habsida.moragoproject.model.input.TranslatorProfileInput;
 import com.habsida.moragoproject.service.TranslatorProfileService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,34 +30,17 @@ public class TranslatorProfileController {
     }
 
     @MutationMapping
-    public TranslatorProfile addTranslatorProfile(@Argument String dateOfBirth, @Argument String email, @Argument Boolean isAvailable,
-                                                    @Argument Boolean isOnline, @Argument String levelOfKorean, @Argument Boolean isActive){
-        TranslatorProfile translatorProfile = new TranslatorProfile();
-        translatorProfile.setDateOfBirth(dateOfBirth);
-        translatorProfile.setEmail(email);
-        translatorProfile.setIsAvailable(isAvailable);
-        translatorProfile.setIsOnline(isOnline);
-        translatorProfile.setLevelOfKorean(levelOfKorean);
-        translatorProfile.setIsActive(isActive);
-        return translatorProfileService.addTranslatorProfile(translatorProfile);
+    public TranslatorProfile createTranslatorProfile(@Argument TranslatorProfileInput translatorProfileInput){
+        return translatorProfileService.createTranslatorProfile(translatorProfileInput);
     }
 
     @MutationMapping
-    public void deleteTranslatorProfile(@Argument Long id){
-        translatorProfileService.deleteTranslatorProfile(id);
+    public void deleteTranslatorProfileById(@Argument Long id){
+        translatorProfileService.deleteTranslatorProfileById(id);
     }
 
     @MutationMapping
-    public TranslatorProfile editTranslatorProfile(@Argument Long id, @Argument String dateOfBirth, @Argument String email, @Argument Boolean isAvailable,
-                                                   @Argument Boolean isOnline, @Argument String levelOfKorean, @Argument Boolean isActive){
-        TranslatorProfile translatorProfile = new TranslatorProfile();
-        translatorProfile.setId(id);
-        translatorProfile.setDateOfBirth(dateOfBirth);
-        translatorProfile.setEmail(email);
-        translatorProfile.setIsAvailable(isAvailable);
-        translatorProfile.setIsOnline(isOnline);
-        translatorProfile.setLevelOfKorean(levelOfKorean);
-        translatorProfile.setIsActive(isActive);
-        return translatorProfileService.editTranslatorProfile(translatorProfile);
+    public TranslatorProfile updateTranslatorProfile(@Argument Long id, @Argument TranslatorProfileInput translatorProfileInput){
+        return translatorProfileService.updateTranslatorProfile(id, translatorProfileInput);
     }
 }

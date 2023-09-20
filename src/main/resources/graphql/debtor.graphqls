@@ -3,14 +3,10 @@ extend type Query{
     findDebtorById(id: ID): Debtor
 }
 extend type  Mutation{
-    addDebtor(accountHolder: String
-        isPaid: Boolean
-        nameOfBank: String): Debtor
-    deleteDebtor(id: ID):Boolean
-    editDebtor(id:ID
-        accountHolder: String
-        isPaid: Boolean
-        nameOfBank: String): Debtor
+    createDebtor(debtorInput: DebtorInput): Debtor
+    deleteDebtorById(id: ID):Boolean
+    updateDebtor(id:ID
+        debtorInput: DebtorInput): Debtor
 }
 
 type Debtor{
@@ -18,6 +14,14 @@ type Debtor{
     createdAt: String
     updatedAt: String
     accountHolder: String
-    isPaid: Boolean
     nameOfBank: String
+    isPaid: Boolean
+    user: User
+}
+
+input DebtorInput{
+    accountHolder: String
+    nameOfBank: String
+    isPaid: Boolean
+    user: Int
 }

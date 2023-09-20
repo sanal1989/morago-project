@@ -3,9 +3,9 @@ extend type Query{
     findRatingById(id: ID): Rating
 }
 extend type  Mutation{
-    addRating(ratingInput:RatingInput): Rating
-    deleteRating(id: ID):Boolean
-    editRating(id: ID
+    createRating(ratingInput:RatingInput): Rating
+    deleteRatingById(id: ID):Boolean
+    updateRating(id: ID
         ratingInput:RatingInput): Rating
 }
 

@@ -1,37 +1,80 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.DebtorDao;
 import com.habsida.moragoproject.model.entity.Debtor;
+import com.habsida.moragoproject.model.input.DebtorInput;
+import com.habsida.moragoproject.repository.DebtorRepository;
+import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class DebtorService {
 
-    DebtorDao debtorDao;
+    DebtorRepository debtorRepository;
+    UserRepository userRepository;
 
-    public DebtorService(DebtorDao debtorDao) {
-        this.debtorDao = debtorDao;
+    public DebtorService(DebtorRepository debtorRepository, UserRepository userRepository) {
+        this.debtorRepository = debtorRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Debtor> findAll(){
-        return debtorDao.findAll();
+        return debtorRepository.findAll();
     }
 
     public Debtor findById(Long id){
-        return debtorDao.findById(id);
+        return debtorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Debtor -> Debtor doesn't find by Id"));
     }
 
-    public Debtor addDebtor(Debtor debtor){
-        return debtorDao.addDebtor(debtor);
+    public Debtor createDebtor(DebtorInput debtorInput){
+        Debtor debtor = new Debtor();
+        if(!isNull(debtorInput.getAccountHolder()) && !debtorInput.getAccountHolder().isEmpty()){
+            debtor.setAccountHolder(debtorInput.getAccountHolder());
+        }else{
+            debtor.setAccountHolder("EMPTY");
+        }
+        if(!isNull(debtorInput.getNameOfBank()) && !debtorInput.getNameOfBank().isEmpty()){
+            debtor.setNameOfBank(debtorInput.getNameOfBank());
+        }else{
+            debtor.setNameOfBank("EMPTY");
+        }
+        if(!isNull(debtorInput.getIsPaid())){
+            debtor.setIsPaid(debtorInput.getIsPaid());
+        }else{
+            debtor.setIsPaid(false);
+        }
+        if(!isNull(debtorInput.getUser())){
+            debtor.setUser(userRepository.findById(debtorInput.getUser())
+                    .orElseThrow(()->new RuntimeException("Debtor -> User doesn't find by Id")));
+        }
+        return debtorRepository.save(debtor);
     }
 
-    public void deleteDebtor(Long id){
-        debtorDao.deleteDebtor(id);
+    public void deleteDebtorById(Long id){
+        debtorRepository.deleteById(id);
     }
 
-    public Debtor editDebtor(Debtor debtor){
-        return debtorDao.editDebtor(debtor);
+    public Debtor updateDebtor(Long id, DebtorInput debtorInput){
+        Debtor debtor = debtorRepository.findById(id).get();
+        if(!isNull(debtorInput.getAccountHolder()) && !debtorInput.getAccountHolder().isEmpty()){
+            debtor.setAccountHolder(debtorInput.getAccountHolder());
+        }else{
+            debtor.setAccountHolder("EMPTY");
+        }
+        if(!isNull(debtorInput.getNameOfBank()) && !debtorInput.getNameOfBank().isEmpty()){
+            debtor.setNameOfBank(debtorInput.getNameOfBank());
+        }else{
+            debtor.setNameOfBank("EMPTY");
+        }
+        if(!isNull(debtorInput.getIsPaid())){
+            debtor.setIsPaid(debtorInput.getIsPaid());
+        }else{
+            debtor.setIsPaid(false);
+        }
+        return debtorRepository.save(debtor);
     }
 }

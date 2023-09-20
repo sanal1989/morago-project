@@ -3,9 +3,9 @@ extend type Query{
     findWithdrawalById(id: ID): Withdrawal
 }
 extend type  Mutation{
-    addWithdrawal(withdrawalInput: WithdrawalInput): Withdrawal
-    deleteWithdrawal(id: ID):Boolean
-    editWithdrawal(id: ID
+    createWithdrawal(withdrawalInput: WithdrawalInput): Withdrawal
+    deleteWithdrawalById(id: ID):String
+    updateWithdrawal(id: ID
         withdrawalInput: WithdrawalInput): Withdrawal
 }
 

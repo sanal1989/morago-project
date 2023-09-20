@@ -1,38 +1,75 @@
 package com.habsida.moragoproject.service;
 
 
-import com.habsida.moragoproject.dao.FrequentlyAskedQuestionDao;
 import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
+import com.habsida.moragoproject.model.enums.FAQCategory;
+import com.habsida.moragoproject.model.input.FrequentlyAskedQuestionInput;
+import com.habsida.moragoproject.repository.FrequentlyAskedQuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class FrequentlyAskedQuestionService {
 
-    FrequentlyAskedQuestionDao frequentlyAskedQuestionDao;
+    FrequentlyAskedQuestionRepository frequentlyAskedQuestionRepository;
 
-    public FrequentlyAskedQuestionService(FrequentlyAskedQuestionDao frequentlyAskedQuestionDao) {
-        this.frequentlyAskedQuestionDao = frequentlyAskedQuestionDao;
+    public FrequentlyAskedQuestionService(FrequentlyAskedQuestionRepository frequentlyAskedQuestionRepository) {
+        this.frequentlyAskedQuestionRepository = frequentlyAskedQuestionRepository;
     }
 
     public List<FrequentlyAskedQuestion> findAll(){
-        return frequentlyAskedQuestionDao.findAll();
+        return frequentlyAskedQuestionRepository.findAll();
     }
 
     public FrequentlyAskedQuestion findById(Long id){
-        return frequentlyAskedQuestionDao.findById(id);
+        return frequentlyAskedQuestionRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("FrequentlyAskedQuestion -> FrequentlyAskedQuestion doesn't find by Id"));
     }
 
-    public FrequentlyAskedQuestion addFrequentlyAskedQuestion(FrequentlyAskedQuestion frequentlyAskedQuestion){
-        return frequentlyAskedQuestionDao.addFrequentlyAskedQuestion(frequentlyAskedQuestion);
+    public FrequentlyAskedQuestion createFrequentlyAskedQuestion(FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
+        FrequentlyAskedQuestion frequentlyAskedQuestion = new FrequentlyAskedQuestion();
+        if(!isNull(frequentlyAskedQuestionInput.getQuestion()) && !frequentlyAskedQuestionInput.getQuestion().isEmpty()){
+            frequentlyAskedQuestion.setQuestion(frequentlyAskedQuestionInput.getQuestion());
+        }else{
+            frequentlyAskedQuestion.setQuestion("EMPTY");
+        }
+        if(!isNull(frequentlyAskedQuestionInput.getAnswer()) && !frequentlyAskedQuestionInput.getAnswer().isEmpty()){
+            frequentlyAskedQuestion.setAnswer(frequentlyAskedQuestionInput.getAnswer());
+        }else{
+            frequentlyAskedQuestion.setQuestion("EMPTY");
+        }
+        if(!isNull(frequentlyAskedQuestionInput.getCategory()) && !frequentlyAskedQuestionInput.getCategory().isEmpty()){
+            frequentlyAskedQuestion.setCategory(FAQCategory.valueOf(frequentlyAskedQuestionInput.getCategory()));
+        }else{
+            frequentlyAskedQuestion.setCategory(FAQCategory.FAQ1);
+        }
+        return frequentlyAskedQuestionRepository.save(frequentlyAskedQuestion);
     }
 
-    public void deleteFrequentlyAskedQuestion(Long id){
-        frequentlyAskedQuestionDao.deleteFrequentlyAskedQuestion(id);
+    public void deleteFrequentlyAskedQuestionById(Long id){
+        frequentlyAskedQuestionRepository.deleteById(id);
     }
 
-    public FrequentlyAskedQuestion editFrequentlyAskedQuestion(FrequentlyAskedQuestion frequentlyAskedQuestion){
-        return frequentlyAskedQuestionDao.editFrequentlyAskedQuestion(frequentlyAskedQuestion);
+    public FrequentlyAskedQuestion updateFrequentlyAskedQuestion(Long id, FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
+        FrequentlyAskedQuestion frequentlyAskedQuestion = frequentlyAskedQuestionRepository.findById(id).get();
+        if(!isNull(frequentlyAskedQuestionInput.getQuestion()) && !frequentlyAskedQuestionInput.getQuestion().isEmpty()){
+            frequentlyAskedQuestion.setQuestion(frequentlyAskedQuestionInput.getQuestion());
+        }else{
+            frequentlyAskedQuestion.setQuestion("EMPTY");
+        }
+        if(!isNull(frequentlyAskedQuestionInput.getAnswer()) && !frequentlyAskedQuestionInput.getAnswer().isEmpty()){
+            frequentlyAskedQuestion.setAnswer(frequentlyAskedQuestionInput.getAnswer());
+        }else{
+            frequentlyAskedQuestion.setQuestion("EMPTY");
+        }
+        if(!isNull(frequentlyAskedQuestionInput.getCategory()) && !frequentlyAskedQuestionInput.getCategory().isEmpty()){
+            frequentlyAskedQuestion.setCategory(FAQCategory.valueOf(frequentlyAskedQuestionInput.getCategory()));
+        }else{
+            frequentlyAskedQuestion.setCategory(FAQCategory.FAQ1);
+        }
+        return frequentlyAskedQuestionRepository.save(frequentlyAskedQuestion);
     }
 }

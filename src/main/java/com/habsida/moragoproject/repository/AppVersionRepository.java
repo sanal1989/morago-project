@@ -5,10 +5,12 @@ import com.habsida.moragoproject.model.enums.EPlatform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface AppVersionRepository extends JpaRepository<AppVersion, Long> {
 
-    AppVersion findByPlatform(EPlatform platform);
+    Optional<AppVersion> findByPlatform(EPlatform platform);
 
     void deleteByPlatform(EPlatform platform);
 }

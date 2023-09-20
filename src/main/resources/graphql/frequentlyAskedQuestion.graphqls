@@ -3,20 +3,22 @@ extend type Query{
     findFrequentlyAskedQuestionById(id: ID): FrequentlyAskedQuestion
 }
 extend type  Mutation{
-    addFrequentlyAskedQuestion(category: String
-        answer: String
-        question: String): FrequentlyAskedQuestion
-    deleteFrequentlyAskedQuestion(id: ID):Boolean
-    editFrequentlyAskedQuestion(id: ID
-        category: String
-        answer: String
-        question: String): FrequentlyAskedQuestion
+    createFrequentlyAskedQuestion(frequentlyAskedQuestionInput: FrequentlyAskedQuestionInput): FrequentlyAskedQuestion
+    deleteFrequentlyAskedQuestionById(id: ID):Boolean
+    updateFrequentlyAskedQuestion(id: ID
+        frequentlyAskedQuestionInput: FrequentlyAskedQuestionInput): FrequentlyAskedQuestion
 }
 
 type FrequentlyAskedQuestion{
     id:ID
     createdAt: String
     updatedAt: String
+    category: String
+    answer: String
+    question: String
+}
+
+input FrequentlyAskedQuestionInput{
     category: String
     answer: String
     question: String

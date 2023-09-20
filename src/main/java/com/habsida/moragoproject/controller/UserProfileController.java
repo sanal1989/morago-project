@@ -30,17 +30,17 @@ public class UserProfileController {
     }
 
     @MutationMapping
-    public UserProfile addUserProfile(@Argument UserProfileInput userProfileInput){
-        return userProfileService.addUserProfile(userProfileInput);
+    public UserProfile createUserProfile(@Argument UserProfileInput userProfileInput){
+        return userProfileService.createUserProfile(userProfileInput);
     }
 
     @MutationMapping
-    public void deleteUserProfile(@Argument Long id){
-        userProfileService.deleteUserProfile(id);
+    public void deleteUserProfileById(@Argument Long id){
+        userProfileService.deleteUserProfileById(id);
     }
 
     @MutationMapping
-    public UserProfile editUserProfile(@Argument Long id, @Argument UserProfileInput userProfileInput){
-        return userProfileService.editUserProfile(id, userProfileInput);
+    public UserProfile updateUserProfile(@Argument Long id, @Argument UserProfileInput userProfileInput){
+        return userProfileService.updateUserProfile(id, userProfileInput);
     }
 }

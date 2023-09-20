@@ -3,9 +3,9 @@ extend type Query{
     findThemeById(id: ID): Theme
 }
 extend type  Mutation{
-    addTheme(themeInput:ThemeInput):Theme
-    deleteTheme(id: ID):Boolean
-    editTheme(id: ID
+    createTheme(themeInput:ThemeInput):Theme
+    deleteThemeById(id: ID):Boolean
+    updateTheme(id: ID
         themeInput:ThemeInput):Theme
 }
 

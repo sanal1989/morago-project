@@ -3,9 +3,9 @@ extend type Query{
     findRoleById(id: ID): Role
 }
 extend type  Mutation{
-    addRole(roleInput:RoleInput): Role
-    deleteRole(id: ID): Boolean
-    editRole(id: ID
+    createRole(roleInput:RoleInput): Role
+    deleteRoleById(id: ID): Boolean
+    updateRole(id: ID
         roleInput:RoleInput): Role
 }
 

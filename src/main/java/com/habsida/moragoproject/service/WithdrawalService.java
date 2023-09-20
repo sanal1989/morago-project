@@ -1,10 +1,10 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.UserDao;
-import com.habsida.moragoproject.dao.WithdrawalDao;
 import com.habsida.moragoproject.model.entity.Withdrawal;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.WithdrawalInput;
+import com.habsida.moragoproject.repository.UserRepository;
+import com.habsida.moragoproject.repository.WithdrawalRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,88 +14,88 @@ import static java.util.Objects.isNull;
 @Service
 public class WithdrawalService {
 
-    WithdrawalDao withdrawalDao;
-    UserDao userDao;
+    WithdrawalRepository withdrawalRepository;
+    UserRepository userRepository;
 
-    public WithdrawalService(WithdrawalDao withdrawalDao, UserDao userDao) {
-        this.withdrawalDao = withdrawalDao;
-        this.userDao = userDao;
+    public WithdrawalService(WithdrawalRepository withdrawalRepository, UserRepository userRepository) {
+        this.withdrawalRepository = withdrawalRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Withdrawal> findAll(){
-        return withdrawalDao.findAll();
+        return withdrawalRepository.findAll();
     }
 
     public Withdrawal findById(Long id){
-        return withdrawalDao.findById(id);
+        return withdrawalRepository.findById(id).orElseThrow(()->new RuntimeException("Withdrawal doesn't find by Id"));
     }
 
-    public Withdrawal addWithdrawal(WithdrawalInput withdrawalInput){
+    public Withdrawal createWithdrawal(WithdrawalInput withdrawalInput){
         Withdrawal withdrawal = new Withdrawal();
-        if(isNull(withdrawalInput.getStatus()) || withdrawalInput.getStatus().isEmpty()){
-            withdrawal.setStatus(EStatus.E100);
-        }else {
+        if(!isNull(withdrawalInput.getStatus()) && !withdrawalInput.getStatus().isEmpty()){
             withdrawal.setStatus(EStatus.valueOf(withdrawalInput.getStatus()));
+        }else{
+            withdrawal.setStatus(EStatus.E100);
         }
-        if( isNull(withdrawalInput.getAccountNumber()) || withdrawalInput.getAccountNumber().isEmpty()){
-            withdrawal.setAccountNumber("EMPTY");
-        }else {
+        if(!isNull(withdrawalInput.getAccountNumber()) && !withdrawalInput.getAccountNumber().isEmpty()){
             withdrawal.setAccountNumber(withdrawalInput.getAccountNumber());
-        }
-        if( isNull(withdrawalInput.getAccountHolder()) || withdrawalInput.getAccountHolder().isEmpty()){
+        }else {
             withdrawal.setAccountHolder("EMPTY");
-        }else {
+        }
+        if(!isNull(withdrawalInput.getAccountHolder()) && !withdrawalInput.getAccountHolder().isEmpty()){
             withdrawal.setAccountHolder(withdrawalInput.getAccountHolder());
-        }
-        if(isNull(withdrawalInput.getNameOfBank())){
-            if(withdrawalInput.getNameOfBank().isEmpty())
-            withdrawal.setNameOfBank("EMPTY");
         }else {
+            withdrawal.setAccountHolder("EMPTY");
+        }
+        if(!isNull(withdrawalInput.getNameOfBank()) && !withdrawalInput.getNameOfBank().isEmpty()){
             withdrawal.setNameOfBank(withdrawalInput.getNameOfBank());
-        }
-        if(isNull(withdrawalInput.getSum())){
-            withdrawal.setSum(0d);
         }else {
+            withdrawal.setNameOfBank("EMPTY");
+        }
+        if(!isNull(withdrawalInput.getSum())){
             withdrawal.setSum(withdrawalInput.getSum());
+        }else {
+            withdrawal.setSum(0d);
         }
         if(!isNull(withdrawalInput.getUser())){
-            withdrawal.setUser(userDao.findById(withdrawalInput.getUser()));
+            withdrawal.setUser(userRepository.findById(withdrawalInput.getUser())
+                    .orElseThrow(()->new RuntimeException("Withdrawal -> User doesn't find by Id")));
         }
-        return withdrawalDao.addWithdrawal(withdrawal);
+        return withdrawalRepository.save(withdrawal);
     }
 
-    public void deleteWithdrawal(Long id){
-        withdrawalDao.deleteWithdrawal(id);
+    public String deleteWithdrawalById(Long id){
+        withdrawalRepository.deleteById(id);
+        return "Withdrawal with Id "+id+" deleted";
     }
 
-    public Withdrawal editWithdrawal(Long id, WithdrawalInput withdrawalInput){
-        Withdrawal withdrawal = new Withdrawal();
-        withdrawal.setId(id);
-        if(isNull(withdrawalInput.getStatus()) || withdrawalInput.getStatus().isEmpty()){
-            withdrawal.setStatus(EStatus.E100);
-        }else {
+    public Withdrawal updateWithdrawal(Long id, WithdrawalInput withdrawalInput){
+        Withdrawal withdrawal = withdrawalRepository.findById(id).get();
+        if(!isNull(withdrawalInput.getStatus()) && !withdrawalInput.getStatus().isEmpty()){
             withdrawal.setStatus(EStatus.valueOf(withdrawalInput.getStatus()));
+        }else{
+            withdrawal.setStatus(EStatus.E100);
         }
-        if(isNull(withdrawalInput.getAccountNumber()) || withdrawalInput.getAccountNumber().isEmpty()){
-            withdrawal.setAccountNumber("EMPTY");
-        }else {
+        if(!isNull(withdrawalInput.getAccountNumber()) && !withdrawalInput.getAccountNumber().isEmpty()){
             withdrawal.setAccountNumber(withdrawalInput.getAccountNumber());
-        }
-        if(isNull(withdrawalInput.getAccountHolder()) || withdrawalInput.getAccountHolder().isEmpty()){
+        }else {
             withdrawal.setAccountHolder("EMPTY");
-        }else {
+        }
+        if(!isNull(withdrawalInput.getAccountHolder()) && !withdrawalInput.getAccountHolder().isEmpty()){
             withdrawal.setAccountHolder(withdrawalInput.getAccountHolder());
-        }
-        if(isNull(withdrawalInput.getNameOfBank()) || withdrawalInput.getNameOfBank().isEmpty()){
-            withdrawal.setNameOfBank("EMPTY");
         }else {
+            withdrawal.setAccountHolder("EMPTY");
+        }
+        if(!isNull(withdrawalInput.getNameOfBank()) && !withdrawalInput.getNameOfBank().isEmpty()){
             withdrawal.setNameOfBank(withdrawalInput.getNameOfBank());
-        }
-        if(isNull(withdrawalInput.getSum())){
-            withdrawal.setSum(0d);
         }else {
-            withdrawal.setSum(withdrawalInput.getSum());
+            withdrawal.setNameOfBank("EMPTY");
         }
-        return withdrawalDao.editWithdrawal(withdrawal);
+        if(!isNull(withdrawalInput.getSum())){
+            withdrawal.setSum(withdrawalInput.getSum());
+        }else {
+            withdrawal.setSum(0d);
+        }
+        return withdrawalRepository.save(withdrawal);
     }
 }

@@ -16,10 +16,11 @@ import javax.persistence.ManyToOne;
 public class DepositInput {
 
     private String accountHolder;
-    private Double coin;
     private String nameOfBank;
-    private EStatus status;
+    private Double coin;
     private Double won;
+    private String status;
+
 
     private Long user;
 }

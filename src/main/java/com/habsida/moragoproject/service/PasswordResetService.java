@@ -1,8 +1,8 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.PasswordResetDao;
 import com.habsida.moragoproject.model.entity.PasswordReset;
-import com.habsida.moragoproject.model.input.PasswordInput;
+import com.habsida.moragoproject.model.input.PasswordResetInput;
+import com.habsida.moragoproject.repository.PasswordResetRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,62 +12,62 @@ import static java.util.Objects.isNull;
 @Service
 public class PasswordResetService {
 
-    PasswordResetDao passwordResetDao;
+    PasswordResetRepository passwordResetRepository;
 
-    public PasswordResetService(PasswordResetDao passwordResetDao) {
-        this.passwordResetDao = passwordResetDao;
+    public PasswordResetService(PasswordResetRepository passwordResetRepository) {
+        this.passwordResetRepository = passwordResetRepository;
     }
 
     public List<PasswordReset> findAll(){
-        return passwordResetDao.findAll();
+        return passwordResetRepository.findAll();
     }
 
     public PasswordReset findById(Long id){
-        return passwordResetDao.findById(id);
+        return passwordResetRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("PasswordReset -> PasswordReset doesn't find by Id"));
     }
 
-    public PasswordReset addPasswordReset(PasswordInput passwordInput){
+    public PasswordReset createPasswordReset(PasswordResetInput passwordResetInput){
         PasswordReset passwordReset = new PasswordReset();
-        if(isNull(passwordInput.getPhone()) || passwordInput.getPhone().isEmpty()){
+        if(!isNull(passwordResetInput.getPhone()) && !passwordResetInput.getPhone().isEmpty()){
+            passwordReset.setPhone(passwordResetInput.getPhone());
+        }else {
             passwordReset.setPhone("EMPTY");
-        }else {
-            passwordReset.setPhone(passwordInput.getPhone());
         }
-        if(isNull(passwordInput.getResetCode())){
-            passwordReset.setResetCode(0);
+        if(!isNull(passwordResetInput.getToken()) && !passwordResetInput.getToken().isEmpty()){
+            passwordReset.setToken(passwordResetInput.getToken());
         }else {
-            passwordReset.setResetCode(passwordInput.getResetCode());
-        }
-        if(isNull(passwordInput.getToken()) || passwordInput.getToken().isEmpty()){
             passwordReset.setToken("EMPTY");
-        }else {
-            passwordReset.setToken(passwordInput.getToken());
         }
-        return passwordResetDao.addPasswordReset(passwordReset);
+        if(!isNull(passwordResetInput.getResetCode())){
+            passwordReset.setResetCode(passwordResetInput.getResetCode());
+        }else {
+            passwordReset.setResetCode(0);
+        }
+        return passwordResetRepository.save(passwordReset);
     }
 
-    public void deletePasswordReset(Long id){
-        passwordResetDao.deletePasswordReset(id);
+    public void deletePasswordResetById(Long id){
+        passwordResetRepository.deleteById(id);
     }
 
-    public PasswordReset editPasswordReset(Long id, PasswordInput passwordInput){
-        PasswordReset passwordReset = new PasswordReset();
-        passwordReset.setId(id);
-        if(isNull(passwordInput.getPhone()) || passwordInput.getPhone().isEmpty()){
+    public PasswordReset updatePasswordReset(Long id, PasswordResetInput passwordResetInput){
+        PasswordReset passwordReset =passwordResetRepository.findById(id).get();
+        if(!isNull(passwordResetInput.getPhone()) && !passwordResetInput.getPhone().isEmpty()){
+            passwordReset.setPhone(passwordResetInput.getPhone());
+        }else {
             passwordReset.setPhone("EMPTY");
-        }else {
-            passwordReset.setPhone(passwordInput.getPhone());
         }
-        if(isNull(passwordInput.getResetCode())){
-            passwordReset.setResetCode(0);
+        if(!isNull(passwordResetInput.getToken()) && !passwordResetInput.getToken().isEmpty()){
+            passwordReset.setToken(passwordResetInput.getToken());
         }else {
-            passwordReset.setResetCode(passwordInput.getResetCode());
-        }
-        if(isNull(passwordInput.getToken()) || passwordInput.getToken().isEmpty()){
             passwordReset.setToken("EMPTY");
-        }else {
-            passwordReset.setToken(passwordInput.getToken());
         }
-        return passwordResetDao.editPasswordReset(passwordReset);
+        if(!isNull(passwordResetInput.getResetCode())){
+            passwordReset.setResetCode(passwordResetInput.getResetCode());
+        }else {
+            passwordReset.setResetCode(0);
+        }
+        return passwordResetRepository.save(passwordReset);
     }
 }

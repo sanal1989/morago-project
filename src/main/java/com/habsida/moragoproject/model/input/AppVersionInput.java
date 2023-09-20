@@ -12,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AppVersionInput {
 
-    private EPlatform platform;
+    private String platform;
     private String latest;
     private String min;
 }

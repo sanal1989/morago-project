@@ -2,7 +2,9 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.AppVersion;
 import com.habsida.moragoproject.model.enums.EPlatform;
+import com.habsida.moragoproject.model.input.AppVersionInput;
 import com.habsida.moragoproject.service.AppVersionService;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -30,17 +32,17 @@ public class AppVersionController {
     }
 
     @MutationMapping
-    public AppVersion addAppVersion(AppVersion appVersion){
-        return appVersionService.addAppVersion(appVersion);
+    public AppVersion createAppVersion(@Argument AppVersionInput appVersionInput){
+        return appVersionService.createAppVersion(appVersionInput);
     }
 
     @MutationMapping
-    public void deleteAppVersion(EPlatform ePlatform){
-        appVersionService.deleteAppVersion(ePlatform);
+    public void deleteAppVersionById(EPlatform ePlatform){
+        appVersionService.deleteAppVersionById(ePlatform);
     }
 
     @MutationMapping
-    public AppVersion editAppVersion(AppVersion appVersion){
-        return appVersionService.editAppVersion(appVersion);
+    public AppVersion updateAppVersion(AppVersionInput appVersionInput){
+        return appVersionService.updateAppVersion(appVersionInput);
     }
 }

@@ -3,18 +3,21 @@ extend type Query{
     findCategoryById(id: ID): Category
 }
 extend type  Mutation{
-    addCategory(isActive:Boolean
-        name: String): Category
-    deleteCategory(id: ID):Boolean
-    editCategory(id: ID
-        isActive:Boolean
-        name: String): Category
+    createCategory(categoryInput: CategoryInput): Category
+    deleteCategoryById(id: ID):Boolean
+    updateCategory(id: ID
+        categoryInput: CategoryInput): Category
 }
 
 type Category{
     id:ID
     createdAt: String
     updatedAt: String
+    isActive:Boolean
+    name: String
+}
+
+input CategoryInput{
     isActive:Boolean
     name: String
 }

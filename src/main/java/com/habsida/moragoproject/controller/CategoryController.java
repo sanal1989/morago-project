@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Category;
+import com.habsida.moragoproject.model.input.CategoryInput;
 import com.habsida.moragoproject.service.CategoryService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,20 +30,17 @@ public class CategoryController {
     }
 
     @MutationMapping
-    public Category addCategory(@Argument Boolean isActive, @Argument String name){
-        Category category = new Category();
-        category.setIsActive(isActive);
-        category.setName(name);
-        return categoryService.addCategory(category);
+    public Category createCategory(@Argument CategoryInput categoryInput){
+        return categoryService.createCategory(categoryInput);
     }
 
     @MutationMapping
-    public void deleteCategory(@Argument Long id){
-        categoryService.deleteCategory(id);
+    public void deleteCategoryById(@Argument Long id){
+        categoryService.deleteCategoryById(id);
     }
 
     @MutationMapping
-    public Category editCategory(Category category){
-        return categoryService.editCategory(category);
+    public Category updateCategory(@Argument Long id, @Argument CategoryInput categoryInput){
+        return categoryService.updateCategory(id, categoryInput);
     }
 }

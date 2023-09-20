@@ -3,16 +3,22 @@ extend type Query{
     findAppVersionByEPlatform(platform: String): AppVersion
 }
 extend type  Mutation{
-                    addAppVersion       (name: String): AppVersion
-    deleteAppVersion(platform: String): Boolean
-                editAppVersion(id: ID
-                    name: String): Role
+    createAppVersion(appVersionInput: AppVersionInput): AppVersion
+    deleteAppVersionById(platform: String): Boolean
+    updateAppVersion(id: ID
+                    appVersionInput: AppVersionInput): Role
 }
 
 type AppVersion{
     platform: String
     createdAt: String
     updatedAt: String
+    latest: String
+    min: String
+}
+
+input AppVersionInput{
+    platform: String
     latest: String
     min: String
 }

@@ -3,14 +3,14 @@ extend type Query{
     findTranslatorProfileById(id: ID): TranslatorProfile
 }
 extend type  Mutation{
-    addTranslatorProfile(dateOfBirth: String
+    createTranslatorProfile(dateOfBirth: String
         email: String
         isAvailable: Boolean
         isOnline: Boolean
         levelOfKorean: String
         isActive: Boolean):TranslatorProfile
-    deleteTranslatorProfile(id: ID):Boolean
-    editTranslatorProfile(id:ID
+    deleteTranslatorProfileById(id: ID):Boolean
+    updateTranslatorProfile(id:ID
         dateOfBirth: String
         email: String
         isAvailable: Boolean
@@ -25,8 +25,22 @@ type TranslatorProfile{
     updatedAt: String
     dateOfBirth: String
     email: String
+    levelOfKorean: String
     isAvailable: Boolean
     isOnline: Boolean
-    levelOfKorean: String
     isActive: Boolean
+    languageList:[Language]
+    themeList: [Theme]
+}
+
+input TranslatorProfileInput{
+    dateOfBirth: String
+    email: String
+    levelOfKorean: String
+    isAvailable: Boolean
+    isOnline: Boolean
+    isActive: Boolean
+    languageList:[LanguageInput]
+    themeList: [ThemeInput]
+
 }

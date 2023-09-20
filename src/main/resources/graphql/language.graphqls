@@ -3,9 +3,9 @@ extend type Query{
     findLanguageById(id: ID): Language
 }
 extend type  Mutation{
-    addLanguage(languageInput:LanguageInput): Language
-    deleteLanguage(id: ID):Boolean
-    editLanguage(id: ID
+    createLanguage(languageInput:LanguageInput): Language
+    deleteLanguageById(id: ID):Boolean
+    updateLanguage(id: ID
         languageInput:LanguageInput): Language
 }
 

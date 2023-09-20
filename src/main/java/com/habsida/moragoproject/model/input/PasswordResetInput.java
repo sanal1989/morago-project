@@ -9,10 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PasswordInput {
+public class PasswordResetInput {
 
     private String phone;
-    private Integer resetCode;
     private String token;
-
+    private Integer resetCode;
 }

@@ -3,14 +3,10 @@ extend type Query{
     findFileById(id: ID): File
 }
 extend type  Mutation{
-    addFile(originalTitle: String
-        path: String
-        fileType: String): File
-    deleteFile(id: ID):Boolean
-    editFile(id: ID
-        originalTitle: String
-        path: String
-        fileType: String): File
+    createFile(fileInput: FileInput): File
+    deleteFileById(id: ID):Boolean
+    updateFile(id: ID
+        fileInput: FileInput): File
 }
 
 type File{
@@ -20,4 +16,12 @@ type File{
     originalTitle: String
     path: String
     fileType: String
+    user: User
+}
+
+input FileInput{
+    originalTitle: String
+    path: String
+    fileType: String
+    user: Int
 }

@@ -3,34 +3,10 @@ extend type Query{
     findCallById(id: ID): Call
 }
 extend type  Mutation{
-    addCall(callStatus: String
-        channelName: String
-        commission: Float
-        duration: Int
-        isEndCall: Boolean
-        status: Boolean
-        sum: Float
-        translatorHasRated: Boolean
-        userHasRated: Boolean
-        userCall: Int
-        userAnswer: Int
-        theme: Int
-        user: Int): Call
-    deleteCall(id: ID):Boolean
-    editCall(id:ID
-        callStatus: String
-        channelName: String
-        commission: Float
-        duration: Int
-        isEndCall: Boolean
-        status: Boolean
-        sum: Float
-        translatorHasRated: Boolean
-        userHasRated: Boolean
-        userCall: Int
-        userAnswer: Int
-        theme: Int
-        user: Int): Call
+    createCall(callInput:CallInput): Call
+    deleteCallById(id: ID):Boolean
+    updateCall(id: ID
+        callInput: CallInput): Call
 }
 
 type Call{
@@ -46,8 +22,22 @@ type Call{
     sum: Float
     translatorHasRated: Boolean
     userHasRated: Boolean
-    userCall: User
-    userAnswer: User
+    caller: User
+    answerer: User
     theme: Theme
-    user: User
+}
+
+input CallInput{
+    callStatus: String
+    channelName: String
+    commission: Float
+    duration: Int
+    isEndCall: Boolean
+    status: Boolean
+    sum: Float
+    translatorHasRated: Boolean
+    userHasRated: Boolean
+    caller: Int
+    answerer: Int
+    theme: Int
 }

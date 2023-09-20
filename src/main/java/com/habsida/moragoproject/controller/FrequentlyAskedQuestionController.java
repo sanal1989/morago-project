@@ -2,6 +2,7 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.enums.FAQCategory;
 import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
+import com.habsida.moragoproject.model.input.FrequentlyAskedQuestionInput;
 import com.habsida.moragoproject.service.FrequentlyAskedQuestionService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,26 +30,17 @@ public class FrequentlyAskedQuestionController {
     }
 
     @MutationMapping
-    public FrequentlyAskedQuestion addFrequentlyAskedQuestion(@Argument String category, @Argument String answer, @Argument String question){
-        FrequentlyAskedQuestion frequentlyAskedQuestion = new FrequentlyAskedQuestion();
-        frequentlyAskedQuestion.setAnswer(answer);
-        frequentlyAskedQuestion.setCategory(FAQCategory.valueOf(category));
-        frequentlyAskedQuestion.setQuestion(question);
-        return frequentlyAskedQuestionService.addFrequentlyAskedQuestion(frequentlyAskedQuestion);
+    public FrequentlyAskedQuestion createFrequentlyAskedQuestion(@Argument FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
+        return frequentlyAskedQuestionService.createFrequentlyAskedQuestion(frequentlyAskedQuestionInput);
     }
 
     @MutationMapping
-    public void deleteFrequentlyAskedQuestion(@Argument Long id){
-        frequentlyAskedQuestionService.deleteFrequentlyAskedQuestion(id);
+    public void deleteFrequentlyAskedQuestionById(@Argument Long id){
+        frequentlyAskedQuestionService.deleteFrequentlyAskedQuestionById(id);
     }
 
     @MutationMapping
-    public FrequentlyAskedQuestion editFrequentlyAskedQuestion(@Argument Long id, @Argument String category, @Argument String answer, @Argument String question){
-        FrequentlyAskedQuestion frequentlyAskedQuestion = new FrequentlyAskedQuestion();
-        frequentlyAskedQuestion.setId(id);
-        frequentlyAskedQuestion.setAnswer(answer);
-        frequentlyAskedQuestion.setCategory(FAQCategory.valueOf(category));
-        frequentlyAskedQuestion.setQuestion(question);
-        return frequentlyAskedQuestionService.editFrequentlyAskedQuestion(frequentlyAskedQuestion);
+    public FrequentlyAskedQuestion updateFrequentlyAskedQuestion(@Argument Long id, @Argument FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
+        return frequentlyAskedQuestionService.updateFrequentlyAskedQuestion(id, frequentlyAskedQuestionInput);
     }
 }

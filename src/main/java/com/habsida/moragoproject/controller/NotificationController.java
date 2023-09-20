@@ -1,7 +1,9 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Notification;
+import com.habsida.moragoproject.model.input.NotificationInput;
 import com.habsida.moragoproject.service.NotificationService;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
@@ -23,22 +25,22 @@ public class NotificationController {
     }
 
     @QueryMapping
-    public Notification findNotificationById(Long id){
+    public Notification findNotificationById(@Argument Long id){
         return notificationService.findById(id);
     }
 
     @MutationMapping
-    public Notification addNotification(Notification notification){
-        return notificationService.addNotification(notification);
+    public Notification createNotification(@Argument NotificationInput notificationInput){
+        return notificationService.createNotification(notificationInput);
     }
 
     @MutationMapping
-    public void deleteNotification(Long id){
-        notificationService.deleteNotification(id);
+    public void deleteNotificationById(@Argument Long id){
+        notificationService.deleteNotificationById(id);
     }
 
     @MutationMapping
-    public Notification editNotification(Notification notification){
-        return notificationService.editNotification(notification);
+    public Notification updateNotification(@Argument Long id, @Argument NotificationInput notificationInput){
+        return notificationService.updateNotification(id, notificationInput);
     }
 }

@@ -1,37 +1,63 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.CoinDao;
 import com.habsida.moragoproject.model.entity.Coin;
+import com.habsida.moragoproject.model.input.CoinInput;
+import com.habsida.moragoproject.repository.CoinRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class CoinService {
 
-    CoinDao coinDao;
+    CoinRepository coinRepository;
 
-    public CoinService(CoinDao coinDao) {
-        this.coinDao = coinDao;
+    public CoinService(CoinRepository coinRepository) {
+        this.coinRepository = coinRepository;
     }
 
     public List<Coin> findAll(){
-        return coinDao.findAll();
+        return coinRepository.findAll();
     }
 
     public Coin findById(Long id){
-        return coinDao.findById(id);
+        return coinRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Coin -> Coin doesn't find by Id"));
     }
 
-    public Coin addCoin(Coin coin){
-        return coinDao.addCoin(coin);
+    public Coin createCoin(CoinInput coinInput){
+        Coin coin = new Coin();
+        if(!isNull(coinInput.getCoin())){
+            coin.setCoin(coinInput.getCoin());
+        }else {
+            coin.setCoin(0d);
+        }
+        if(!isNull(coinInput.getWon())){
+            coin.setWon(coinInput.getWon());
+        }else {
+            coin.setWon(0d);
+        }
+        return coinRepository.save(coin);
     }
 
-    public void deleteCoin(Long id){
-        coinDao.deleteCoin(id);
+    public void deleteCoinById(Long id){
+        coinRepository.deleteById(id);
     }
 
-    public Coin editCoin(Coin coin){
-        return coinDao.editCoin(coin);
+    public Coin updateCoin(Long id, CoinInput coinInput){
+        Coin coin = coinRepository.findById(id).get();
+        if(!isNull(coinInput.getCoin())){
+            coin.setCoin(coinInput.getCoin());
+        }else {
+            coin.setCoin(0d);
+        }
+        if(!isNull(coinInput.getWon())){
+            coin.setWon(coinInput.getWon());
+        }else {
+            coin.setWon(0d);
+        }
+        return coinRepository.save(coin);
     }
 }

@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.File;
+import com.habsida.moragoproject.model.input.FileInput;
 import com.habsida.moragoproject.service.FileService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,26 +30,17 @@ public class FileController {
     }
 
     @MutationMapping
-    public File addFile(@Argument String originalTitle, @Argument String path, @Argument String fileType){
-        File file = new File();
-        file.setOriginalTitle(originalTitle);
-        file.setPath(path);
-        file.setType(fileType);
-        return fileService.addFile(file);
+    public File createFile(@Argument FileInput fileInput){
+        return fileService.createFile(fileInput);
     }
 
     @MutationMapping
-    public void deleteFile(@Argument Long id){
-        fileService.deleteFile(id);
+    public void deleteFileById(@Argument Long id){
+        fileService.deleteFileById(id);
     }
 
     @MutationMapping
-    public File editFile(@Argument Long id, @Argument String originalTitle, @Argument String path, @Argument String fileType){
-        File file = new File();
-        file.setId(id);
-        file.setOriginalTitle(originalTitle);
-        file.setPath(path);
-        file.setType(fileType);
-        return fileService.editFile(file);
+    public File updateFile(@Argument Long id, @Argument FileInput fileInput){
+        return fileService.updateFile(id, fileInput);
     }
 }

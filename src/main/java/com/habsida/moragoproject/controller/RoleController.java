@@ -1,6 +1,5 @@
 package com.habsida.moragoproject.controller;
 
-import com.habsida.moragoproject.model.enums.ERole;
 import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.input.RoleInput;
 import com.habsida.moragoproject.service.RoleService;
@@ -31,17 +30,17 @@ public class RoleController {
     }
 
     @MutationMapping
-    public Role addRole(@Argument RoleInput roleInput){
-        return roleService.addRole(roleInput);
+    public Role createRole(@Argument RoleInput roleInput){
+        return roleService.createRole(roleInput);
     }
 
     @MutationMapping
-    public void deleteRole(@Argument Long id){
-        roleService.deleteRole(id);
+    public void deleteRoleById(@Argument Long id){
+        roleService.deleteRoleById(id);
     }
 
     @MutationMapping
-    public Role editRole(@Argument Long id, @Argument RoleInput roleInput){
-        return roleService.editRole(id, roleInput);
+    public Role updateRole(@Argument Long id, @Argument RoleInput roleInput){
+        return roleService.updateRole(id, roleInput);
     }
 }

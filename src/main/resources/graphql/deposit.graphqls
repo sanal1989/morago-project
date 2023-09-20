@@ -3,18 +3,10 @@ extend type Query{
     findDepositById(id: ID): Deposit
 }
 extend type  Mutation{
-    addDeposit(accountHolder: String
-        coin: Float
-        nameOfBank: String
-        status: String
-        won:Float): Deposit
-    deleteDeposit(id: ID):Boolean
-    editDeposit(id: ID
-        accountHolder: String
-        coin: Float
-        nameOfBank: String
-        status: String
-        won:Float): Deposit
+    createDeposit(depositInput:DepositInput): Deposit
+    deleteDepositById(id: ID):Boolean
+    updateDeposit(id: ID
+        depositInput: DepositInput): Deposit
 }
 
 type Deposit{
@@ -26,4 +18,14 @@ type Deposit{
     nameOfBank: String
     status: String
     won:Float
+    user: User
+}
+
+input DepositInput{
+    accountHolder: String
+    coin: Float
+    nameOfBank: String
+    status: String
+    won:Float
+    user: Int
 }

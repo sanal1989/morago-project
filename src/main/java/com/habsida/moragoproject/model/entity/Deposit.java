@@ -17,10 +17,10 @@ import javax.persistence.ManyToOne;
 public class Deposit extends AbstractAuditable{
 
     private String accountHolder;
-    private Double coin;
     private String nameOfBank;
-    private EStatus status;
+    private Double coin;
     private Double won;
+    private EStatus status;
 
     @ManyToOne
     private User user;

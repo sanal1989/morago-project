@@ -31,17 +31,17 @@ public class RatingController {
     }
 
     @MutationMapping
-    public Rating addRating(@Argument RatingInput ratingInput){
-        return ratingService.addRating(ratingInput);
+    public Rating createRating(@Argument RatingInput ratingInput){
+        return ratingService.createRating(ratingInput);
     }
 
     @MutationMapping
-    public void deleteRating(@Argument Long id){
-        ratingService.deleteRating(id);
+    public void deleteRatingById(@Argument Long id){
+        ratingService.deleteRatingById(id);
     }
 
     @MutationMapping
-    public Rating editRating(@Argument Long id, @Argument RatingInput ratingInput){
-        return ratingService.editRating(id, ratingInput);
+    public Rating updateRating(@Argument Long id, @Argument RatingInput ratingInput){
+        return ratingService.updateRating(id, ratingInput);
     }
 }

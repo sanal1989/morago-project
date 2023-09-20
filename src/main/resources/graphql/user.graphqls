@@ -3,9 +3,9 @@ extend type Query{
     findUserById(id: ID): User
 }
 extend type  Mutation{
-    addUser(userInput: UserInput): User
-    deleteUser(id: ID): Boolean
-    editUser(id: ID
+    createUser(userInput: UserInput): User
+    deleteUserById(id: ID): Boolean
+    updateUser(id: ID
         userInput: UserInput): User
 }
 

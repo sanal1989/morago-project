@@ -31,7 +31,7 @@ public class User extends AbstractAuditable{
     private Double ratings;
     private Integer totalRatings;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Role> roles = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)

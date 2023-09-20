@@ -1,37 +1,80 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.dao.FileDao;
 import com.habsida.moragoproject.model.entity.File;
+import com.habsida.moragoproject.model.input.FileInput;
+import com.habsida.moragoproject.repository.FileRepository;
+import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 public class FileService {
 
-    FileDao fileDao;
+    FileRepository fileRepository;
+    UserRepository userRepository;
 
-    public FileService(FileDao fileDao) {
-        this.fileDao = fileDao;
+    public FileService(FileRepository fileRepository, UserRepository userRepository) {
+        this.fileRepository = fileRepository;
+        this.userRepository = userRepository;
     }
 
     public List<File> findAll(){
-        return fileDao.findAll();
+        return fileRepository.findAll();
     }
 
     public File findById(Long id){
-        return fileDao.findById(id);
+        return fileRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("File -> File doesn't find by Id"));
     }
 
-    public File addFile(File file){
-        return fileDao.addFile(file);
+    public File createFile(FileInput fileInput){
+        File file = new File();
+        if(!isNull(fileInput.getOriginalTitle()) && !fileInput.getOriginalTitle().isEmpty()){
+            file.setOriginalTitle(fileInput.getOriginalTitle());
+        }else{
+            file.setOriginalTitle("EMPTY");
+        }
+        if(!isNull(fileInput.getPath()) && !fileInput.getPath().isEmpty()){
+            file.setPath(fileInput.getPath());
+        }else{
+            file.setPath("EMPTY");
+        }
+        if(!isNull(fileInput.getType()) && !fileInput.getType().isEmpty()){
+            file.setType(fileInput.getType());
+        }else{
+            file.setType("EMPTY");
+        }
+        if(!isNull(fileInput.getUser())){
+            file.setUser(userRepository.findById(fileInput.getUser())
+                    .orElseThrow(()-> new RuntimeException("File -> User doesn't find by Id")));
+        }
+        return fileRepository.save(file);
     }
 
-    public void deleteFile(Long id){
-        fileDao.deleteFile(id);
+    public void deleteFileById(Long id){
+        fileRepository.deleteById(id);
     }
 
-    public File editFile(File file){
-        return fileDao.editFile(file);
+    public File updateFile(Long id ,FileInput fileInput){
+        File file = fileRepository.findById(id).get();
+        if(!isNull(fileInput.getOriginalTitle()) && !fileInput.getOriginalTitle().isEmpty()){
+            file.setOriginalTitle(fileInput.getOriginalTitle());
+        }else{
+            file.setOriginalTitle("EMPTY");
+        }
+        if(!isNull(fileInput.getPath()) && !fileInput.getPath().isEmpty()){
+            file.setPath(fileInput.getPath());
+        }else{
+            file.setPath("EMPTY");
+        }
+        if(!isNull(fileInput.getType()) && !fileInput.getType().isEmpty()){
+            file.setType(fileInput.getType());
+        }else{
+            file.setType("EMPTY");
+        }
+        return fileRepository.save(file);
     }
 }
