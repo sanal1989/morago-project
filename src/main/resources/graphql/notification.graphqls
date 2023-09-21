@@ -1,12 +1,12 @@
 extend type Query{
     findAllNotification: [Notification]
-    findNotificationById(id: ID): Role
+    findNotificationById(id: ID): Notification
 }
 extend type  Mutation{
     createNotification(notificationInput:NotificationInput): Notification
     deleteNotificationById(id: ID): Boolean
     updateNotification(id: ID
-        notificationInput:NotificationInput): Role
+        notificationInput:NotificationInput): Notification
 }
 
 type Notification{

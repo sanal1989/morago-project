@@ -31,13 +31,18 @@ public class User extends AbstractAuditable{
     private Double ratings;
     private Integer totalRatings;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<Role> roles = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
+    private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserProfile userProfile = new UserProfile();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private TranslatorProfile translatorProfile = new TranslatorProfile();
 
     @Override

@@ -26,13 +26,19 @@ public class Call extends AbstractAuditable{
     private Boolean translatorHasRated;
     private Boolean userHasRated;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name="caller_id")
     private User caller;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name="answerer_id")
     private User answerer;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    @JoinColumn(name="theme_id")
     private Theme theme;
 
 }

@@ -43,7 +43,6 @@ public class UserProfileService {
 
     public UserProfile updateUserProfile(Long id, UserProfileInput userProfileInput){
         UserProfile userProfile = userProfileRepository.findById(id).get();
-        userProfile.setId(id);
         if(isNull(userProfileInput.getIsFreeCallMade())){
             userProfile.setIsFreeCallMade(userProfileInput.getIsFreeCallMade());
         }else{

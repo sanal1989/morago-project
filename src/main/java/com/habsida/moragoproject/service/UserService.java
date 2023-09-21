@@ -9,9 +9,11 @@ import com.habsida.moragoproject.repository.TranslatorProfileRepository;
 import com.habsida.moragoproject.repository.UserProfileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Objects.isNull;
 
@@ -39,6 +41,7 @@ public class UserService {
                 .orElseThrow(()->new RuntimeException("User -> User doesn't find by Id"));
     }
 
+    @Transactional
     public User createUser(UserInput userInput){
         User user = new User();
         if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
@@ -104,14 +107,18 @@ public class UserService {
         if(!isNull(userInput.getUserProfile())){
             user.setUserProfile(userProfileRepository.findById(userInput.getUserProfile())
                     .orElseThrow(()->new RuntimeException("User- > UserProfile doesn't find by Id")));
+        }else{
+            user.setUserProfile(null);
         }
         if(!isNull(userInput.getTranslatorProfile())){
             user.setTranslatorProfile(translatorProfileRepository.findById(userInput.getTranslatorProfile())
                     .orElseThrow(()->new RuntimeException("User- > TranslatorProfile doesn't find by Id")));
+        }else{
+            user.setTranslatorProfile(null);
         }
         if(!isNull(userInput.getRoles())){
             List<String> roles = userInput.getRoles();
-            List<Role> rolestoBD = user.getRoles();
+            Set<Role> rolestoBD = user.getRoles();
             if(roles.contains("ADMIN")) {
                 rolestoBD.add(roleRepository.findByName(ERole.ADMIN)
                         .orElseThrow(()-> new RuntimeException("User -> Role.ADMIN doesn't exist")));
@@ -124,6 +131,7 @@ public class UserService {
                 rolestoBD.add(roleRepository.findByName(ERole.TRANSLATOR)
                         .orElseThrow(()-> new RuntimeException("User -> Role.TRANSLATOR doesn't exist")));
             }
+            user.setRoles(rolestoBD);
         }
         return userRepository.save(user);
     }

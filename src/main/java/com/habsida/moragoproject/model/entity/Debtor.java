@@ -17,6 +17,7 @@ public class Debtor extends AbstractAuditable{
     private Boolean isPaid;
     private String nameOfBank;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
     private User user;
 }

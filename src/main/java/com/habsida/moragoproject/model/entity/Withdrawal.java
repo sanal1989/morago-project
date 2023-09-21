@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -26,6 +23,7 @@ public class Withdrawal extends AbstractAuditable{
     private String nameOfBank;
     private Double sum;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+                fetch = FetchType.LAZY)
     private User user;
 }

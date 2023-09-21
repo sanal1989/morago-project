@@ -24,6 +24,6 @@ public class TranslatorProfileInput {
     private String levelOfKorean;
     private Boolean isActive;
 
-    private List<LanguageInput> languageList = new ArrayList<>();
-    private List<ThemeInput> themeList = new ArrayList<>();
+    private List<String> languageList = new ArrayList<>();
+    private List<String> themeList = new ArrayList<>();
 }

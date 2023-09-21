@@ -13,6 +13,5 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @Entity
 public class UserProfile extends AbstractAuditable{
-
     private Boolean isFreeCallMade;
 }

@@ -24,6 +24,7 @@ public class Notification {
     private String title;
     private String text;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
     private User user;
 }

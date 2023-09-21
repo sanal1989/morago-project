@@ -3,20 +3,10 @@ extend type Query{
     findTranslatorProfileById(id: ID): TranslatorProfile
 }
 extend type  Mutation{
-    createTranslatorProfile(dateOfBirth: String
-        email: String
-        isAvailable: Boolean
-        isOnline: Boolean
-        levelOfKorean: String
-        isActive: Boolean):TranslatorProfile
+    createTranslatorProfile(translatorProfileInput:TranslatorProfileInput):TranslatorProfile
     deleteTranslatorProfileById(id: ID):Boolean
     updateTranslatorProfile(id:ID
-        dateOfBirth: String
-        email: String
-        isAvailable: Boolean
-        isOnline: Boolean
-        levelOfKorean: String
-        isActive: Boolean): TranslatorProfile
+        translatorProfileInput:TranslatorProfileInput): TranslatorProfile
 }
 
 type TranslatorProfile{
@@ -40,7 +30,7 @@ input TranslatorProfileInput{
     isAvailable: Boolean
     isOnline: Boolean
     isActive: Boolean
-    languageList:[LanguageInput]
-    themeList: [ThemeInput]
+    languageList:[String]
+    themeList: [String]
 
 }

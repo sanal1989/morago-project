@@ -71,16 +71,16 @@ public class TranslatorProfileService {
             translatorProfile.setIsOnline(false);
         }
         if(!isNull(translatorProfileInput.getLanguageList())){
-            List<LanguageInput> languageList = translatorProfileInput.getLanguageList();
+            List<String> languageList = translatorProfileInput.getLanguageList();
             for (int i = 0; i < languageList.size(); i++) {
-                Optional<Language> language = languagesRepository.findByName(languageList.get(i).getName());
+                Optional<Language> language = languagesRepository.findByName(languageList.get(i));
                 if(language.isPresent()) translatorProfile.getLanguageList().add(language.get());
             }
         }
         if(!isNull(translatorProfileInput.getThemeList())){
-            List<ThemeInput> themeList = translatorProfileInput.getThemeList();
+            List<String> themeList = translatorProfileInput.getThemeList();
             for (int i = 0; i < themeList.size(); i++) {
-                Optional<Theme> theme = themeRepository.findByName(themeList.get(i).getName());
+                Optional<Theme> theme = themeRepository.findByName(themeList.get(i));
                 if(theme.isPresent()) translatorProfile.getThemeList().add(theme.get());
             }
         }

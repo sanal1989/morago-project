@@ -9,6 +9,9 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ManyToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,5 +22,7 @@ public class Role extends AbstractAuditable{
 
     @Enumerated(EnumType.ORDINAL)
     private ERole name;
+
+
 
 }
