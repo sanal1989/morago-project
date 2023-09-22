@@ -6,6 +6,7 @@ import com.habsida.moragoproject.service.WithdrawalService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class WithdrawalController {
     public WithdrawalController(WithdrawalService withdrawalService) {
         this.withdrawalService = withdrawalService;
     }
-
+    @PreAuthorize("isAuthenticated()")
     @QueryMapping
     public List<Withdrawal> findAllWithdrawalService(){
         return withdrawalService.findAll();
