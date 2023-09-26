@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class WithdrawalController {
 
     WithdrawalService withdrawalService;
@@ -19,8 +20,9 @@ public class WithdrawalController {
     public WithdrawalController(WithdrawalService withdrawalService) {
         this.withdrawalService = withdrawalService;
     }
-    @PreAuthorize("isAuthenticated()")
+
     @QueryMapping
+
     public List<Withdrawal> findAllWithdrawalService(){
         return withdrawalService.findAll();
     }

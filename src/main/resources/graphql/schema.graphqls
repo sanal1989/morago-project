@@ -3,5 +3,11 @@ type Query{
 }
 type Mutation{
     login(username: String,
-        password: String): String
+        password: String): RefreshTokenResponse
+    refreshToken(token: String): String
+}
+
+type RefreshTokenResponse{
+    jwtToken: String
+    RefreshToken: String
 }

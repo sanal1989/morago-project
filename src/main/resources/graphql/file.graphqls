@@ -16,12 +16,10 @@ type File{
     originalTitle: String
     path: String
     fileType: String
-    user: User
 }
 
 input FileInput{
     originalTitle: String
     path: String
     fileType: String
-    user: Int
 }

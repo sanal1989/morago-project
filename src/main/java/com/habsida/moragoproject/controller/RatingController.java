@@ -15,7 +15,6 @@ public class RatingController {
 
     RatingService ratingService;
 
-
     public RatingController(RatingService ratingService) {
         this.ratingService = ratingService;
     }

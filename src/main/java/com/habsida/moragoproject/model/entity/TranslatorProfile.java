@@ -33,4 +33,8 @@ public class TranslatorProfile extends AbstractAuditable{
             fetch = FetchType.LAZY)
     private Set<Theme> themeList = new HashSet<>();
 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
+    private File file;
+
 }

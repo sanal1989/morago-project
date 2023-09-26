@@ -21,6 +21,7 @@ type TranslatorProfile{
     isActive: Boolean
     languageList:[Language]
     themeList: [Theme]
+    file: File
 }
 
 input TranslatorProfileInput{
@@ -32,5 +33,5 @@ input TranslatorProfileInput{
     isActive: Boolean
     languageList:[String]
     themeList: [String]
-
+    file: Int
 }

@@ -19,7 +19,7 @@ public class UserProfileController {
     public UserProfileController(UserProfileService userProfileService) {
         this.userProfileService = userProfileService;
     }
-    @PreAuthorize("isAuthenticated()")
+//    @PreAuthorize("isAuthenticated()")
     @QueryMapping
     public List<UserProfile> findAllUserProfile(){
         return userProfileService.findAll();

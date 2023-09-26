@@ -47,10 +47,6 @@ public class FileService {
         }else{
             file.setType("EMPTY");
         }
-        if(!isNull(fileInput.getUser())){
-            file.setUser(userRepository.findById(fileInput.getUser())
-                    .orElseThrow(()-> new RuntimeException("File -> User doesn't find by Id")));
-        }
         return fileRepository.save(file);
     }
 

@@ -8,6 +8,7 @@ import com.habsida.moragoproject.repository.RoleRepository;
 import com.habsida.moragoproject.repository.TranslatorProfileRepository;
 import com.habsida.moragoproject.repository.UserProfileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,12 +25,14 @@ public class UserService {
     UserProfileRepository userProfileRepository;
     TranslatorProfileRepository translatorProfileRepository;
     RoleRepository roleRepository;
+    PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, TranslatorProfileRepository translatorProfileRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, TranslatorProfileRepository translatorProfileRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.translatorProfileRepository = translatorProfileRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll(){
@@ -65,7 +68,7 @@ public class UserService {
             user.setFcmToken("EMPTY");
         }
         if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
-            user.setPassword(userInput.getPassword());
+            user.setPassword(passwordEncoder.encode(userInput.getPassword()));
         }else {
             user.setPassword("EMPTY");
         }
@@ -142,11 +145,6 @@ public class UserService {
 
     public User updateUser(Long id, UserInput userInput){
         User user = userRepository.findById(id).get();
-        if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
-            user.setFirstName(userInput.getFirstName());
-        }else {
-            user.setFirstName("EMPTY");
-        }
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
         }else {
@@ -161,11 +159,6 @@ public class UserService {
             user.setFcmToken(userInput.getFcmToken());
         }else {
             user.setFcmToken("EMPTY");
-        }
-        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
-            user.setPassword(userInput.getPassword());
-        }else {
-            user.setPassword("EMPTY");
         }
         if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());

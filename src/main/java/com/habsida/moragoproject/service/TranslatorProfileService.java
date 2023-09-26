@@ -6,6 +6,7 @@ import com.habsida.moragoproject.model.entity.TranslatorProfile;
 import com.habsida.moragoproject.model.input.LanguageInput;
 import com.habsida.moragoproject.model.input.ThemeInput;
 import com.habsida.moragoproject.model.input.TranslatorProfileInput;
+import com.habsida.moragoproject.repository.FileRepository;
 import com.habsida.moragoproject.repository.LanguagesRepository;
 import com.habsida.moragoproject.repository.ThemeRepository;
 import com.habsida.moragoproject.repository.TranslatorProfileRepository;
@@ -22,11 +23,13 @@ public class TranslatorProfileService {
     TranslatorProfileRepository translatorProfileRepository;
     LanguagesRepository languagesRepository;
     ThemeRepository themeRepository;
+    FileRepository fileRepository;
 
-    public TranslatorProfileService(TranslatorProfileRepository translatorProfileRepository, LanguagesRepository languagesRepository, ThemeRepository themeRepository) {
+    public TranslatorProfileService(TranslatorProfileRepository translatorProfileRepository, LanguagesRepository languagesRepository, ThemeRepository themeRepository, FileRepository fileRepository) {
         this.translatorProfileRepository = translatorProfileRepository;
         this.languagesRepository = languagesRepository;
         this.themeRepository = themeRepository;
+        this.fileRepository = fileRepository;
     }
 
     public List<TranslatorProfile> findAll(){
@@ -76,6 +79,10 @@ public class TranslatorProfileService {
                 Optional<Language> language = languagesRepository.findByName(languageList.get(i));
                 if(language.isPresent()) translatorProfile.getLanguageList().add(language.get());
             }
+        }
+        if(!isNull(translatorProfileInput.getFile())){
+            translatorProfile.setFile(fileRepository.findById(translatorProfileInput.getFile())
+                    .orElseThrow(()->new RuntimeException("TranslatorProfile -> File doesn't find by ID")));
         }
         if(!isNull(translatorProfileInput.getThemeList())){
             List<String> themeList = translatorProfileInput.getThemeList();

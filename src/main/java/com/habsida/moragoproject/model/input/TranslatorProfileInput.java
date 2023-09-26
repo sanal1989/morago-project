@@ -26,4 +26,6 @@ public class TranslatorProfileInput {
 
     private List<String> languageList = new ArrayList<>();
     private List<String> themeList = new ArrayList<>();
+
+    private Long file;
 }

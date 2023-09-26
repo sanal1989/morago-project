@@ -17,8 +17,4 @@ public class File extends AbstractAuditable{
     private String path;
     private String type;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
-    private User user;
-
 }
