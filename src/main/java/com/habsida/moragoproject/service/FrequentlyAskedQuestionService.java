@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.service;
 
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
 import com.habsida.moragoproject.model.enums.FAQCategory;
 import com.habsida.moragoproject.model.input.FrequentlyAskedQuestionInput;
@@ -26,7 +27,7 @@ public class FrequentlyAskedQuestionService {
 
     public FrequentlyAskedQuestion findById(Long id){
         return frequentlyAskedQuestionRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("FrequentlyAskedQuestion -> FrequentlyAskedQuestion doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("FrequentlyAskedQuestion -> FrequentlyAskedQuestion doesn't find by Id " + id));
     }
 
     public FrequentlyAskedQuestion createFrequentlyAskedQuestion(FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
@@ -49,8 +50,13 @@ public class FrequentlyAskedQuestionService {
         return frequentlyAskedQuestionRepository.save(frequentlyAskedQuestion);
     }
 
-    public void deleteFrequentlyAskedQuestionById(Long id){
-        frequentlyAskedQuestionRepository.deleteById(id);
+    public String deleteFrequentlyAskedQuestionById(Long id){
+        try {
+            frequentlyAskedQuestionRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "FrequentlyAskedQuestion with Id "+id+" deleted";
     }
 
     public FrequentlyAskedQuestion updateFrequentlyAskedQuestion(Long id, FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){

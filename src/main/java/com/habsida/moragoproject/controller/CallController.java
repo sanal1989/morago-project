@@ -8,11 +8,13 @@ import com.habsida.moragoproject.service.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class CallController {
 
     CallService callService;
@@ -41,8 +43,8 @@ public class CallController {
     }
 
     @MutationMapping
-    public void deleteCallById(@Argument Long id){
-        callService.deleteCallById(id);
+    public String deleteCallById(@Argument Long id){
+        return callService.deleteCallById(id);
     }
 
     @MutationMapping

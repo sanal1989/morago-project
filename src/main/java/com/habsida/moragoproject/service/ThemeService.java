@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Theme;
 import com.habsida.moragoproject.model.input.ThemeInput;
 import com.habsida.moragoproject.repository.CategoryRepository;
@@ -29,7 +30,8 @@ public class ThemeService {
     }
 
     public Theme findById(Long id){
-        return themeRepository.findById(id).orElseThrow(()->new RuntimeException("Theme-> Theme doesn't find by Id"));
+        return themeRepository.findById(id)
+                .orElseThrow(()->new NotFoundById("Theme-> Theme doesn't find by Id " + id));
     }
 
     public Theme createTheme(ThemeInput themeInput){
@@ -71,17 +73,22 @@ public class ThemeService {
         }
         if(!isNull(themeInput.getCategory())){
             theme.setCategory(categoryRepository.findById(themeInput.getCategory())
-                    .orElseThrow(()->new RuntimeException("Theme-> Category doesn't find By Id")));
+                    .orElseThrow(()->new NotFoundById("Theme-> Category doesn't find By Id " + themeInput.getCategory())));
         }
         if(!isNull(themeInput.getFile())){
             theme.setFile(fileRepository.findById(themeInput.getFile())
-                    .orElseThrow(()->new RuntimeException("Theme-> File doesn't find By Id")));
+                    .orElseThrow(()->new NotFoundById("Theme-> File doesn't find By Id " + themeInput.getFile())));
         }
         return themeRepository.save(theme);
     }
 
-    public void deleteThemeById(Long id){
-        themeRepository.deleteById(id);
+    public String deleteThemeById(Long id){
+        try{
+            themeRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Theme with Id "+id+" deleted";
     }
 
     public Theme updateTheme(Long id, ThemeInput themeInput){
@@ -123,11 +130,11 @@ public class ThemeService {
         }
         if(!isNull(themeInput.getCategory())){
             theme.setCategory(categoryRepository.findById(themeInput.getCategory())
-                    .orElseThrow(()->new RuntimeException("Theme-> Category doesn't find By Id")));
+                    .orElseThrow(()->new NotFoundById("Theme-> Category doesn't find By Id " + themeInput.getCategory())));
         }
         if(!isNull(themeInput.getFile())){
             theme.setFile(fileRepository.findById(themeInput.getFile())
-                    .orElseThrow(()->new RuntimeException("Theme-> File doesn't find By Id")));
+                    .orElseThrow(()->new NotFoundById("Theme-> File doesn't find By Id " + themeInput.getFile())));
         }
         return themeRepository.save(theme);
     }

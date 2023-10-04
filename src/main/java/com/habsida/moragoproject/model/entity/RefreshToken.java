@@ -22,8 +22,7 @@ public class RefreshToken extends AbstractAuditable{
 
     private Instant expiryDate;
 
-    @OneToOne(cascade = {
-        CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+    @OneToOne(cascade = CascadeType.ALL,
     fetch = FetchType.LAZY)
     private User user;
 }

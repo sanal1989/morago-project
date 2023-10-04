@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-@PreAuthorize("isAuthenticated()")
+@PreAuthorize("hasRole('USER')")
 public class WithdrawalController {
 
     WithdrawalService withdrawalService;

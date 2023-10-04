@@ -6,11 +6,13 @@ import com.habsida.moragoproject.service.CategoryService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class CategoryController {
 
     CategoryService categoryService;
@@ -35,8 +37,8 @@ public class CategoryController {
     }
 
     @MutationMapping
-    public void deleteCategoryById(@Argument Long id){
-        categoryService.deleteCategoryById(id);
+    public String deleteCategoryById(@Argument Long id){
+        return categoryService.deleteCategoryById(id);
     }
 
     @MutationMapping

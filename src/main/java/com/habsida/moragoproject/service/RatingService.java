@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Rating;
 import com.habsida.moragoproject.model.input.RatingInput;
 import com.habsida.moragoproject.repository.RatingRepository;
@@ -27,7 +28,7 @@ public class RatingService {
 
     public Rating findById(Long id){
         return ratingRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Rating -> Rating doesn't find By Id"));
+                .orElseThrow(()->new NotFoundById("Rating -> Rating doesn't find By Id " +id));
     }
 
     public Rating createRating(RatingInput ratingInput){
@@ -39,21 +40,26 @@ public class RatingService {
         }
         if(!isNull(ratingInput.getUserGivesRating())){
             rating.setUserGivesRating(userRepository.findById(ratingInput.getUserGivesRating())
-                    .orElseThrow(()->new RuntimeException("Rating->User dont find By Id")));
+                    .orElseThrow(()->new NotFoundById("Rating->User dont find By Id " +ratingInput.getUserGivesRating())));
         }
         if(!isNull(ratingInput.getUserTakesRating())){
             rating.setUserTakesRating(userRepository.findById(ratingInput.getUserTakesRating())
-                    .orElseThrow(()->new RuntimeException("Rating->User dont find By Id")));
+                    .orElseThrow(()->new NotFoundById("Rating->User dont find By Id " + ratingInput.getUserTakesRating())));
         }
         if(!isNull(ratingInput.getUser())){
             rating.setUser(userRepository.findById(ratingInput.getUser())
-                    .orElseThrow(()->new RuntimeException("Rating->User dont find By Id")));
+                    .orElseThrow(()->new NotFoundById("Rating->User dont find By Id " + ratingInput.getUser())));
         }
         return ratingRepository.save(rating);
     }
 
-    public void deleteRatingById(Long id){
-        ratingRepository.deleteById(id);
+    public String deleteRatingById(Long id){
+        try{
+            ratingRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Rating with Id "+id+" deleted";
     }
 
     public Rating updateRating(Long id, RatingInput ratingInput){
@@ -65,11 +71,11 @@ public class RatingService {
         }
         if(!isNull(ratingInput.getUserGivesRating())){
             rating.setUserGivesRating(userRepository.findById(ratingInput.getUserGivesRating())
-                    .orElseThrow(()->new RuntimeException("Rating->User dont find By Id")));
+                    .orElseThrow(()->new NotFoundById("Rating->User dont find By Id " +ratingInput.getUserGivesRating())));
         }
         if(!isNull(ratingInput.getUserTakesRating())){
             rating.setUserTakesRating(userRepository.findById(ratingInput.getUserTakesRating())
-                    .orElseThrow(()->new RuntimeException("Rating->User dont find By Id")));
+                    .orElseThrow(()->new NotFoundById("Rating->User dont find By Id " +ratingInput.getUserTakesRating())));
         }
         return ratingRepository.save(rating);
     }

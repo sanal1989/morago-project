@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Call;
 import com.habsida.moragoproject.model.enums.CallStatus;
 import com.habsida.moragoproject.model.input.CallInput;
@@ -31,7 +32,7 @@ public class CallService {
 
     public Call findById(Long id){
         return callRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Call -> Call doesn't find"));
+                .orElseThrow(()-> new NotFoundById("Call -> Call doesn't find " + id));
     }
 
     public Call createCall(CallInput callInput){
@@ -83,21 +84,26 @@ public class CallService {
         }
         if(!isNull(callInput.getCaller())){
             call.setCaller(userRepository.findById(callInput.getCaller())
-                    .orElseThrow(()-> new RuntimeException("Call -> User doesn't find by Id")));
+                    .orElseThrow(()-> new NotFoundById("Call -> User doesn't find by Id " + callInput.getCaller())));
         }
         if(!isNull(callInput.getAnswerer())){
             call.setAnswerer(userRepository.findById(callInput.getAnswerer())
-                    .orElseThrow(()-> new RuntimeException("Call -> User doesn't find by Id")));
+                    .orElseThrow(()-> new NotFoundById("Call -> User doesn't find by Id " + callInput.getAnswerer())));
         }
         if(!isNull(callInput.getTheme())){
             call.setTheme(themeRepository.findById(callInput.getTheme())
-                    .orElseThrow(()-> new RuntimeException("Call -> Theme doesn't find by Id")));
+                    .orElseThrow(()-> new NotFoundById("Call -> Theme doesn't find by Id " + callInput.getTheme())));
         }
         return callRepository.save(call);
     }
 
-    public void deleteCallById(Long id){
-        callRepository.deleteById(id);
+    public String deleteCallById(Long id){
+        try{
+            callRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Call with Id "+id+" deleted";
     }
 
     public Call updateCall(Long id, CallInput callInput){

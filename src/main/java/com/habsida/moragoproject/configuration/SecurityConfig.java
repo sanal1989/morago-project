@@ -1,8 +1,8 @@
 package com.habsida.moragoproject.configuration;
 
-import com.habsida.moragoproject.security.CustomUserDetailsService;
-import com.habsida.moragoproject.security.JwtAuthenticationEntryPoint;
-import com.habsida.moragoproject.security.JwtAuthenticationFilter;
+import com.habsida.moragoproject.configuration.security.CustomUserDetailsService;
+import com.habsida.moragoproject.configuration.security.JwtAuthenticationEntryPoint;
+import com.habsida.moragoproject.configuration.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,8 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/graphql").permitAll()
                 .anyRequest().authenticated()
                 // Add more URL patterns and permissions as needed
-                .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

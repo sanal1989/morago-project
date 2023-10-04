@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Debtor;
 import com.habsida.moragoproject.model.input.DebtorInput;
 import com.habsida.moragoproject.repository.DebtorRepository;
@@ -27,7 +28,7 @@ public class DebtorService {
 
     public Debtor findById(Long id){
         return debtorRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Debtor -> Debtor doesn't find by Id"));
+                .orElseThrow(() -> new NotFoundById("Debtor -> Debtor doesn't find by Id " +id));
     }
 
     public Debtor createDebtor(DebtorInput debtorInput){
@@ -49,13 +50,18 @@ public class DebtorService {
         }
         if(!isNull(debtorInput.getUser())){
             debtor.setUser(userRepository.findById(debtorInput.getUser())
-                    .orElseThrow(()->new RuntimeException("Debtor -> User doesn't find by Id")));
+                    .orElseThrow(()->new NotFoundById("Debtor -> User doesn't find by Id " + debtorInput.getUser())));
         }
         return debtorRepository.save(debtor);
     }
 
-    public void deleteDebtorById(Long id){
-        debtorRepository.deleteById(id);
+    public String deleteDebtorById(Long id){
+        try{
+            debtorRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Debtor with Id "+id+" deleted";
     }
 
     public Debtor updateDebtor(Long id, DebtorInput debtorInput){

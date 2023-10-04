@@ -3,7 +3,7 @@ package com.habsida.moragoproject.controller;
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
-import com.habsida.moragoproject.security.JwtUtil;
+import com.habsida.moragoproject.configuration.security.JwtUtil;
 import com.habsida.moragoproject.service.RefreshTokenService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -38,8 +38,8 @@ public class LoginController {
                     new UsernamePasswordAuthenticationToken(username, password)
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken(username);
-            refreshTokenResponse.setJwtToken(jwtUtil.generateToken(userDetails.getUsername()));
+            RefreshToken refreshToken = refreshTokenService.findByUser(username);
+            refreshTokenResponse.setJwtToken(jwtUtil.generateToken(userDetails.getUsername(), true));
             refreshTokenResponse.setRefreshToken(refreshToken.getToken());
             return refreshTokenResponse;
         } catch (Exception e) {
@@ -54,6 +54,6 @@ public class LoginController {
                 .orElseThrow(()->new RuntimeException("Refresh token is not in database!"));
         refreshTokenService.verifyExpiration(refreshToken);
         User user = refreshToken.getUser();
-        return jwtUtil.generateToken(user.getFirstName());
+        return jwtUtil.generateToken(user.getFirstName(),true);
     }
 }

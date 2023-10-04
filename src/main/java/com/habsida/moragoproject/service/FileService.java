@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.model.input.FileInput;
 import com.habsida.moragoproject.repository.FileRepository;
@@ -27,7 +28,7 @@ public class FileService {
 
     public File findById(Long id){
         return fileRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("File -> File doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("File -> File doesn't find by Id " +id));
     }
 
     public File createFile(FileInput fileInput){
@@ -50,8 +51,13 @@ public class FileService {
         return fileRepository.save(file);
     }
 
-    public void deleteFileById(Long id){
-        fileRepository.deleteById(id);
+    public String deleteFileById(Long id){
+        try {
+            fileRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "File with Id "+id+" deleted";
     }
 
     public File updateFile(Long id ,FileInput fileInput){

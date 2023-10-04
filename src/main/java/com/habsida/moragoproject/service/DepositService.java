@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Deposit;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.DepositInput;
@@ -28,7 +29,7 @@ public class DepositService {
 
     public Deposit findById(Long id){
         return depositRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Deposit -> Deposit doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("Deposit -> Deposit doesn't find by Id " + id));
     }
 
     public Deposit createDeposit(DepositInput depositInput){
@@ -60,13 +61,18 @@ public class DepositService {
         }
         if(!isNull(depositInput.getUser())){
             deposit.setUser(userRepository.findById(depositInput.getUser())
-                    .orElseThrow(()->new RuntimeException("Deposit -> User doesn't find by id")));
+                    .orElseThrow(()->new NotFoundById("Deposit -> User doesn't find by id " + depositInput.getUser())));
         }
         return depositRepository.save(deposit);
     }
 
-    public void deleteDepositById(Long id){
-        depositRepository.deleteById(id);
+    public String deleteDepositById(Long id){
+        try{
+            depositRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Deposit with Id "+id+" deleted";
     }
 
     public Deposit updateDeposit(Long id, DepositInput depositInput){

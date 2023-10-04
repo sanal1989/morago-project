@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Coin;
 import com.habsida.moragoproject.model.input.CoinInput;
 import com.habsida.moragoproject.repository.CoinRepository;
@@ -24,7 +25,7 @@ public class CoinService {
 
     public Coin findById(Long id){
         return coinRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Coin -> Coin doesn't find by Id"));
+                .orElseThrow(()-> new NotFoundById("Coin -> Coin doesn't find by Id " + id));
     }
 
     public Coin createCoin(CoinInput coinInput){
@@ -42,8 +43,13 @@ public class CoinService {
         return coinRepository.save(coin);
     }
 
-    public void deleteCoinById(Long id){
-        coinRepository.deleteById(id);
+    public String deleteCoinById(Long id){
+        try{
+            coinRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Coin with Id "+id+" deleted";
     }
 
     public Coin updateCoin(Long id, CoinInput coinInput){

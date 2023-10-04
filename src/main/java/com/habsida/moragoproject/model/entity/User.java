@@ -32,7 +32,7 @@ public class User extends AbstractAuditable{
     private Integer totalRatings;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -44,6 +44,9 @@ public class User extends AbstractAuditable{
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private TranslatorProfile translatorProfile = new TranslatorProfile();
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private RefreshToken refreshToken;
 
     @Override
     public String toString() {

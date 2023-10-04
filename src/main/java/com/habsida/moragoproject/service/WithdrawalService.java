@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Withdrawal;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.WithdrawalInput;
@@ -27,7 +28,8 @@ public class WithdrawalService {
     }
 
     public Withdrawal findById(Long id){
-        return withdrawalRepository.findById(id).orElseThrow(()->new RuntimeException("Withdrawal doesn't find by Id"));
+        return withdrawalRepository.findById(id)
+                .orElseThrow(()->new NotFoundById("Withdrawal doesn't find by Id " + id));
     }
 
     public Withdrawal createWithdrawal(WithdrawalInput withdrawalInput){
@@ -59,13 +61,17 @@ public class WithdrawalService {
         }
         if(!isNull(withdrawalInput.getUser())){
             withdrawal.setUser(userRepository.findById(withdrawalInput.getUser())
-                    .orElseThrow(()->new RuntimeException("Withdrawal -> User doesn't find by Id")));
+                    .orElseThrow(()->new NotFoundById("Withdrawal -> User doesn't find by Id " + withdrawalInput.getUser())));
         }
         return withdrawalRepository.save(withdrawal);
     }
 
     public String deleteWithdrawalById(Long id){
-        withdrawalRepository.deleteById(id);
+        try{
+            withdrawalRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
         return "Withdrawal with Id "+id+" deleted";
     }
 

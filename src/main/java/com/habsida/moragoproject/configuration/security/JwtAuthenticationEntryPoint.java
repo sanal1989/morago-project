@@ -1,4 +1,4 @@
-package com.habsida.moragoproject.security;
+package com.habsida.moragoproject.configuration.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

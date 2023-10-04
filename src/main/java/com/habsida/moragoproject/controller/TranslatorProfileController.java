@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
+//@PreAuthorize("isAuthenticated()")
 public class TranslatorProfileController {
 
     TranslatorProfileService translatorProfileService;
@@ -35,8 +36,8 @@ public class TranslatorProfileController {
     }
 
     @MutationMapping
-    public void deleteTranslatorProfileById(@Argument Long id){
-        translatorProfileService.deleteTranslatorProfileById(id);
+    public String deleteTranslatorProfileById(@Argument Long id){
+        return translatorProfileService.deleteTranslatorProfileById(id);
     }
 
     @MutationMapping

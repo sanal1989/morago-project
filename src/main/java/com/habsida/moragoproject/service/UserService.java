@@ -1,5 +1,7 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.enums.ERole;
@@ -8,11 +10,11 @@ import com.habsida.moragoproject.repository.RoleRepository;
 import com.habsida.moragoproject.repository.TranslatorProfileRepository;
 import com.habsida.moragoproject.repository.UserProfileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,18 +23,25 @@ import static java.util.Objects.isNull;
 @Service
 public class UserService {
 
-    UserRepository userRepository;
-    UserProfileRepository userProfileRepository;
-    TranslatorProfileRepository translatorProfileRepository;
-    RoleRepository roleRepository;
-    PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+    private UserProfileRepository userProfileRepository;
+    private TranslatorProfileRepository translatorProfileRepository;
+    private RoleRepository roleRepository;
+    private PasswordEncoder passwordEncoder;
+    private RefreshTokenService refreshTokenService;
 
-    public UserService(UserRepository userRepository, UserProfileRepository userProfileRepository, TranslatorProfileRepository translatorProfileRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository,
+                       UserProfileRepository userProfileRepository,
+                       TranslatorProfileRepository translatorProfileRepository,
+                       RoleRepository roleRepository,
+                       PasswordEncoder passwordEncoder,
+                       RefreshTokenService refreshTokenService) {
         this.userRepository = userRepository;
         this.userProfileRepository = userProfileRepository;
         this.translatorProfileRepository = translatorProfileRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public List<User> findAll(){
@@ -41,7 +50,7 @@ public class UserService {
 
     public User findById(Long id){
         return userRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("User -> User doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("User -> User doesn't find by Id " + id));
     }
 
     @Transactional
@@ -109,13 +118,13 @@ public class UserService {
         }
         if(!isNull(userInput.getUserProfile())){
             user.setUserProfile(userProfileRepository.findById(userInput.getUserProfile())
-                    .orElseThrow(()->new RuntimeException("User- > UserProfile doesn't find by Id")));
+                    .orElseThrow(()->new NotFoundById("User- > UserProfile doesn't find by Id " + userInput.getUserProfile())));
         }else{
             user.setUserProfile(null);
         }
         if(!isNull(userInput.getTranslatorProfile())){
             user.setTranslatorProfile(translatorProfileRepository.findById(userInput.getTranslatorProfile())
-                    .orElseThrow(()->new RuntimeException("User- > TranslatorProfile doesn't find by Id")));
+                    .orElseThrow(()->new NotFoundById("User- > TranslatorProfile doesn't find by Id " + userInput.getTranslatorProfile())));
         }else{
             user.setTranslatorProfile(null);
         }
@@ -124,23 +133,32 @@ public class UserService {
             Set<Role> rolestoBD = user.getRoles();
             if(roles.contains("ADMIN")) {
                 rolestoBD.add(roleRepository.findByName(ERole.ADMIN)
-                        .orElseThrow(()-> new RuntimeException("User -> Role.ADMIN doesn't exist")));
+                        .orElseThrow(()-> new NotFoundById("User -> Role.ADMIN doesn't exist")));
             }
             if(roles.contains("USER")){
                 rolestoBD.add(roleRepository.findByName(ERole.USER)
-                        .orElseThrow(()-> new RuntimeException("User -> Role.USER doesn't exist")));
+                        .orElseThrow(()-> new NotFoundById("User -> Role.USER doesn't exist")));
             }
             if(roles.contains("TRANSLATOR")){
                 rolestoBD.add(roleRepository.findByName(ERole.TRANSLATOR)
-                        .orElseThrow(()-> new RuntimeException("User -> Role.TRANSLATOR doesn't exist")));
+                        .orElseThrow(()-> new NotFoundById("User -> Role.TRANSLATOR doesn't exist")));
             }
             user.setRoles(rolestoBD);
         }
-        return userRepository.save(user);
+        User userDB = userRepository.save(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInput.getFirstName());
+        userDB.setRefreshToken(refreshToken);
+        userRepository.save(userDB);
+        return userDB;
     }
 
-    public void deleteUserById(Long id){
-        userRepository.deleteById(id);
+    public String deleteUserById(Long id){
+        try{
+            userRepository.deleteById(id);
+        }catch (Exception e){
+            throw  new NotFoundById(e.getMessage());
+        }
+        return "User with Id "+id+" deleted";
     }
 
     public User updateUser(Long id, UserInput userInput){

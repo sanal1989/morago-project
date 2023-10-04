@@ -6,12 +6,12 @@ import com.habsida.moragoproject.service.UserProfileService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+//@PreAuthorize("isAuthenticated()")
 public class UserProfileController {
 
     UserProfileService userProfileService;
@@ -19,7 +19,7 @@ public class UserProfileController {
     public UserProfileController(UserProfileService userProfileService) {
         this.userProfileService = userProfileService;
     }
-//    @PreAuthorize("isAuthenticated()")
+
     @QueryMapping
     public List<UserProfile> findAllUserProfile(){
         return userProfileService.findAll();
@@ -36,8 +36,8 @@ public class UserProfileController {
     }
 
     @MutationMapping
-    public void deleteUserProfileById(@Argument Long id){
-        userProfileService.deleteUserProfileById(id);
+    public String deleteUserProfileById(@Argument Long id){
+        return userProfileService.deleteUserProfileById(id);
     }
 
     @MutationMapping

@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.AppVersion;
 import com.habsida.moragoproject.model.enums.EPlatform;
 import com.habsida.moragoproject.model.input.AppVersionInput;
@@ -25,7 +26,7 @@ public class AppVersionService {
 
     public AppVersion findByEPlatform(EPlatform ePlatform){
         return appVersionRepository.findByPlatform(ePlatform)
-                .orElseThrow(()->new RuntimeException("AppVersion -> AppVersion doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("AppVersion -> AppVersion doesn't find by Id " +ePlatform.toString()));
     }
 
     public AppVersion createAppVersion(AppVersionInput appVersionInput){
@@ -49,8 +50,13 @@ public class AppVersionService {
         return appVersionRepository.save(appVersion);
     }
 
-    public void deleteAppVersionById(EPlatform ePlatform){
-        appVersionRepository.deleteByPlatform(ePlatform);
+    public String deleteAppVersionById(EPlatform ePlatform){
+        try{
+            appVersionRepository.deleteByPlatform(ePlatform);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "AppVersion with Id "+ePlatform.toString()+" deleted";
     }
 
     public AppVersion updateAppVersion(AppVersionInput appVersionInput){

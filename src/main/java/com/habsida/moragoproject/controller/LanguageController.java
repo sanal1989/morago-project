@@ -6,11 +6,13 @@ import com.habsida.moragoproject.service.LanguageService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class LanguageController {
 
     LanguageService languageService;
@@ -35,8 +37,8 @@ public class LanguageController {
     }
 
     @MutationMapping
-    public void deleteLanguageById(@Argument Long id){
-        languageService.deleteLanguageById(id);
+    public String deleteLanguageById(@Argument Long id){
+        return languageService.deleteLanguageById(id);
     }
 
     @MutationMapping

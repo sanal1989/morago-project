@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
+@PreAuthorize("hasRole('ADMIN')")
 public class RoleController {
 
     RoleService roleService;
@@ -19,7 +20,7 @@ public class RoleController {
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
     }
-    @PreAuthorize("isAuthenticated()")
+
     @QueryMapping
     public List<Role> findAllRole(){
         return roleService.findAll();
@@ -36,8 +37,8 @@ public class RoleController {
     }
 
     @MutationMapping
-    public void deleteRoleById(@Argument Long id){
-        roleService.deleteRoleById(id);
+    public String deleteRoleById(@Argument Long id){
+        return roleService.deleteRoleById(id);
     }
 
     @MutationMapping

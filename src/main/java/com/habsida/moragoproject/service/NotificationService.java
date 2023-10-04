@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Notification;
 import com.habsida.moragoproject.model.input.NotificationInput;
 import com.habsida.moragoproject.repository.NotificationRepository;
@@ -27,7 +28,7 @@ public class NotificationService {
 
     public Notification findById(Long id){
         return notificationRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Notification -> Notification doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("Notification -> Notification doesn't find by Id " + id));
     }
 
     public Notification createNotification(NotificationInput notificationInput){
@@ -51,8 +52,13 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    public void deleteNotificationById(Long id){
-        notificationRepository.deleteById(id);
+    public String deleteNotificationById(Long id){
+        try{
+            notificationRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Notification with Id "+id+" deleted";
     }
 
     public Notification updateNotification(Long id, NotificationInput notificationInput){
@@ -69,7 +75,7 @@ public class NotificationService {
         }
         if(!isNull(notificationInput.getUser())){
             notification.setUser(userRepository.findById(notificationInput.getUser())
-                    .orElseThrow(()->new RuntimeException("Notification -> User doesn't find by Id")));
+                    .orElseThrow(()->new NotFoundById("Notification -> User doesn't find by Id " + notificationInput.getUser())));
         }else{
             notification.setTitle("EMPTY");
         }

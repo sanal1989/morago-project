@@ -7,11 +7,13 @@ import com.habsida.moragoproject.service.AppVersionService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class AppVersionController {
 
     AppVersionService appVersionService;
@@ -37,8 +39,8 @@ public class AppVersionController {
     }
 
     @MutationMapping
-    public void deleteAppVersionById(EPlatform ePlatform){
-        appVersionService.deleteAppVersionById(ePlatform);
+    public String deleteAppVersionById(EPlatform ePlatform){
+        return appVersionService.deleteAppVersionById(ePlatform);
     }
 
     @MutationMapping

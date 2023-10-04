@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.UserProfile;
 import com.habsida.moragoproject.model.input.UserProfileInput;
 import com.habsida.moragoproject.repository.UserProfileRepository;
@@ -24,7 +25,7 @@ public class UserProfileService {
 
     public UserProfile findById(Long id){
         return userProfileRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("UserProfile -> UserProfile doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("UserProfile -> UserProfile doesn't find by Id " + id));
     }
 
     public UserProfile createUserProfile(UserProfileInput userProfileInput){
@@ -37,8 +38,13 @@ public class UserProfileService {
         return userProfileRepository.save(userProfile);
     }
 
-    public void deleteUserProfileById(Long id){
-        userProfileRepository.deleteById(id);
+    public String deleteUserProfileById(Long id){
+        try{
+            userProfileRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "UserProfile with Id "+id+" deleted";
     }
 
     public UserProfile updateUserProfile(Long id, UserProfileInput userProfileInput){

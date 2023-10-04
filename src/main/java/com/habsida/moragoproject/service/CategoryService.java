@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Category;
 import com.habsida.moragoproject.model.input.CategoryInput;
 import com.habsida.moragoproject.repository.CategoryRepository;
@@ -24,7 +25,7 @@ public class CategoryService {
 
     public Category findById(Long id){
         return categoryRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Category -> Category doesn't find by Id"));
+                .orElseThrow(()-> new NotFoundById("Category -> Category doesn't find by Id " +id));
     }
 
     public Category createCategory(CategoryInput categoryInput){
@@ -42,8 +43,13 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public void deleteCategoryById(Long id){
-        categoryRepository.deleteById(id);
+    public String deleteCategoryById(Long id){
+        try{
+            categoryRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "Category with Id "+id+" deleted";
     }
 
     public Category updateCategory(Long id, CategoryInput categoryInput){

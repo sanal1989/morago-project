@@ -6,11 +6,13 @@ import com.habsida.moragoproject.service.PasswordResetService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 public class PasswordResetController {
 
     PasswordResetService passwordResetService;
@@ -35,8 +37,8 @@ public class PasswordResetController {
     }
 
     @MutationMapping
-    public void deletePasswordResetById(@Argument Long id){
-        passwordResetService.deletePasswordResetById(id);
+    public String deletePasswordResetById(@Argument Long id){
+        return passwordResetService.deletePasswordResetById(id);
     }
 
     @MutationMapping

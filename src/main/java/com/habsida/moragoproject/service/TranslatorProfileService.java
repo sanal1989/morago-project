@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.entity.Theme;
 import com.habsida.moragoproject.model.entity.TranslatorProfile;
@@ -38,7 +39,7 @@ public class TranslatorProfileService {
 
     public TranslatorProfile findById(Long id){
         return translatorProfileRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("TranslatorProfile->TranslatorProfile doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("TranslatorProfile->TranslatorProfile doesn't find by Id " + id));
     }
 
     public TranslatorProfile createTranslatorProfile(TranslatorProfileInput translatorProfileInput){
@@ -82,7 +83,7 @@ public class TranslatorProfileService {
         }
         if(!isNull(translatorProfileInput.getFile())){
             translatorProfile.setFile(fileRepository.findById(translatorProfileInput.getFile())
-                    .orElseThrow(()->new RuntimeException("TranslatorProfile -> File doesn't find by ID")));
+                    .orElseThrow(()->new NotFoundById("TranslatorProfile -> File doesn't find by Id " + translatorProfileInput.getFile())));
         }
         if(!isNull(translatorProfileInput.getThemeList())){
             List<String> themeList = translatorProfileInput.getThemeList();
@@ -94,8 +95,14 @@ public class TranslatorProfileService {
         return translatorProfileRepository.save(translatorProfile);
     }
 
-    public void deleteTranslatorProfileById(Long id){
-        translatorProfileRepository.deleteById(id);
+    public String deleteTranslatorProfileById(Long id){
+        try{
+            translatorProfileRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "TranslatorProfile with Id "+id+" deleted";
+
     }
 
     public TranslatorProfile updateTranslatorProfile(Long id, TranslatorProfileInput translatorProfileInput){

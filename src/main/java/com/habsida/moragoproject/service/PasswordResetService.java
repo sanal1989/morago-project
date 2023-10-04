@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.PasswordReset;
 import com.habsida.moragoproject.model.input.PasswordResetInput;
 import com.habsida.moragoproject.repository.PasswordResetRepository;
@@ -24,7 +25,7 @@ public class PasswordResetService {
 
     public PasswordReset findById(Long id){
         return passwordResetRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("PasswordReset -> PasswordReset doesn't find by Id"));
+                .orElseThrow(()->new NotFoundById("PasswordReset -> PasswordReset doesn't find by Id " + id));
     }
 
     public PasswordReset createPasswordReset(PasswordResetInput passwordResetInput){
@@ -47,8 +48,13 @@ public class PasswordResetService {
         return passwordResetRepository.save(passwordReset);
     }
 
-    public void deletePasswordResetById(Long id){
-        passwordResetRepository.deleteById(id);
+    public String deletePasswordResetById(Long id){
+        try{
+            passwordResetRepository.deleteById(id);
+        }catch (Exception e){
+            throw new NotFoundById(e.getMessage());
+        }
+        return "PasswordReset with Id "+id+" deleted";
     }
 
     public PasswordReset updatePasswordReset(Long id, PasswordResetInput passwordResetInput){
