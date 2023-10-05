@@ -5,9 +5,19 @@ import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.model.input.FileInput;
 import com.habsida.moragoproject.repository.FileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.isNull;
 
@@ -16,7 +26,7 @@ public class FileService {
 
     FileRepository fileRepository;
     UserRepository userRepository;
-
+    static int idFileDirectory = 1;
     public FileService(FileRepository fileRepository, UserRepository userRepository) {
         this.fileRepository = fileRepository;
         this.userRepository = userRepository;
@@ -78,5 +88,41 @@ public class FileService {
             file.setType("EMPTY");
         }
         return fileRepository.save(file);
+    }
+
+    public static String saveFile(String fileName, MultipartFile multipartFile)
+            throws IOException {
+        Path uploadPath = Paths.get("C:\\Files-Upload");
+
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+
+        String fileCode = Integer.toString(idFileDirectory);
+
+        try (InputStream inputStream = multipartFile.getInputStream()) {
+            Path filePath = uploadPath.resolve(fileCode + "-" + fileName);
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            idFileDirectory++;
+        } catch (IOException ioe) {
+            throw new IOException("Could not save file: " + fileName, ioe);
+        }
+        return fileCode;
+    }
+
+    public Resource getFileAsResource(String fileCode) throws IOException {
+        Path dirPath = Paths.get("C:\\Files-Upload");
+        AtomicReference<Path> foundFile = new AtomicReference<>();
+        Files.list(dirPath).forEach(file -> {
+            if (file.getFileName().toString().startsWith(fileCode)) {
+                foundFile.set(file);
+                return;
+            }
+        });
+
+        if (foundFile.get() != null) {
+            return new UrlResource(foundFile.get().toUri());
+        }
+        return null;
     }
 }

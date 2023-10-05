@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/graphql").permitAll()
+                .antMatchers("/graphql","/uploadFile","/downloadFile/*").permitAll()
                 .anyRequest().authenticated()
                 // Add more URL patterns and permissions as needed
 //                .and()
