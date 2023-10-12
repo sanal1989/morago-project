@@ -1,13 +1,19 @@
 type Query{
-
+    test:String
 }
+scalar FileUpload
+
 type Mutation{
-    login(username: String,
+    login(phone: String,
         password: String): RefreshTokenResponse
-    refreshToken(token: String): String
+    refreshToken(token: String): RefreshTokenResponse
+    singleUpload(fileUpload: FileUpload): Boolean
 }
 
 type RefreshTokenResponse{
-    jwtToken: String
-    RefreshToken: String
+    accessToken: String
+    refreshToken: String
 }
+
+
+

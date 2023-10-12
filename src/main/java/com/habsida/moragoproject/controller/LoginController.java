@@ -1,7 +1,6 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.RefreshToken;
-import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.configuration.security.JwtUtil;
 import com.habsida.moragoproject.service.RefreshTokenService;
@@ -31,15 +30,15 @@ public class LoginController {
 
     @MutationMapping
     @PreAuthorize("isAnonymous()")
-    public RefreshTokenResponse login(@Argument String username, @Argument String password) {
+    public RefreshTokenResponse login(@Argument String phone, @Argument String password) {
         try {
             RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
+                    new UsernamePasswordAuthenticationToken(phone, password)
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            RefreshToken refreshToken = refreshTokenService.findByUser(username);
-            refreshTokenResponse.setJwtToken(jwtUtil.generateToken(userDetails.getUsername(), true));
+            RefreshToken refreshToken = refreshTokenService.findByPhone(phone);
+            refreshTokenResponse.setAccessToken(jwtUtil.generateToken(userDetails.getUsername(), true));
             refreshTokenResponse.setRefreshToken(refreshToken.getToken());
             return refreshTokenResponse;
         } catch (Exception e) {
@@ -49,11 +48,11 @@ public class LoginController {
 
     @MutationMapping
     @PreAuthorize("isAnonymous()")
-    public String refreshToken(@Argument String token){
-        RefreshToken refreshToken = refreshTokenService.findByToken(token)
-                .orElseThrow(()->new RuntimeException("Refresh token is not in database!"));
-        refreshTokenService.verifyExpiration(refreshToken);
-        User user = refreshToken.getUser();
-        return jwtUtil.generateToken(user.getFirstName(),true);
+    public RefreshTokenResponse refreshToken(@Argument String token){
+        RefreshToken refreshToken = refreshTokenService.updateRefreshToken(token);
+        RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
+        refreshTokenResponse.setAccessToken(jwtUtil.generateToken(refreshToken.getUser().getPhone(),true));
+        refreshTokenResponse.setRefreshToken(refreshToken.getToken());
+        return refreshTokenResponse;
     }
 }

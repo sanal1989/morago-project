@@ -1,5 +1,18 @@
 package com.habsida.moragoproject.configuration.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.habsida.moragoproject.exception.CustomExceptionResolver;
+import com.habsida.moragoproject.exception.JwtException;
+import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.UserAlreadyExistAuthenticationException;
+import graphql.*;
+import graphql.execution.DataFetcherResult;
+import graphql.language.SourceLocation;
+import graphql.schema.DataFetchingEnvironment;
+import org.springframework.graphql.execution.DataFetcherExceptionResolverAdapter;
+import org.springframework.graphql.execution.ErrorType;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -21,7 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter(CustomUserDetailsService userDetailsService, JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(CustomUserDetailsService userDetailsService,
+                                   JwtUtil jwtUtil,
+                                   CustomExceptionResolver customExceptionResolver) {
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
     }
@@ -29,22 +45,28 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        String jwt = extractJwtFromRequest(request);
         try {
-            String jwt = extractJwtFromRequest(request);
             if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt, true)) {
-                String username = jwtUtil.getUsernameFromToken(jwt, true);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                System.out.println("if");
+                String phone = jwtUtil.getPhoneFromToken(jwt, true);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
-//                System.out.println(userDetails.getAuthorities());
+                System.out.println(userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        } catch (Exception ex) {
-            logger.error("Could not set user authentication in security context", ex);
-
-        }finally {
             filterChain.doFilter(request, response);
+        } catch (Exception ex) {
+            System.out.println("exx");
+            GraphQLError error = GraphqlErrorBuilder.newError()
+                    .errorType(ErrorType.UNAUTHORIZED)
+                    .message("e.getMessage()")
+                    .build();
+            response.setContentType("application/json");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.getWriter().write(convertObjectToJson(error));
         }
 
     }
@@ -55,5 +77,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return authorizationHeader.substring(7);
         }
         return null; // No token found in the header
+    }
+    private String convertObjectToJson(Object object) throws JsonProcessingException {
+        if (object == null) {
+            return null;
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(object);
     }
 }

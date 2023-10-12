@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.repository.RefreshTokenRepository;
@@ -29,12 +30,12 @@ public class RefreshTokenService {
         this.jwtUtil = jwtUtil;
     }
 
-    public RefreshToken createRefreshToken(String userName) {
+    public RefreshToken createRefreshToken(String phone) {
         RefreshToken refreshToken = new RefreshToken();
 
-        refreshToken.setUser(userRepository.findByFirstName(userName));
+        refreshToken.setUser(userRepository.findByPhone(phone).get());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-        refreshToken.setToken(jwtUtil.generateRefreshToken(userName, false));
+        refreshToken.setToken(jwtUtil.generateToken(phone, false));
 
         refreshToken = refreshTokenRepository.save(refreshToken);
         return refreshToken;
@@ -52,10 +53,18 @@ public class RefreshTokenService {
         return token;
     }
 
-    public RefreshToken findByUser(String username) {
-        User user = userRepository.findByFirstName(username);
+    public RefreshToken findByPhone(String phone) {
+        User user = userRepository.findByPhone(phone).get();
         return refreshTokenRepository.findByUser(user)
-                .orElseThrow(()->new RuntimeException("RefreshToken->RefreshToken doesn't find by Name"));
+                .orElseThrow(()->new NotFoundById("RefreshToken->RefreshToken doesn't find by Name"));
     }
 
+    public RefreshToken updateRefreshToken(String token){
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
+                .orElseThrow(()->new NotFoundById("Refresh token is not in database!"));
+        this.verifyExpiration(refreshToken);
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+        refreshToken.setToken(jwtUtil.generateToken(refreshToken.getUser().getPhone(), false));
+        return refreshTokenRepository.save(refreshToken);
+    }
 }

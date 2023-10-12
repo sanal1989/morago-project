@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.isNull;
@@ -93,12 +94,11 @@ public class FileService {
     public static String saveFile(String fileName, MultipartFile multipartFile)
             throws IOException {
         Path uploadPath = Paths.get("C:\\Files-Upload");
-
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
-
-        String fileCode = Integer.toString(idFileDirectory);
+//        String fileCode = Integer.toString(idFileDirectory);
+        String fileCode = UUID.randomUUID().toString().split("-")[0];
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(fileCode + "-" + fileName);

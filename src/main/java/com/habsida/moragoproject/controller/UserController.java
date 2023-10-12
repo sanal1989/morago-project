@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.User;
+import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.model.input.UserInput;
 import com.habsida.moragoproject.service.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -36,8 +37,13 @@ public class UserController {
     }
 
     @MutationMapping
-    public User createUser(@Argument UserInput userInput){
+    public RefreshTokenResponse createUser(@Argument UserInput userInput){
         return userService.createUser(userInput);
+    }
+
+    @MutationMapping
+    public RefreshTokenResponse createAdmin(@Argument UserInput userInput){
+        return userService.createAdmin(userInput);
     }
 
     @MutationMapping
