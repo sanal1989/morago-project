@@ -48,7 +48,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = extractJwtFromRequest(request);
         try {
             if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt, true)) {
-                System.out.println("if");
                 String phone = jwtUtil.getPhoneFromToken(jwt, true);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(phone);
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
@@ -59,11 +58,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             filterChain.doFilter(request, response);
         } catch (Exception ex) {
-            System.out.println("exx");
             GraphQLError error = GraphqlErrorBuilder.newError()
-                    .errorType(ErrorType.UNAUTHORIZED)
-                    .message("e.getMessage()")
-                    .build();
+                        .errorType(ErrorType.UNAUTHORIZED)
+                        .message(ex.getMessage())
+                        .build();
+
             response.setContentType("application/json");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.getWriter().write(convertObjectToJson(error));

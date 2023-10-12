@@ -42,7 +42,7 @@ public class JwtUtil {
                 .getClaim("phone").asString();
     }
 
-    public boolean  validateToken(String token, boolean isAccessToken) {
+    public boolean  validateToken(String token, boolean isAccessToken) throws JwtException{
         try {
             JWT.require(Algorithm.HMAC512(isAccessToken ? secret : refreshSecret)).build().verify(token);
             return true;
