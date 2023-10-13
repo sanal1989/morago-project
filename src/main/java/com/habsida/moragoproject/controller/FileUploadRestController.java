@@ -29,11 +29,7 @@ public class FileUploadRestController {
 
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         long size = multipartFile.getSize();
-        String filecode = FileService.saveFile(fileName, multipartFile);
-        File response = new File();
-        response.setPath(fileName);
-        response.setType("/downloadFile/" + filecode+"-"+fileName);
-
+        File response = fileService.saveFile(fileName, multipartFile);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

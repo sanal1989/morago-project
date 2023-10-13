@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.FileSaveException;
 import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.model.input.FileInput;
@@ -8,6 +9,7 @@ import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -91,23 +93,29 @@ public class FileService {
         return fileRepository.save(file);
     }
 
-    public static String saveFile(String fileName, MultipartFile multipartFile)
-            throws IOException {
+    public File saveFile(String fileName, MultipartFile multipartFile) {
         Path uploadPath = Paths.get("C:\\Files-Upload");
+        String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
         if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+            try {
+                Files.createDirectories(uploadPath);
+            } catch (IOException e) {
+                throw new FileSaveException("Could not create directory");
+            }
         }
-//        String fileCode = Integer.toString(idFileDirectory);
-        String fileCode = UUID.randomUUID().toString().split("-")[0];
-
+        String fileCode = UUID.randomUUID().toString();
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(fileCode + "-" + fileName);
+            Path filePath = uploadPath.resolve(fileCode+"."+extension);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            idFileDirectory++;
         } catch (IOException ioe) {
-            throw new IOException("Could not save file: " + fileName, ioe);
+            throw new FileSaveException("Could not save file: " + fileName);
         }
-        return fileCode;
+        File response = new File();
+        response.setType(multipartFile.getContentType());
+        response.setOriginalTitle(fileName);
+        response.setPath(StringUtils.cleanPath(uploadPath.toString()+"\\"+fileCode+"."+extension));
+        fileRepository.save(response);
+        return response;
     }
 
     public Resource getFileAsResource(String fileCode) throws IOException {

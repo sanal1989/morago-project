@@ -31,7 +31,6 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
                     .build();
         }
         if (ex instanceof JwtException) {
-            ex.printStackTrace();
             return GraphqlErrorBuilder.newError()
                     .errorType(ErrorType.UNAUTHORIZED)
                     .message(ex.getMessage())
@@ -39,7 +38,14 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
                     .location(env.getField().getSourceLocation())
                     .build();
         }
-
+        if (ex instanceof FileSaveException) {
+            return GraphqlErrorBuilder.newError()
+                    .errorType(ErrorType.UNAUTHORIZED)
+                    .message(ex.getMessage())
+                    .path(env.getExecutionStepInfo().getPath())
+                    .location(env.getField().getSourceLocation())
+                    .build();
+        }
         return null;
 
     }

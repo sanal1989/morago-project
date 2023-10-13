@@ -15,7 +15,7 @@ type File{
     updatedAt: String
     originalTitle: String
     path: String
-    fileType: String
+    type: String
 }
 
 input FileInput{
