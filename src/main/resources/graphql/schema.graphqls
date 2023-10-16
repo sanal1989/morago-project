@@ -6,7 +6,7 @@ type Query{
 type Mutation{
     login(phone: String,
         password: String): RefreshTokenResponse
-    refreshToken(token: String): RefreshTokenResponse
+    refreshToken(refreshToken: String): RefreshTokenResponse
     fileUpload(file: Upload!): File!
     multiFileUpload(files: [Upload!]): [File!]!
 }

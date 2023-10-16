@@ -37,12 +37,12 @@ public class UserController {
     }
 
     @MutationMapping
-    public RefreshTokenResponse createUser(@Argument UserInput userInput){
+    public RefreshTokenResponse registrationUser(@Argument UserInput userInput){
         return userService.createUser(userInput);
     }
 
     @MutationMapping
-    public RefreshTokenResponse createAdmin(@Argument UserInput userInput){
+    public RefreshTokenResponse registrationAdmin(@Argument UserInput userInput){
         return userService.createAdmin(userInput);
     }
 

@@ -11,11 +11,16 @@ extend type  Mutation{
 
 type Role{
     id:ID
-    name: String
+    name: ERole
     createdAt: String
     updatedAt: String
 }
 
 input RoleInput{
-    name: String
+    name: ERole
+}
+enum ERole{
+    ADMIN,
+    USER,
+    TRANSLATOR
 }

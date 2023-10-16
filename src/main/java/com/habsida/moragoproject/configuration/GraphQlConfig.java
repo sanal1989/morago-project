@@ -1,7 +1,6 @@
 package com.habsida.moragoproject.configuration;
 
 import com.habsida.moragoproject.repository.FileRepository;
-import com.habsida.moragoproject.scalar.FileUpload;
 import graphql.schema.*;
 import graphql.schema.idl.SchemaDirectiveWiring;
 import name.nkonev.multipart.spring.graphql.coercing.webmvc.UploadCoercing;

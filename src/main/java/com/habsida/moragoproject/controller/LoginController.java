@@ -48,11 +48,11 @@ public class LoginController {
 
     @MutationMapping
     @PreAuthorize("isAnonymous()")
-    public RefreshTokenResponse refreshToken(@Argument String token){
-        RefreshToken refreshToken = refreshTokenService.updateRefreshToken(token);
+    public RefreshTokenResponse refreshToken(@Argument String refreshToken){
+        RefreshToken refreshT = refreshTokenService.updateRefreshToken(refreshToken);
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
-        refreshTokenResponse.setAccessToken(jwtUtil.generateToken(refreshToken.getUser().getPhone(),true));
-        refreshTokenResponse.setRefreshToken(refreshToken.getToken());
+        refreshTokenResponse.setAccessToken(jwtUtil.generateToken(refreshT.getUser().getPhone(),true));
+        refreshTokenResponse.setRefreshToken(refreshT.getToken());
         return refreshTokenResponse;
     }
 }

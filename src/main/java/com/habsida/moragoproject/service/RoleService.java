@@ -32,8 +32,8 @@ public class RoleService {
 
     public Role createRole(RoleInput roleInput){
         Role role = new Role();
-        if(!isNull(roleInput.getName()) && !roleInput.getName().isEmpty()){
-            role.setName(ERole.valueOf(roleInput.getName()));
+        if(!isNull(roleInput.getName())){
+            role.setName(roleInput.getName());
         }else{
             role.setName(ERole.USER);
         }
@@ -51,8 +51,8 @@ public class RoleService {
 
     public Role updateRole(Long id, RoleInput roleInput){
         Role role = roleRepository.findById(id).get();
-        if(!isNull(roleInput.getName()) && !roleInput.getName().isEmpty()){
-            role.setName(ERole.valueOf(roleInput.getName()));
+        if(!isNull(roleInput.getName())){
+            role.setName(roleInput.getName());
         }else{
             role.setName(ERole.USER);
         }

@@ -12,5 +12,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class RoleInput {
 
-    private String name;
+    private ERole name;
 }

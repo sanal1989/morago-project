@@ -2,7 +2,6 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.exception.FileSaveException;
 import com.habsida.moragoproject.model.entity.File;
-import com.habsida.moragoproject.scalar.FileUpload;
 import com.habsida.moragoproject.service.FileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.service;
 
+import com.habsida.moragoproject.exception.JwtException;
 import com.habsida.moragoproject.exception.NotFoundById;
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.User;
@@ -48,7 +49,7 @@ public class RefreshTokenService {
     public RefreshToken verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
             refreshTokenRepository.delete(token);
-            throw new RuntimeException(token.getToken() + " Refresh token was expired. Please make a new signin request");
+            throw new JwtException(token.getToken() + " Refresh token was expired. Please make a new signin request");
         }
         return token;
     }
