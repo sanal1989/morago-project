@@ -3,6 +3,7 @@ package com.habsida.moragoproject.controller;
 import com.habsida.moragoproject.exception.FileSaveException;
 import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.service.FileService;
+import com.habsida.moragoproject.service.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -29,10 +30,10 @@ import java.util.UUID;
 
 public class FileUploadController {
 
-    private FileService fileService;
+    private FileUtil fileUtil;
 
-    public FileUploadController(FileService fileService) {
-        this.fileService = fileService;
+    public FileUploadController(FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 
     @MutationMapping(name = "fileUpload")
@@ -40,7 +41,7 @@ public class FileUploadController {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         File response;
         try {
-            response = fileService.saveFile(fileName, file);
+            response = fileUtil.saveFile(fileName, file);
         } catch (Exception e) {
             throw new FileSaveException(e.getMessage());
         }
@@ -54,7 +55,7 @@ public class FileUploadController {
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             File response;
             try {
-                response = fileService.saveFile(fileName, file);
+                response = fileUtil.saveFile(fileName, file);
             } catch (Exception e) {
                 throw new FileSaveException(e.getMessage());
             }

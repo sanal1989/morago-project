@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Notification;
 import com.habsida.moragoproject.model.input.NotificationInput;
 import com.habsida.moragoproject.repository.NotificationRepository;
@@ -28,26 +28,20 @@ public class NotificationService {
 
     public Notification findById(Long id){
         return notificationRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("Notification -> Notification doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("Notification -> Notification doesn't find by Id " + id));
     }
 
     public Notification createNotification(NotificationInput notificationInput){
         Notification notification = new Notification();
         if(!isNull(notificationInput.getText()) && !notificationInput.getText().isEmpty()){
             notification.setText(notificationInput.getText());
-        }else{
-            notification.setText("EMPTY");
         }
         if(!isNull(notificationInput.getTitle()) && !notificationInput.getTitle().isEmpty()){
             notification.setTitle(notificationInput.getTitle());
-        }else{
-            notification.setTitle("EMPTY");
         }
         if(!isNull(notificationInput.getUser())){
             notification.setUser(userRepository.findById(notificationInput.getUser())
                     .orElseThrow(()->new RuntimeException("Notification -> User doesn't find by Id")));
-        }else{
-            notification.setTitle("EMPTY");
         }
         return notificationRepository.save(notification);
     }
@@ -56,7 +50,7 @@ public class NotificationService {
         try{
             notificationRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Notification with Id "+id+" deleted";
     }
@@ -65,19 +59,13 @@ public class NotificationService {
         Notification notification = notificationRepository.findById(id).get();
         if(!isNull(notificationInput.getText()) && !notificationInput.getText().isEmpty()){
             notification.setText(notificationInput.getText());
-        }else{
-            notification.setText("EMPTY");
         }
         if(!isNull(notificationInput.getTitle()) && !notificationInput.getTitle().isEmpty()){
             notification.setTitle(notificationInput.getTitle());
-        }else{
-            notification.setTitle("EMPTY");
         }
         if(!isNull(notificationInput.getUser())){
             notification.setUser(userRepository.findById(notificationInput.getUser())
-                    .orElseThrow(()->new NotFoundById("Notification -> User doesn't find by Id " + notificationInput.getUser())));
-        }else{
-            notification.setTitle("EMPTY");
+                    .orElseThrow(()->new NotFoundByIdException("Notification -> User doesn't find by Id " + notificationInput.getUser())));
         }
         return notificationRepository.save(notification);
     }

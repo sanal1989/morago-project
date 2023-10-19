@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Category;
 import com.habsida.moragoproject.model.input.CategoryInput;
 import com.habsida.moragoproject.repository.CategoryRepository;
@@ -25,7 +25,7 @@ public class CategoryService {
 
     public Category findById(Long id){
         return categoryRepository.findById(id)
-                .orElseThrow(()-> new NotFoundById("Category -> Category doesn't find by Id " +id));
+                .orElseThrow(()-> new NotFoundByIdException("Category -> Category doesn't find by Id " +id));
     }
 
     public Category createCategory(CategoryInput categoryInput){
@@ -37,8 +37,6 @@ public class CategoryService {
         }
         if(!isNull(categoryInput.getName()) && !categoryInput.getName().isEmpty()){
             category.setName(categoryInput.getName());
-        }else {
-            category.setName("EMPTY");
         }
         return categoryRepository.save(category);
     }
@@ -47,7 +45,7 @@ public class CategoryService {
         try{
             categoryRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Category with Id "+id+" deleted";
     }
@@ -61,8 +59,6 @@ public class CategoryService {
         }
         if(!isNull(categoryInput.getName()) && !categoryInput.getName().isEmpty()){
             category.setName(categoryInput.getName());
-        }else {
-            category.setName("EMPTY");
         }
         return categoryRepository.save(category);
     }

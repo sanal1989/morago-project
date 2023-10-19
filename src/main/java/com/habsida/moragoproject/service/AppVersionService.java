@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.AppVersion;
 import com.habsida.moragoproject.model.enums.EPlatform;
 import com.habsida.moragoproject.model.input.AppVersionInput;
@@ -26,7 +26,7 @@ public class AppVersionService {
 
     public AppVersion findByEPlatform(EPlatform ePlatform){
         return appVersionRepository.findByPlatform(ePlatform)
-                .orElseThrow(()->new NotFoundById("AppVersion -> AppVersion doesn't find by Id " +ePlatform.toString()));
+                .orElseThrow(()->new NotFoundByIdException("AppVersion -> AppVersion doesn't find by Id " +ePlatform.toString()));
     }
 
     public AppVersion createAppVersion(AppVersionInput appVersionInput){
@@ -39,13 +39,9 @@ public class AppVersionService {
         }
         if(!isNull(appVersionInput.getLatest()) && !appVersionInput.getLatest().isEmpty()){
             appVersion.setLatest(appVersionInput.getLatest());
-        }else {
-            appVersion.setLatest("EMPTY");
         }
         if(!isNull(appVersionInput.getMin()) && !appVersionInput.getMin().isEmpty()){
             appVersion.setMin(appVersionInput.getMin());
-        }else {
-            appVersion.setMin("EMPTY");
         }
         return appVersionRepository.save(appVersion);
     }
@@ -54,7 +50,7 @@ public class AppVersionService {
         try{
             appVersionRepository.deleteByPlatform(ePlatform);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "AppVersion with Id "+ePlatform.toString()+" deleted";
     }
@@ -69,13 +65,9 @@ public class AppVersionService {
         }
         if(!isNull(appVersionInput.getLatest()) && !appVersionInput.getLatest().isEmpty()){
             appVersion.setLatest(appVersionInput.getLatest());
-        }else {
-            appVersion.setLatest("EMPTY");
         }
         if(!isNull(appVersionInput.getMin()) && !appVersionInput.getMin().isEmpty()){
             appVersion.setMin(appVersionInput.getMin());
-        }else {
-            appVersion.setMin("EMPTY");
         }
         return appVersionRepository.save(appVersion);
     }

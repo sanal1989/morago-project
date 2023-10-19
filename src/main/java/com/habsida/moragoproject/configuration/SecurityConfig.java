@@ -1,7 +1,6 @@
 package com.habsida.moragoproject.configuration;
 
 import com.habsida.moragoproject.configuration.security.CustomUserDetailsService;
-import com.habsida.moragoproject.configuration.security.JwtAuthenticationEntryPoint;
 import com.habsida.moragoproject.configuration.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,9 +23,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
@@ -57,9 +53,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/graphql","/uploadFile","/downloadFile/*").permitAll()
                 .anyRequest().authenticated()
-                // Add more URL patterns and permissions as needed
-//                .and()
-//                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

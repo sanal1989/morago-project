@@ -1,11 +1,9 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.entity.Theme;
 import com.habsida.moragoproject.model.entity.TranslatorProfile;
-import com.habsida.moragoproject.model.input.LanguageInput;
-import com.habsida.moragoproject.model.input.ThemeInput;
 import com.habsida.moragoproject.model.input.TranslatorProfileInput;
 import com.habsida.moragoproject.repository.FileRepository;
 import com.habsida.moragoproject.repository.LanguagesRepository;
@@ -39,25 +37,19 @@ public class TranslatorProfileService {
 
     public TranslatorProfile findById(Long id){
         return translatorProfileRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("TranslatorProfile->TranslatorProfile doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("TranslatorProfile->TranslatorProfile doesn't find by Id " + id));
     }
 
     public TranslatorProfile createTranslatorProfile(TranslatorProfileInput translatorProfileInput){
         TranslatorProfile translatorProfile = new TranslatorProfile();
         if(!isNull(translatorProfileInput.getDateOfBirth()) && !translatorProfileInput.getDateOfBirth().isEmpty()){
             translatorProfile.setDateOfBirth(translatorProfileInput.getDateOfBirth());
-        }else {
-            translatorProfile.setDateOfBirth("EMPTY");
         }
         if(!isNull(translatorProfileInput.getEmail()) && !translatorProfileInput.getEmail().isEmpty()){
             translatorProfile.setEmail(translatorProfileInput.getEmail());
-        }else {
-            translatorProfile.setEmail("EMPTY");
         }
         if(!isNull(translatorProfileInput.getLevelOfKorean()) && !translatorProfileInput.getLevelOfKorean().isEmpty()){
             translatorProfile.setLevelOfKorean(translatorProfileInput.getLevelOfKorean());
-        }else {
-            translatorProfile.setLevelOfKorean("EMPTY");
         }
         if(!isNull(translatorProfileInput.getIsActive())){
             translatorProfile.setIsActive(translatorProfileInput.getIsActive());
@@ -83,7 +75,7 @@ public class TranslatorProfileService {
         }
         if(!isNull(translatorProfileInput.getFile())){
             translatorProfile.setFile(fileRepository.findById(translatorProfileInput.getFile())
-                    .orElseThrow(()->new NotFoundById("TranslatorProfile -> File doesn't find by Id " + translatorProfileInput.getFile())));
+                    .orElseThrow(()->new NotFoundByIdException("TranslatorProfile -> File doesn't find by Id " + translatorProfileInput.getFile())));
         }
         if(!isNull(translatorProfileInput.getThemeList())){
             List<String> themeList = translatorProfileInput.getThemeList();
@@ -99,7 +91,7 @@ public class TranslatorProfileService {
         try{
             translatorProfileRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "TranslatorProfile with Id "+id+" deleted";
 
@@ -109,18 +101,12 @@ public class TranslatorProfileService {
         TranslatorProfile translatorProfile = translatorProfileRepository.findById(id).get();
         if(!isNull(translatorProfileInput.getDateOfBirth()) && !translatorProfileInput.getDateOfBirth().isEmpty()){
             translatorProfile.setDateOfBirth(translatorProfileInput.getDateOfBirth());
-        }else {
-            translatorProfile.setDateOfBirth("EMPTY");
         }
         if(!isNull(translatorProfileInput.getEmail()) && !translatorProfileInput.getEmail().isEmpty()){
             translatorProfile.setEmail(translatorProfileInput.getEmail());
-        }else {
-            translatorProfile.setEmail("EMPTY");
         }
         if(!isNull(translatorProfileInput.getLevelOfKorean()) && !translatorProfileInput.getLevelOfKorean().isEmpty()){
             translatorProfile.setLevelOfKorean(translatorProfileInput.getLevelOfKorean());
-        }else {
-            translatorProfile.setLevelOfKorean("EMPTY");
         }
         if(!isNull(translatorProfileInput.getIsActive())){
             translatorProfile.setIsActive(translatorProfileInput.getIsActive());

@@ -4,7 +4,6 @@ import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.entity.TranslatorProfile;
 import com.habsida.moragoproject.model.entity.UserProfile;
 import lombok.*;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;

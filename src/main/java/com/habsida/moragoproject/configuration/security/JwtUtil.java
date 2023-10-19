@@ -30,12 +30,6 @@ public class JwtUtil {
                 .sign(Algorithm.HMAC512(isAccessToken ? secret : refreshSecret));
     }
 
-//    public String generateRefreshToken(String phone, boolean isAccessToken) {
-//        return JWT.create()
-//                .withExpiresAt(new Date(System.currentTimeMillis()+ ))
-//                .withClaim("phone", phone)
-//                .sign(Algorithm.HMAC512(isAccessToken ? secret : refreshSecret));
-//    }
 
     public String getPhoneFromToken(String token, boolean isAccessToken) {
         return  JWT.require(Algorithm.HMAC512(isAccessToken ? secret : refreshSecret)).build().verify(token)

@@ -2,6 +2,7 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.service.FileService;
+import com.habsida.moragoproject.service.FileUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,10 @@ import java.io.IOException;
 @RestController
 public class FileUploadRestController {
 
-    FileService fileService;
+    private FileUtil fileUtil;
 
-    public FileUploadRestController(FileService fileService) {
-        this.fileService = fileService;
+    public FileUploadRestController(FileUtil fileUtil) {
+        this.fileUtil = fileUtil;
     }
 
     @PostMapping("/uploadFile")
@@ -29,7 +30,7 @@ public class FileUploadRestController {
 
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         long size = multipartFile.getSize();
-        File response = fileService.saveFile(fileName, multipartFile);
+        File response = fileUtil.saveFile(fileName, multipartFile);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -38,7 +39,7 @@ public class FileUploadRestController {
 
         Resource resource = null;
         try {
-            resource = fileService.getFileAsResource(fileCode);
+            resource = fileUtil.getFileAsResource(fileCode);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().build();
         }

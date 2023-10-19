@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.input.LanguageInput;
 import com.habsida.moragoproject.repository.LanguagesRepository;
@@ -25,15 +25,13 @@ public class LanguageService {
 
     public Language findById(Long id){
         return languagesRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("Language -> Language doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("Language -> Language doesn't find by Id " + id));
     }
 
     public Language createLanguage(LanguageInput languageInput){
         Language language = new Language();
         if(!isNull(languageInput.getName()) && !languageInput.getName().isEmpty()){
             language.setName(languageInput.getName());
-        }else {
-            language.setName("EMPTY");
         }
         return languagesRepository.save(language);
     }
@@ -42,7 +40,7 @@ public class LanguageService {
         try{
             languagesRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Language with Id "+id+" deleted";
     }
@@ -51,8 +49,6 @@ public class LanguageService {
         Language language = languagesRepository.findById(id).get();
         if(!isNull(languageInput.getName()) && !languageInput.getName().isEmpty()){
             language.setName(languageInput.getName());
-        }else {
-            language.setName("EMPTY");
         }
         return languagesRepository.save(language);
     }

@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.enums.ERole;
 import com.habsida.moragoproject.model.input.RoleInput;
@@ -27,7 +27,7 @@ public class RoleService {
 
     public Role findById(Long id){
         return roleRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("Role -> Role doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("Role -> Role doesn't find by Id " + id));
     }
 
     public Role createRole(RoleInput roleInput){
@@ -44,7 +44,7 @@ public class RoleService {
         try {
             roleRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Role with Id "+id+" deleted";
     }

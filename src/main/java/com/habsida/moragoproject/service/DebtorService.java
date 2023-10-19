@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Debtor;
 import com.habsida.moragoproject.model.input.DebtorInput;
 import com.habsida.moragoproject.repository.DebtorRepository;
@@ -28,20 +28,16 @@ public class DebtorService {
 
     public Debtor findById(Long id){
         return debtorRepository.findById(id)
-                .orElseThrow(() -> new NotFoundById("Debtor -> Debtor doesn't find by Id " +id));
+                .orElseThrow(() -> new NotFoundByIdException("Debtor -> Debtor doesn't find by Id " +id));
     }
 
     public Debtor createDebtor(DebtorInput debtorInput){
         Debtor debtor = new Debtor();
         if(!isNull(debtorInput.getAccountHolder()) && !debtorInput.getAccountHolder().isEmpty()){
             debtor.setAccountHolder(debtorInput.getAccountHolder());
-        }else{
-            debtor.setAccountHolder("EMPTY");
         }
         if(!isNull(debtorInput.getNameOfBank()) && !debtorInput.getNameOfBank().isEmpty()){
             debtor.setNameOfBank(debtorInput.getNameOfBank());
-        }else{
-            debtor.setNameOfBank("EMPTY");
         }
         if(!isNull(debtorInput.getIsPaid())){
             debtor.setIsPaid(debtorInput.getIsPaid());
@@ -50,7 +46,7 @@ public class DebtorService {
         }
         if(!isNull(debtorInput.getUser())){
             debtor.setUser(userRepository.findById(debtorInput.getUser())
-                    .orElseThrow(()->new NotFoundById("Debtor -> User doesn't find by Id " + debtorInput.getUser())));
+                    .orElseThrow(()->new NotFoundByIdException("Debtor -> User doesn't find by Id " + debtorInput.getUser())));
         }
         return debtorRepository.save(debtor);
     }
@@ -59,7 +55,7 @@ public class DebtorService {
         try{
             debtorRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Debtor with Id "+id+" deleted";
     }
@@ -68,13 +64,9 @@ public class DebtorService {
         Debtor debtor = debtorRepository.findById(id).get();
         if(!isNull(debtorInput.getAccountHolder()) && !debtorInput.getAccountHolder().isEmpty()){
             debtor.setAccountHolder(debtorInput.getAccountHolder());
-        }else{
-            debtor.setAccountHolder("EMPTY");
         }
         if(!isNull(debtorInput.getNameOfBank()) && !debtorInput.getNameOfBank().isEmpty()){
             debtor.setNameOfBank(debtorInput.getNameOfBank());
-        }else{
-            debtor.setNameOfBank("EMPTY");
         }
         if(!isNull(debtorInput.getIsPaid())){
             debtor.setIsPaid(debtorInput.getIsPaid());

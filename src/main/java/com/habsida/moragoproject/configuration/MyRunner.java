@@ -17,13 +17,13 @@ public class MyRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if(!roleRepository.findByName(ERole.ADMIN).isPresent()){
+        if(!roleRepository.existsByName(ERole.ADMIN)){
             roleRepository.save(new Role(ERole.ADMIN));
         }
-        if(!roleRepository.findByName(ERole.USER).isPresent()){
+        if(!roleRepository.existsByName(ERole.USER)){
             roleRepository.save(new Role(ERole.USER));
         }
-        if(!roleRepository.findByName(ERole.TRANSLATOR).isPresent()){
+        if(!roleRepository.existsByName(ERole.TRANSLATOR)){
             roleRepository.save(new Role(ERole.TRANSLATOR));
         }
     }

@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
 import com.habsida.moragoproject.model.enums.FAQCategory;
 import com.habsida.moragoproject.model.input.FrequentlyAskedQuestionInput;
@@ -27,20 +27,16 @@ public class FrequentlyAskedQuestionService {
 
     public FrequentlyAskedQuestion findById(Long id){
         return frequentlyAskedQuestionRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("FrequentlyAskedQuestion -> FrequentlyAskedQuestion doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("FrequentlyAskedQuestion -> FrequentlyAskedQuestion doesn't find by Id " + id));
     }
 
     public FrequentlyAskedQuestion createFrequentlyAskedQuestion(FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
         FrequentlyAskedQuestion frequentlyAskedQuestion = new FrequentlyAskedQuestion();
         if(!isNull(frequentlyAskedQuestionInput.getQuestion()) && !frequentlyAskedQuestionInput.getQuestion().isEmpty()){
             frequentlyAskedQuestion.setQuestion(frequentlyAskedQuestionInput.getQuestion());
-        }else{
-            frequentlyAskedQuestion.setQuestion("EMPTY");
         }
         if(!isNull(frequentlyAskedQuestionInput.getAnswer()) && !frequentlyAskedQuestionInput.getAnswer().isEmpty()){
             frequentlyAskedQuestion.setAnswer(frequentlyAskedQuestionInput.getAnswer());
-        }else{
-            frequentlyAskedQuestion.setQuestion("EMPTY");
         }
         if(!isNull(frequentlyAskedQuestionInput.getCategory()) && !frequentlyAskedQuestionInput.getCategory().isEmpty()){
             frequentlyAskedQuestion.setCategory(FAQCategory.valueOf(frequentlyAskedQuestionInput.getCategory()));
@@ -54,7 +50,7 @@ public class FrequentlyAskedQuestionService {
         try {
             frequentlyAskedQuestionRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "FrequentlyAskedQuestion with Id "+id+" deleted";
     }
@@ -63,13 +59,9 @@ public class FrequentlyAskedQuestionService {
         FrequentlyAskedQuestion frequentlyAskedQuestion = frequentlyAskedQuestionRepository.findById(id).get();
         if(!isNull(frequentlyAskedQuestionInput.getQuestion()) && !frequentlyAskedQuestionInput.getQuestion().isEmpty()){
             frequentlyAskedQuestion.setQuestion(frequentlyAskedQuestionInput.getQuestion());
-        }else{
-            frequentlyAskedQuestion.setQuestion("EMPTY");
         }
         if(!isNull(frequentlyAskedQuestionInput.getAnswer()) && !frequentlyAskedQuestionInput.getAnswer().isEmpty()){
             frequentlyAskedQuestion.setAnswer(frequentlyAskedQuestionInput.getAnswer());
-        }else{
-            frequentlyAskedQuestion.setQuestion("EMPTY");
         }
         if(!isNull(frequentlyAskedQuestionInput.getCategory()) && !frequentlyAskedQuestionInput.getCategory().isEmpty()){
             frequentlyAskedQuestion.setCategory(FAQCategory.valueOf(frequentlyAskedQuestionInput.getCategory()));

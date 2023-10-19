@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Deposit;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.DepositInput;
@@ -29,20 +29,16 @@ public class DepositService {
 
     public Deposit findById(Long id){
         return depositRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("Deposit -> Deposit doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("Deposit -> Deposit doesn't find by Id " + id));
     }
 
     public Deposit createDeposit(DepositInput depositInput){
         Deposit deposit = new Deposit();
         if(!isNull(depositInput.getAccountHolder()) && !depositInput.getAccountHolder().isEmpty()){
             deposit.setAccountHolder(depositInput.getAccountHolder());
-        }else{
-            deposit.setAccountHolder("EMPTY");
         }
         if(!isNull(depositInput.getNameOfBank()) && !depositInput.getNameOfBank().isEmpty()){
             deposit.setNameOfBank(depositInput.getNameOfBank());
-        }else{
-            deposit.setNameOfBank("EMPTY");
         }
         if(!isNull(depositInput.getCoin())){
             deposit.setCoin(depositInput.getCoin());
@@ -61,7 +57,7 @@ public class DepositService {
         }
         if(!isNull(depositInput.getUser())){
             deposit.setUser(userRepository.findById(depositInput.getUser())
-                    .orElseThrow(()->new NotFoundById("Deposit -> User doesn't find by id " + depositInput.getUser())));
+                    .orElseThrow(()->new NotFoundByIdException("Deposit -> User doesn't find by id " + depositInput.getUser())));
         }
         return depositRepository.save(deposit);
     }
@@ -70,7 +66,7 @@ public class DepositService {
         try{
             depositRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Deposit with Id "+id+" deleted";
     }
@@ -79,13 +75,9 @@ public class DepositService {
         Deposit deposit = depositRepository.findById(id).get();
         if(!isNull(depositInput.getAccountHolder()) && !depositInput.getAccountHolder().isEmpty()){
             deposit.setAccountHolder(depositInput.getAccountHolder());
-        }else{
-            deposit.setAccountHolder("EMPTY");
         }
         if(!isNull(depositInput.getNameOfBank()) && !depositInput.getNameOfBank().isEmpty()){
             deposit.setNameOfBank(depositInput.getNameOfBank());
-        }else{
-            deposit.setNameOfBank("EMPTY");
         }
         if(!isNull(depositInput.getCoin())){
             deposit.setCoin(depositInput.getCoin());

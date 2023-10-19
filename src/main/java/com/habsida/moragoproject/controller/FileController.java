@@ -41,8 +41,8 @@ public class FileController {
     }
 
     @MutationMapping
-    public File createFile(@Argument FileInput fileInput){
-        return fileService.createFile(fileInput);
+    public File createFile(@Argument MultipartFile file){
+        return fileService.createFile(file);
     }
 
     @MutationMapping
@@ -51,8 +51,8 @@ public class FileController {
     }
 
     @MutationMapping
-    public File updateFile(@Argument Long id, @Argument FileInput fileInput){
-        return fileService.updateFile(id, fileInput);
+    public File updateFile(@Argument Long id, @Argument MultipartFile file){
+        return fileService.updateFile(id, file);
     }
 
 

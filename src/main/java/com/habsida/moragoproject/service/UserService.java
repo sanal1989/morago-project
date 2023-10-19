@@ -1,8 +1,9 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.configuration.security.JwtUtil;
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.exception.UserAlreadyExistAuthenticationException;
+import com.habsida.moragoproject.exception.ValidationPhoneException;
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.entity.User;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.bind.ValidationException;
 import java.util.List;
 import java.util.Set;
 
@@ -56,44 +58,35 @@ public class UserService {
 
     public User findById(Long id){
         return userRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("User -> User doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("User -> User doesn't find by Id " + id));
     }
 
     @Transactional
     public RefreshTokenResponse createUser(UserInput userInput){
-        if(userRepository.findByPhone(userInput.getPhone()).isPresent()){
+        if(userRepository.existsByPhone(userInput.getPhone())){
             throw new UserAlreadyExistAuthenticationException("Phone already exist");
+        }
+        if(!userInput.getPhone().matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")){
+            throw new ValidationPhoneException("phone number doesn't valid");
         }
         User user = new User();
         if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
             user.setFirstName(userInput.getFirstName());
-        }else {
-            user.setFirstName("EMPTY");
         }
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
-        }else {
-            user.setLastName("EMPTY");
         }
         if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
             user.setApnToken(userInput.getApnToken());
-        }else {
-            user.setApnToken("EMPTY");
         }
         if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
             user.setFcmToken(userInput.getFcmToken());
-        }else {
-            user.setFcmToken("EMPTY");
         }
         if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
             user.setPassword(passwordEncoder.encode(userInput.getPassword()));
-        }else {
-            user.setPassword("EMPTY");
         }
         if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
-        }else {
-            user.setPhone("EMPTY");
         }
         if(!isNull(userInput.getBalance())){
             user.setBalance(userInput.getBalance());
@@ -104,16 +97,6 @@ public class UserService {
             user.setRatings(userInput.getRatings());
         }else {
             user.setRatings(0d);
-        }
-        if(!isNull(userInput.getIsActive())){
-            user.setIsActive(userInput.getIsActive());
-        }else {
-            user.setIsActive(false);
-        }
-        if(!isNull(userInput.getIsDebtor())){
-            user.setIsDebtor(userInput.getIsDebtor());
-        }else {
-            user.setIsDebtor(false);
         }
         if(!isNull(userInput.getOnBoardingStatus())){
             user.setOnBoardingStatus(userInput.getOnBoardingStatus());
@@ -125,22 +108,33 @@ public class UserService {
         }else {
             user.setTotalRatings(0);
         }
+
         UserProfile userProfile= new UserProfile();
         userProfile.setIsFreeCallMade(false);
         userProfileRepository.save(userProfile);
+
+        user.setIsActive(true);
+        user.setIsDebtor(false);
         user.setUserProfile(userProfile);
         user.setTranslatorProfile(null);
+
         Set<Role> rolestoBD = user.getRoles();
         rolestoBD.add(roleRepository.findByName(ERole.USER)
-            .orElseThrow(()-> new NotFoundById("User -> Role.USER doesn't exist")));
+            .orElseThrow(()-> new NotFoundByIdException("User -> Role.USER doesn't exist")));
         user.setRoles(rolestoBD);
+
+        //
         User userDB = userRepository.save(user);
+        //
+
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInput.getPhone());
         userDB.setRefreshToken(refreshToken);
+
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
         refreshTokenResponse.setRefreshToken(refreshToken.getToken());
         refreshTokenResponse.setAccessToken(jwtUtil.generateToken(userInput.getPhone(), true));
         userRepository.save(userDB);
+
         return refreshTokenResponse;
     }
 
@@ -148,7 +142,7 @@ public class UserService {
         try{
             userRepository.deleteById(id);
         }catch (Exception e){
-            throw  new NotFoundById(e.getMessage());
+            throw  new NotFoundByIdException(e.getMessage());
         }
         return "User with Id "+id+" deleted";
     }
@@ -157,23 +151,15 @@ public class UserService {
         User user = userRepository.findById(id).get();
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
-        }else {
-            user.setLastName("EMPTY");
         }
         if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
             user.setApnToken(userInput.getApnToken());
-        }else {
-            user.setApnToken("EMPTY");
         }
         if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
             user.setFcmToken(userInput.getFcmToken());
-        }else {
-            user.setFcmToken("EMPTY");
         }
         if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
-        }else {
-            user.setPhone("EMPTY");
         }
         if(!isNull(userInput.getBalance())){
             user.setBalance(userInput.getBalance());
@@ -188,7 +174,7 @@ public class UserService {
         if(!isNull(userInput.getIsActive())){
             user.setIsActive(userInput.getIsActive());
         }else {
-            user.setIsActive(false);
+            user.setIsActive(true);
         }
         if(!isNull(userInput.getIsDebtor())){
             user.setIsDebtor(userInput.getIsDebtor());
@@ -209,39 +195,30 @@ public class UserService {
     }
 
     public RefreshTokenResponse createAdmin(UserInput userInput) {
-        if(userRepository.findByPhone(userInput.getPhone()).isPresent()){
+        if(userRepository.existsByPhone(userInput.getPhone())){
             throw new UserAlreadyExistAuthenticationException("Phone already exist");
+        }
+        if(!userInput.getPhone().matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")){
+            throw new ValidationPhoneException("phone number doesn't valid");
         }
         User user = new User();
         if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
             user.setFirstName(userInput.getFirstName());
-        }else {
-            user.setFirstName("EMPTY");
         }
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
-        }else {
-            user.setLastName("EMPTY");
         }
         if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
             user.setApnToken(userInput.getApnToken());
-        }else {
-            user.setApnToken("EMPTY");
         }
         if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
             user.setFcmToken(userInput.getFcmToken());
-        }else {
-            user.setFcmToken("EMPTY");
         }
         if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
             user.setPassword(passwordEncoder.encode(userInput.getPassword()));
-        }else {
-            user.setPassword("EMPTY");
         }
         if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
-        }else {
-            user.setPhone("EMPTY");
         }
         if(!isNull(userInput.getBalance())){
             user.setBalance(userInput.getBalance());
@@ -253,16 +230,6 @@ public class UserService {
         }else {
             user.setRatings(0d);
         }
-        if(!isNull(userInput.getIsActive())){
-            user.setIsActive(userInput.getIsActive());
-        }else {
-            user.setIsActive(false);
-        }
-        if(!isNull(userInput.getIsDebtor())){
-            user.setIsDebtor(userInput.getIsDebtor());
-        }else {
-            user.setIsDebtor(false);
-        }
         if(!isNull(userInput.getOnBoardingStatus())){
             user.setOnBoardingStatus(userInput.getOnBoardingStatus());
         }else {
@@ -273,16 +240,23 @@ public class UserService {
         }else {
             user.setTotalRatings(0);
         }
+
         UserProfile userProfile= new UserProfile();
         userProfile.setIsFreeCallMade(false);
         userProfileRepository.save(userProfile);
+
+        user.setIsActive(true);
+        user.setIsDebtor(false);
         user.setUserProfile(userProfile);
         user.setTranslatorProfile(null);
+
         Set<Role> rolestoBD = user.getRoles();
         rolestoBD.add(roleRepository.findByName(ERole.ADMIN)
-                .orElseThrow(()-> new NotFoundById("User -> Role.ADMIN doesn't exist")));
+                .orElseThrow(()-> new NotFoundByIdException("User -> Role.ADMIN doesn't exist")));
         user.setRoles(rolestoBD);
+
         User userDB = userRepository.save(user);
+
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInput.getPhone());
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
         refreshTokenResponse.setRefreshToken(refreshToken.getToken());

@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Call;
 import com.habsida.moragoproject.model.enums.CallStatus;
 import com.habsida.moragoproject.model.input.CallInput;
@@ -32,7 +32,7 @@ public class CallService {
 
     public Call findById(Long id){
         return callRepository.findById(id)
-                .orElseThrow(()-> new NotFoundById("Call -> Call doesn't find " + id));
+                .orElseThrow(()-> new NotFoundByIdException("Call -> Call doesn't find " + id));
     }
 
     public Call createCall(CallInput callInput){
@@ -44,8 +44,6 @@ public class CallService {
         }
         if(!isNull(callInput.getChannelName()) && callInput.getChannelName().isEmpty()){
             call.setChannelName(callInput.getChannelName());
-        }else {
-            call.setChannelName("EMPTY");
         }
         if(!isNull(callInput.getCommission())){
             call.setCommission(callInput.getCommission());
@@ -84,15 +82,15 @@ public class CallService {
         }
         if(!isNull(callInput.getCaller())){
             call.setCaller(userRepository.findById(callInput.getCaller())
-                    .orElseThrow(()-> new NotFoundById("Call -> User doesn't find by Id " + callInput.getCaller())));
+                    .orElseThrow(()-> new NotFoundByIdException("Call -> User doesn't find by Id " + callInput.getCaller())));
         }
         if(!isNull(callInput.getAnswerer())){
             call.setAnswerer(userRepository.findById(callInput.getAnswerer())
-                    .orElseThrow(()-> new NotFoundById("Call -> User doesn't find by Id " + callInput.getAnswerer())));
+                    .orElseThrow(()-> new NotFoundByIdException("Call -> User doesn't find by Id " + callInput.getAnswerer())));
         }
         if(!isNull(callInput.getTheme())){
             call.setTheme(themeRepository.findById(callInput.getTheme())
-                    .orElseThrow(()-> new NotFoundById("Call -> Theme doesn't find by Id " + callInput.getTheme())));
+                    .orElseThrow(()-> new NotFoundByIdException("Call -> Theme doesn't find by Id " + callInput.getTheme())));
         }
         return callRepository.save(call);
     }
@@ -101,7 +99,7 @@ public class CallService {
         try{
             callRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Call with Id "+id+" deleted";
     }
@@ -115,8 +113,6 @@ public class CallService {
         }
         if(!isNull(callInput.getChannelName()) && callInput.getChannelName().isEmpty()){
             call.setChannelName(callInput.getChannelName());
-        }else {
-            call.setChannelName("EMPTY");
         }
         if(!isNull(callInput.getCommission())){
             call.setCommission(callInput.getCommission());

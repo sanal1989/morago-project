@@ -4,7 +4,7 @@ extend type Query{
 }
 extend type  Mutation{
     createFile(fileInput: FileInput): File
-    deleteFileById(id: ID):Boolean
+    deleteFileById(id: ID):String
     updateFile(id: ID
         fileInput: FileInput): File
 }

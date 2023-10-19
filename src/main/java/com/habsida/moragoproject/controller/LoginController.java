@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -42,7 +43,7 @@ public class LoginController {
             refreshTokenResponse.setRefreshToken(refreshToken.getToken());
             return refreshTokenResponse;
         } catch (Exception e) {
-            throw new RuntimeException("Authentication failed: " + e.getMessage());
+            throw new UsernameNotFoundException("Authentication failed: " + e.getMessage());
         }
     }
 

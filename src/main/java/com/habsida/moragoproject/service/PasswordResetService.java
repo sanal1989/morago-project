@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.PasswordReset;
 import com.habsida.moragoproject.model.input.PasswordResetInput;
 import com.habsida.moragoproject.repository.PasswordResetRepository;
@@ -25,25 +25,19 @@ public class PasswordResetService {
 
     public PasswordReset findById(Long id){
         return passwordResetRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("PasswordReset -> PasswordReset doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("PasswordReset -> PasswordReset doesn't find by Id " + id));
     }
 
     public PasswordReset createPasswordReset(PasswordResetInput passwordResetInput){
         PasswordReset passwordReset = new PasswordReset();
         if(!isNull(passwordResetInput.getPhone()) && !passwordResetInput.getPhone().isEmpty()){
             passwordReset.setPhone(passwordResetInput.getPhone());
-        }else {
-            passwordReset.setPhone("EMPTY");
         }
         if(!isNull(passwordResetInput.getToken()) && !passwordResetInput.getToken().isEmpty()){
             passwordReset.setToken(passwordResetInput.getToken());
-        }else {
-            passwordReset.setToken("EMPTY");
         }
         if(!isNull(passwordResetInput.getResetCode())){
             passwordReset.setResetCode(passwordResetInput.getResetCode());
-        }else {
-            passwordReset.setResetCode(0);
         }
         return passwordResetRepository.save(passwordReset);
     }
@@ -52,7 +46,7 @@ public class PasswordResetService {
         try{
             passwordResetRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "PasswordReset with Id "+id+" deleted";
     }
@@ -61,13 +55,9 @@ public class PasswordResetService {
         PasswordReset passwordReset =passwordResetRepository.findById(id).get();
         if(!isNull(passwordResetInput.getPhone()) && !passwordResetInput.getPhone().isEmpty()){
             passwordReset.setPhone(passwordResetInput.getPhone());
-        }else {
-            passwordReset.setPhone("EMPTY");
         }
         if(!isNull(passwordResetInput.getToken()) && !passwordResetInput.getToken().isEmpty()){
             passwordReset.setToken(passwordResetInput.getToken());
-        }else {
-            passwordReset.setToken("EMPTY");
         }
         if(!isNull(passwordResetInput.getResetCode())){
             passwordReset.setResetCode(passwordResetInput.getResetCode());

@@ -1,6 +1,6 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Withdrawal;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.WithdrawalInput;
@@ -29,7 +29,7 @@ public class WithdrawalService {
 
     public Withdrawal findById(Long id){
         return withdrawalRepository.findById(id)
-                .orElseThrow(()->new NotFoundById("Withdrawal doesn't find by Id " + id));
+                .orElseThrow(()->new NotFoundByIdException("Withdrawal doesn't find by Id " + id));
     }
 
     public Withdrawal createWithdrawal(WithdrawalInput withdrawalInput){
@@ -41,18 +41,12 @@ public class WithdrawalService {
         }
         if(!isNull(withdrawalInput.getAccountNumber()) && !withdrawalInput.getAccountNumber().isEmpty()){
             withdrawal.setAccountNumber(withdrawalInput.getAccountNumber());
-        }else {
-            withdrawal.setAccountHolder("EMPTY");
         }
         if(!isNull(withdrawalInput.getAccountHolder()) && !withdrawalInput.getAccountHolder().isEmpty()){
             withdrawal.setAccountHolder(withdrawalInput.getAccountHolder());
-        }else {
-            withdrawal.setAccountHolder("EMPTY");
         }
         if(!isNull(withdrawalInput.getNameOfBank()) && !withdrawalInput.getNameOfBank().isEmpty()){
             withdrawal.setNameOfBank(withdrawalInput.getNameOfBank());
-        }else {
-            withdrawal.setNameOfBank("EMPTY");
         }
         if(!isNull(withdrawalInput.getSum())){
             withdrawal.setSum(withdrawalInput.getSum());
@@ -61,7 +55,7 @@ public class WithdrawalService {
         }
         if(!isNull(withdrawalInput.getUser())){
             withdrawal.setUser(userRepository.findById(withdrawalInput.getUser())
-                    .orElseThrow(()->new NotFoundById("Withdrawal -> User doesn't find by Id " + withdrawalInput.getUser())));
+                    .orElseThrow(()->new NotFoundByIdException("Withdrawal -> User doesn't find by Id " + withdrawalInput.getUser())));
         }
         return withdrawalRepository.save(withdrawal);
     }
@@ -70,7 +64,7 @@ public class WithdrawalService {
         try{
             withdrawalRepository.deleteById(id);
         }catch (Exception e){
-            throw new NotFoundById(e.getMessage());
+            throw new NotFoundByIdException(e.getMessage());
         }
         return "Withdrawal with Id "+id+" deleted";
     }
@@ -84,18 +78,12 @@ public class WithdrawalService {
         }
         if(!isNull(withdrawalInput.getAccountNumber()) && !withdrawalInput.getAccountNumber().isEmpty()){
             withdrawal.setAccountNumber(withdrawalInput.getAccountNumber());
-        }else {
-            withdrawal.setAccountHolder("EMPTY");
         }
         if(!isNull(withdrawalInput.getAccountHolder()) && !withdrawalInput.getAccountHolder().isEmpty()){
             withdrawal.setAccountHolder(withdrawalInput.getAccountHolder());
-        }else {
-            withdrawal.setAccountHolder("EMPTY");
         }
         if(!isNull(withdrawalInput.getNameOfBank()) && !withdrawalInput.getNameOfBank().isEmpty()){
             withdrawal.setNameOfBank(withdrawalInput.getNameOfBank());
-        }else {
-            withdrawal.setNameOfBank("EMPTY");
         }
         if(!isNull(withdrawalInput.getSum())){
             withdrawal.setSum(withdrawalInput.getSum());

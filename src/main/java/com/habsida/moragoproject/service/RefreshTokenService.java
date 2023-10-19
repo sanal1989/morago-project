@@ -1,7 +1,7 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.JwtException;
-import com.habsida.moragoproject.exception.NotFoundById;
+import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.repository.RefreshTokenRepository;
@@ -57,12 +57,12 @@ public class RefreshTokenService {
     public RefreshToken findByPhone(String phone) {
         User user = userRepository.findByPhone(phone).get();
         return refreshTokenRepository.findByUser(user)
-                .orElseThrow(()->new NotFoundById("RefreshToken->RefreshToken doesn't find by Name"));
+                .orElseThrow(()->new NotFoundByIdException("RefreshToken->RefreshToken doesn't find by Name"));
     }
 
     public RefreshToken updateRefreshToken(String token){
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(()->new NotFoundById("Refresh token is not in database!"));
+                .orElseThrow(()->new NotFoundByIdException("Refresh token is not in database!"));
         this.verifyExpiration(refreshToken);
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(jwtUtil.generateToken(refreshToken.getUser().getPhone(), false));
