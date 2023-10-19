@@ -7,12 +7,13 @@ import com.habsida.moragoproject.service.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
 
 @Controller
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 public class UserController {
 
     UserService userService;
@@ -51,5 +52,8 @@ public class UserController {
         return userService.updateUser(id, userInput);
     }
 
-
+    @QueryMapping
+    public User currentUser(){
+        return userService.currentUser();
+    }
 }

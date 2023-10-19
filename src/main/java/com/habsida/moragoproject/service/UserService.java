@@ -15,6 +15,8 @@ import com.habsida.moragoproject.repository.RoleRepository;
 import com.habsida.moragoproject.repository.TranslatorProfileRepository;
 import com.habsida.moragoproject.repository.UserProfileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -264,5 +266,12 @@ public class UserService {
         userDB.setRefreshToken(refreshToken);
         userRepository.save(userDB);
         return refreshTokenResponse;
+    }
+
+    public User currentUser() {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        User user = userRepository.findByPhone(currentPrincipalName).get();
+        return user;
     }
 }
