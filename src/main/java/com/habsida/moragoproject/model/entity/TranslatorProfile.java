@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.model.entity;
 
+import com.habsida.moragoproject.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TranslatorProfile extends AbstractAuditable{
+public class TranslatorProfile extends AbstractAuditable implements Profile {
 
     private String dateOfBirth;
     private String email;

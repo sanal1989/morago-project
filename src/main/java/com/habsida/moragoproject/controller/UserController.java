@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-@PreAuthorize("isAuthenticated()")
+//@PreAuthorize("isAuthenticated()")
 public class UserController {
 
     UserService userService;
@@ -52,8 +52,5 @@ public class UserController {
         return userService.updateUser(id, userInput);
     }
 
-    @QueryMapping
-    public User currentUser(){
-        return userService.currentUser();
-    }
+
 }

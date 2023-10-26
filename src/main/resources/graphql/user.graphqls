@@ -1,7 +1,7 @@
 extend type Query{
     findAllUser: [User]
     findUserById(id: ID): User
-    currentUser:User
+
 }
 extend type  Mutation{
     registrationUser(userInput: UserInput): RefreshTokenResponse

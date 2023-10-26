@@ -1,7 +1,8 @@
 type Query{
-    test:String
+    currentProfiles:Profile
+    currentUser:CurrentUser
 }
-
+union Profile = UserProfile | TranslatorProfile
 
 type Mutation{
     login(phone: String,
@@ -14,6 +15,13 @@ type Mutation{
 type RefreshTokenResponse{
     accessToken: String
     refreshToken: String
+}
+
+
+type CurrentUser{
+    password: String
+    phone: String
+    profile: Profile
 }
 
 

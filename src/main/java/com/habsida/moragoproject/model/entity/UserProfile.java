@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.model.entity;
 
+import com.habsida.moragoproject.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,6 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserProfile extends AbstractAuditable{
+public class UserProfile extends AbstractAuditable implements Profile {
     private Boolean isFreeCallMade;
 }
