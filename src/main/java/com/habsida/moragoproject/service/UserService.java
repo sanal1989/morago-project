@@ -65,12 +65,15 @@ public class UserService {
 
     @Transactional
     public RefreshTokenResponse createUser(UserInput userInput){
+        String userPhone = userInput.getPhone();
+        userPhone = userPhone.replaceAll(" ","");
+        userPhone = userPhone.replaceAll("-","");
+        userPhone = userPhone.replaceAll("_","");
+        userInput.setPhone(userPhone);
         if(userRepository.existsByPhone(userInput.getPhone())){
             throw new UserAlreadyExistAuthenticationException("Phone already exist");
         }
-        if(!userInput.getPhone().matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")){
-            throw new ValidationPhoneException("phone number doesn't valid");
-        }
+
         User user = new User();
         if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
             user.setFirstName(userInput.getFirstName());
@@ -197,11 +200,13 @@ public class UserService {
     }
 
     public RefreshTokenResponse createAdmin(UserInput userInput) {
+        String userPhone = userInput.getPhone();
+        userPhone = userPhone.replaceAll(" ","");
+        userPhone = userPhone.replaceAll("-","");
+        userPhone = userPhone.replaceAll("_","");
+        userInput.setPhone(userPhone);
         if(userRepository.existsByPhone(userInput.getPhone())){
             throw new UserAlreadyExistAuthenticationException("Phone already exist");
-        }
-        if(!userInput.getPhone().matches("^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$")){
-            throw new ValidationPhoneException("phone number doesn't valid");
         }
         User user = new User();
         if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){

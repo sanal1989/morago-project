@@ -1,15 +1,15 @@
+
 type Query{
-    currentProfiles:Profile
     currentUser:CurrentUser
 }
-union Profile = UserProfile | TranslatorProfile
+
 
 type Mutation{
     login(phone: String,
         password: String): RefreshTokenResponse
     refreshToken(refreshToken: String): RefreshTokenResponse
-    fileUpload(file: Upload!): File!
-    multiFileUpload(files: [Upload!]): [File!]!
+#    fileUpload(file: Upload!): File!
+#    multiFileUpload(files: [Upload!]): [File!]!
 }
 
 type RefreshTokenResponse{
@@ -19,9 +19,23 @@ type RefreshTokenResponse{
 
 
 type CurrentUser{
+    id:ID
+    createdAt: String
+    updatedAt: String
+    firstName: String
+    lastName: String
+    apnToken: String
+    fcmToken: String
     password: String
     phone: String
-    profile: Profile
+    balance: Float
+    ratings: Float
+    isActive: Boolean
+    isDebtor: Boolean
+    onBoardingStatus: Int
+    totalRatings: Int
+    roles: [Role]
+    profile: String
 }
 
 

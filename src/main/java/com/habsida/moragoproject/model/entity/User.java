@@ -39,10 +39,10 @@ public class User extends AbstractAuditable{
             inverseJoinColumns = @JoinColumn(name = "roles_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     private UserProfile userProfile = new UserProfile();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     private TranslatorProfile translatorProfile = new TranslatorProfile();
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

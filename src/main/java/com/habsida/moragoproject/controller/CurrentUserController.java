@@ -1,37 +1,36 @@
 package com.habsida.moragoproject.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.habsida.moragoproject.model.CurrentUser;
 import com.habsida.moragoproject.model.Profile;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.entity.UserProfile;
+import com.habsida.moragoproject.service.CurrentUserService;
 import com.habsida.moragoproject.service.UserService;
+import graphql.execution.DataFetcherResult;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.Collection;
 
+import static graphql.execution.DataFetcherResult.newResult;
+
 @Controller
 public class CurrentUserController {
     UserService userService;
+    private CurrentUserService currentUserService;
 
-    public CurrentUserController(UserService userService) {
-        this.userService = userService;
+    public CurrentUserController(CurrentUserService currentUserService) {
+        this.currentUserService = currentUserService;
     }
 
     @QueryMapping
-    public Profile currentProfiles(){
-        User user = userService.currentUser();
-        return user.getUserProfile() != null ? user.getUserProfile(): user.getTranslatorProfile();
+    public DataFetcherResult<CurrentUser> currentUser() throws JsonProcessingException {
+        return currentUserService.getCurrentUser();
     }
 
-    @QueryMapping
-    public CurrentUser currentUser(){
-        CurrentUser currentUser = new CurrentUser();
-        User user = userService.currentUser();
-        currentUser.setPhone(user.getPhone());
-        currentUser.setPassword(user.getPassword());
-        if(user.getUserProfile() instanceof UserProfile) currentUser.setProfile(user.getUserProfile());
-        else currentUser.setProfile(user.getTranslatorProfile());
-        return currentUser;
-    }
+
 }

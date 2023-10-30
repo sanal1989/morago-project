@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class TranslatorProfile extends AbstractAuditable implements Profile {
+public class TranslatorProfile extends AbstractAuditable  {
 
     private String dateOfBirth;
     private String email;
@@ -38,4 +38,18 @@ public class TranslatorProfile extends AbstractAuditable implements Profile {
             fetch = FetchType.LAZY)
     private File file;
 
+    @Override
+    public String toString() {
+        return "TranslatorProfile{" +
+                "dateOfBirth='" + dateOfBirth + '\'' +
+                ", email='" + email + '\'' +
+                ", isAvailable=" + isAvailable +
+                ", isOnline=" + isOnline +
+                ", levelOfKorean='" + levelOfKorean + '\'' +
+                ", isActive=" + isActive +
+                ", languageList=" + languageList +
+                ", themeList=" + themeList +
+                ", file=" + file +
+                '}';
+    }
 }

@@ -13,6 +13,13 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserProfile extends AbstractAuditable implements Profile {
+public class UserProfile extends AbstractAuditable  {
     private Boolean isFreeCallMade;
+
+    @Override
+    public String toString() {
+        return "UserProfile{" +
+                "isFreeCallMade=" + isFreeCallMade +
+                '}';
+    }
 }
