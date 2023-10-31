@@ -63,6 +63,15 @@ public class UserService {
                 .orElseThrow(()->new NotFoundByIdException("User -> User doesn't find by Id " + id));
     }
 
+    public User findByPhone(String phone){
+        return userRepository.findByPhone(phone)
+                .orElseThrow(()->new NotFoundByIdException("User -> User doesn't find by phone " + phone));
+    }
+
+    public Boolean existsByPhone(String phone){
+        return userRepository.existsByPhone(phone);
+    }
+
     @Transactional
     public RefreshTokenResponse createUser(UserInput userInput){
         String userPhone = userInput.getPhone();
@@ -278,5 +287,9 @@ public class UserService {
         String currentPrincipalName = authentication.getName();
         User user = userRepository.findByPhone(currentPrincipalName).get();
         return user;
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

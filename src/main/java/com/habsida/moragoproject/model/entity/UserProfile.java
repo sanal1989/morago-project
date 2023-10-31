@@ -1,6 +1,5 @@
 package com.habsida.moragoproject.model.entity;
 
-import com.habsida.moragoproject.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

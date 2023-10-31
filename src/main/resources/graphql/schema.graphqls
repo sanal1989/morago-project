@@ -1,6 +1,8 @@
 
 type Query{
     currentUser:CurrentUser
+    resetPasswordGetCode(phone:String) : String
+
 }
 
 
@@ -8,8 +10,15 @@ type Mutation{
     login(phone: String,
         password: String): RefreshTokenResponse
     refreshToken(refreshToken: String): RefreshTokenResponse
-#    fileUpload(file: Upload!): File!
-#    multiFileUpload(files: [Upload!]): [File!]!
+    fileUpload(file: Upload!): File!
+    multiFileUpload(files: [Upload!]): [File!]!
+    resetPasswordHash(phone:String): ResetPasswordDTO
+    generateTokenResetPassword(hashCode: String
+                                time: String
+                                phone:String
+                                code: String ):String
+    resetNewPassword(token: String
+                    password: String):String
 }
 
 type RefreshTokenResponse{
@@ -36,6 +45,11 @@ type CurrentUser{
     totalRatings: Int
     roles: [Role]
     profile: String
+}
+
+type ResetPasswordDTO{
+    hashCode:String
+    time: String
 }
 
 
