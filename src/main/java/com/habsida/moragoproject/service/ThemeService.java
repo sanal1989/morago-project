@@ -9,6 +9,7 @@ import com.habsida.moragoproject.repository.ThemeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -16,13 +17,15 @@ import static java.util.Objects.isNull;
 public class ThemeService {
 
     ThemeRepository themeRepository;
-    CategoryRepository categoryRepository;
-    FileRepository fileRepository;
+    CategoryService categoryService;
+    FileService fileService;
 
-    public ThemeService(ThemeRepository themeRepository, CategoryRepository categoryRepository, FileRepository fileRepository) {
+    public ThemeService(ThemeRepository themeRepository,
+                        CategoryService categoryService,
+                        FileService fileService) {
         this.themeRepository = themeRepository;
-        this.categoryRepository = categoryRepository;
-        this.fileRepository = fileRepository;
+        this.categoryService = categoryService;
+        this.fileService = fileService;
     }
 
     public List<Theme> findAll(){
@@ -66,12 +69,10 @@ public class ThemeService {
             theme.setPrice(0d);
         }
         if(!isNull(themeInput.getCategory())){
-            theme.setCategory(categoryRepository.findById(themeInput.getCategory())
-                    .orElseThrow(()->new NotFoundByIdException("Theme-> Category doesn't find By Id " + themeInput.getCategory())));
+            theme.setCategory(categoryService.findById(themeInput.getCategory()));
         }
         if(!isNull(themeInput.getFile())){
-            theme.setFile(fileRepository.findById(themeInput.getFile())
-                    .orElseThrow(()->new NotFoundByIdException("Theme-> File doesn't find By Id " + themeInput.getFile())));
+            theme.setFile(fileService.findById(themeInput.getFile()));
         }
         return themeRepository.save(theme);
     }
@@ -117,13 +118,15 @@ public class ThemeService {
             theme.setPrice(0d);
         }
         if(!isNull(themeInput.getCategory())){
-            theme.setCategory(categoryRepository.findById(themeInput.getCategory())
-                    .orElseThrow(()->new NotFoundByIdException("Theme-> Category doesn't find By Id " + themeInput.getCategory())));
+            theme.setCategory(categoryService.findById(themeInput.getCategory()));
         }
         if(!isNull(themeInput.getFile())){
-            theme.setFile(fileRepository.findById(themeInput.getFile())
-                    .orElseThrow(()->new NotFoundByIdException("Theme-> File doesn't find By Id " + themeInput.getFile())));
+            theme.setFile(fileService.findById(themeInput.getFile()));
         }
         return themeRepository.save(theme);
+    }
+
+    public Optional<Theme> findByName(String name) {
+        return themeRepository.findByName(name);
     }
 }

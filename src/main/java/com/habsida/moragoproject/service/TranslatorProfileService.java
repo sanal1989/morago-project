@@ -20,15 +20,18 @@ import static java.util.Objects.isNull;
 public class TranslatorProfileService {
 
     TranslatorProfileRepository translatorProfileRepository;
-    LanguagesRepository languagesRepository;
-    ThemeRepository themeRepository;
-    FileRepository fileRepository;
+    LanguageService languageService;
+    ThemeService themeService;
+    FileService fileService;
 
-    public TranslatorProfileService(TranslatorProfileRepository translatorProfileRepository, LanguagesRepository languagesRepository, ThemeRepository themeRepository, FileRepository fileRepository) {
+    public TranslatorProfileService(TranslatorProfileRepository translatorProfileRepository,
+                                    LanguageService languageService,
+                                    ThemeService themeService,
+                                    FileService fileService) {
         this.translatorProfileRepository = translatorProfileRepository;
-        this.languagesRepository = languagesRepository;
-        this.themeRepository = themeRepository;
-        this.fileRepository = fileRepository;
+        this.languageService = languageService;
+        this.themeService = themeService;
+        this.fileService = fileService;
     }
 
     public List<TranslatorProfile> findAll(){
@@ -42,6 +45,7 @@ public class TranslatorProfileService {
 
     public TranslatorProfile createTranslatorProfile(TranslatorProfileInput translatorProfileInput){
         TranslatorProfile translatorProfile = new TranslatorProfile();
+        translatorProfile.setIsAvailable(false);
         if(!isNull(translatorProfileInput.getDateOfBirth()) && !translatorProfileInput.getDateOfBirth().isEmpty()){
             translatorProfile.setDateOfBirth(translatorProfileInput.getDateOfBirth());
         }
@@ -56,11 +60,8 @@ public class TranslatorProfileService {
         }else {
             translatorProfile.setIsActive(false);
         }
-        if(!isNull(translatorProfileInput.getIsAvailable())){
-            translatorProfile.setIsAvailable(translatorProfileInput.getIsAvailable());
-        }else {
-            translatorProfile.setIsAvailable(false);
-        }
+
+
         if(!isNull(translatorProfileInput.getIsOnline())){
             translatorProfile.setIsOnline(translatorProfileInput.getIsOnline());
         }else {
@@ -69,18 +70,17 @@ public class TranslatorProfileService {
         if(!isNull(translatorProfileInput.getLanguageList())){
             List<String> languageList = translatorProfileInput.getLanguageList();
             for (int i = 0; i < languageList.size(); i++) {
-                Optional<Language> language = languagesRepository.findByName(languageList.get(i));
+                Optional<Language> language = languageService.findByName(languageList.get(i));
                 if(language.isPresent()) translatorProfile.getLanguageList().add(language.get());
             }
         }
         if(!isNull(translatorProfileInput.getFile())){
-            translatorProfile.setFile(fileRepository.findById(translatorProfileInput.getFile())
-                    .orElseThrow(()->new NotFoundByIdException("TranslatorProfile -> File doesn't find by Id " + translatorProfileInput.getFile())));
+            translatorProfile.setFile(fileService.findById(translatorProfileInput.getFile()));
         }
         if(!isNull(translatorProfileInput.getThemeList())){
             List<String> themeList = translatorProfileInput.getThemeList();
             for (int i = 0; i < themeList.size(); i++) {
-                Optional<Theme> theme = themeRepository.findByName(themeList.get(i));
+                Optional<Theme> theme = themeService.findByName(themeList.get(i));
                 if(theme.isPresent()) translatorProfile.getThemeList().add(theme.get());
             }
         }
@@ -112,11 +112,6 @@ public class TranslatorProfileService {
             translatorProfile.setIsActive(translatorProfileInput.getIsActive());
         }else {
             translatorProfile.setIsActive(false);
-        }
-        if(!isNull(translatorProfileInput.getIsAvailable())){
-            translatorProfile.setIsAvailable(translatorProfileInput.getIsAvailable());
-        }else {
-            translatorProfile.setIsAvailable(false);
         }
         if(!isNull(translatorProfileInput.getIsOnline())){
             translatorProfile.setIsOnline(translatorProfileInput.getIsOnline());

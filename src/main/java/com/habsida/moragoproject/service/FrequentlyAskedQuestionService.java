@@ -31,7 +31,9 @@ public class FrequentlyAskedQuestionService {
     }
 
     public FrequentlyAskedQuestion createFrequentlyAskedQuestion(FrequentlyAskedQuestionInput frequentlyAskedQuestionInput){
+
         FrequentlyAskedQuestion frequentlyAskedQuestion = new FrequentlyAskedQuestion();
+
         if(!isNull(frequentlyAskedQuestionInput.getQuestion()) && !frequentlyAskedQuestionInput.getQuestion().isEmpty()){
             frequentlyAskedQuestion.setQuestion(frequentlyAskedQuestionInput.getQuestion());
         }

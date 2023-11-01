@@ -2,29 +2,16 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.exception.FileSaveException;
 import com.habsida.moragoproject.model.entity.File;
-import com.habsida.moragoproject.service.FileService;
-import com.habsida.moragoproject.service.FileUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.habsida.moragoproject.configuration.utils.FileUtil;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 

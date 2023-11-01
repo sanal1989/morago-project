@@ -29,7 +29,9 @@ public class CoinService {
     }
 
     public Coin createCoin(CoinInput coinInput){
+
         Coin coin = new Coin();
+
         if(!isNull(coinInput.getCoin())){
             coin.setCoin(coinInput.getCoin());
         }else {

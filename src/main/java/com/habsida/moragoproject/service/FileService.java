@@ -1,27 +1,16 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.exception.FileSaveException;
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.File;
-import com.habsida.moragoproject.model.input.FileInput;
 import com.habsida.moragoproject.repository.FileRepository;
-import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.isNull;
 
@@ -29,14 +18,14 @@ import static java.util.Objects.isNull;
 public class FileService {
 
     FileRepository fileRepository;
-    UserRepository userRepository;
+    UserService userService;
 
     @Value("${path.folder}")
     private String pathFolder;
 
-    public FileService(FileRepository fileRepository, UserRepository userRepository) {
+    public FileService(FileRepository fileRepository, UserService userService) {
         this.fileRepository = fileRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<File> findAll(){

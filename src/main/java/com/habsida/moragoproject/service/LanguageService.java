@@ -7,6 +7,7 @@ import com.habsida.moragoproject.repository.LanguagesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -29,7 +30,9 @@ public class LanguageService {
     }
 
     public Language createLanguage(LanguageInput languageInput){
+
         Language language = new Language();
+
         if(!isNull(languageInput.getName()) && !languageInput.getName().isEmpty()){
             language.setName(languageInput.getName());
         }
@@ -46,10 +49,16 @@ public class LanguageService {
     }
 
     public Language updateLanguage(Long id, LanguageInput languageInput){
+
         Language language = languagesRepository.findById(id).get();
+
         if(!isNull(languageInput.getName()) && !languageInput.getName().isEmpty()){
             language.setName(languageInput.getName());
         }
         return languagesRepository.save(language);
+    }
+
+    public Optional<Language> findByName(String name) {
+        return languagesRepository.findByName(name);
     }
 }

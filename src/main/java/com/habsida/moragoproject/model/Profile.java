@@ -1,4 +1,4 @@
-package com.habsida.moragoproject.model.input;
+package com.habsida.moragoproject.model;
 
 import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.entity.Theme;
@@ -7,24 +7,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TranslatorProfileInput {
-
+public class Profile {
+    private Boolean isFreeCallMade;
     private String dateOfBirth;
     private String email;
+    private Boolean isAvailable;
     private Boolean isOnline;
     private String levelOfKorean;
     private Boolean isActive;
-
-    private List<String> languageList = new ArrayList<>();
-    private List<String> themeList = new ArrayList<>();
-
-    private Long file;
+    private Set<Language> languageList = new HashSet<>();
+    private Set<Theme> themeList = new HashSet<>();
+    private String selfDescription;
 }

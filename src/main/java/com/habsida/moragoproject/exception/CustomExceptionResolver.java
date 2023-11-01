@@ -61,6 +61,14 @@ public class CustomExceptionResolver extends DataFetcherExceptionResolverAdapter
                     .location(env.getField().getSourceLocation())
                     .build();
         }
+        if (ex instanceof RuntimeException) {
+            return GraphqlErrorBuilder.newError()
+                    .errorType(ErrorType.INTERNAL_ERROR)
+                    .message(ex.getMessage())
+                    .path(env.getExecutionStepInfo().getPath())
+                    .location(env.getField().getSourceLocation())
+                    .build();
+        }
         return null;
 
     }

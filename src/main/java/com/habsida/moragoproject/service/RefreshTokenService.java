@@ -6,7 +6,7 @@ import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.repository.RefreshTokenRepository;
 import com.habsida.moragoproject.repository.UserRepository;
-import com.habsida.moragoproject.configuration.security.JwtUtil;
+import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,23 +18,25 @@ public class RefreshTokenService {
 
     RefreshTokenRepository refreshTokenRepository;
 
-    UserRepository userRepository;
+    UserService userService;
 
     private JwtUtil jwtUtil;
 
     @Value("#{new Long ('${jwt.jwtRefreshExpirationMs}')}")
     private Long refreshTokenDurationMs;
 
-    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository, JwtUtil jwtUtil) {
+    public RefreshTokenService(RefreshTokenRepository refreshTokenRepository,
+                               UserService userService,
+                               JwtUtil jwtUtil) {
         this.refreshTokenRepository = refreshTokenRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
 
     public RefreshToken createRefreshToken(String phone) {
         RefreshToken refreshToken = new RefreshToken();
 
-        refreshToken.setUser(userRepository.findByPhone(phone).get());
+        refreshToken.setUser(userService.findByPhone(phone));
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
         refreshToken.setToken(jwtUtil.generateToken(phone, false));
 
@@ -55,7 +57,7 @@ public class RefreshTokenService {
     }
 
     public RefreshToken findByPhone(String phone) {
-        User user = userRepository.findByPhone(phone).get();
+        User user = userService.findByPhone(phone);
         return refreshTokenRepository.findByUser(user)
                 .orElseThrow(()->new NotFoundByIdException("RefreshToken->RefreshToken doesn't find by Name"));
     }

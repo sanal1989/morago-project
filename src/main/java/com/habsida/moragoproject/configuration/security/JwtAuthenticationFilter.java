@@ -2,6 +2,7 @@ package com.habsida.moragoproject.configuration.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import com.habsida.moragoproject.exception.CustomExceptionResolver;
 import graphql.*;
 import org.springframework.graphql.execution.ErrorType;

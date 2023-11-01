@@ -1,4 +1,4 @@
-package com.habsida.moragoproject.service;
+package com.habsida.moragoproject.configuration.utils;
 
 import com.habsida.moragoproject.exception.FileSaveException;
 import com.habsida.moragoproject.model.entity.File;

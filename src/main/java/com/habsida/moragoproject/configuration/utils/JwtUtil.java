@@ -1,4 +1,4 @@
-package com.habsida.moragoproject.configuration.security;
+package com.habsida.moragoproject.configuration.utils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -51,14 +51,9 @@ public class JwtUtil {
         }
     }
 
-    public String generateTokenResetPassword(String phone, String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-        LocalDateTime localDateTime = LocalDateTime.parse(date.substring(0,23).replace("T", " "),formatter);
-
+    public String generateTokenResetPassword(String phone) {
         return JWT.create()
-                .withExpiresAt(java.util.Date
-                        .from(localDateTime.atZone(ZoneId.systemDefault())
-                                .toInstant()))
+                .withExpiresAt(new Date(System.currentTimeMillis()+ refreshTokenDurationMs))
                 .withClaim("phone", phone)
                 .withClaim("type", "password_reset")
                 .sign(Algorithm.HMAC512(refreshPasswordSecretKey));

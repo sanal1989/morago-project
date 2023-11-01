@@ -15,11 +15,11 @@ import static java.util.Objects.isNull;
 public class NotificationService {
 
     NotificationRepository notificationRepository;
-    UserRepository userRepository;
+    UserService userService;
 
-    public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository) {
+    public NotificationService(NotificationRepository notificationRepository, UserService userService) {
         this.notificationRepository = notificationRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Notification> findAll(){
@@ -40,8 +40,7 @@ public class NotificationService {
             notification.setTitle(notificationInput.getTitle());
         }
         if(!isNull(notificationInput.getUser())){
-            notification.setUser(userRepository.findById(notificationInput.getUser())
-                    .orElseThrow(()->new RuntimeException("Notification -> User doesn't find by Id")));
+            notification.setUser(userService.findById(notificationInput.getUser()));
         }
         return notificationRepository.save(notification);
     }
@@ -64,8 +63,7 @@ public class NotificationService {
             notification.setTitle(notificationInput.getTitle());
         }
         if(!isNull(notificationInput.getUser())){
-            notification.setUser(userRepository.findById(notificationInput.getUser())
-                    .orElseThrow(()->new NotFoundByIdException("Notification -> User doesn't find by Id " + notificationInput.getUser())));
+            notification.setUser(userService.findById(notificationInput.getUser()));
         }
         return notificationRepository.save(notification);
     }

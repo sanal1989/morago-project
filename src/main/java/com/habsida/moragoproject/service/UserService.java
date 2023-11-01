@@ -1,9 +1,9 @@
 package com.habsida.moragoproject.service;
 
-import com.habsida.moragoproject.configuration.security.JwtUtil;
+import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.exception.UserAlreadyExistAuthenticationException;
-import com.habsida.moragoproject.exception.ValidationPhoneException;
+import com.habsida.moragoproject.model.Profile;
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.entity.User;
@@ -21,7 +21,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.xml.bind.ValidationException;
 import java.util.List;
 import java.util.Set;
 
@@ -31,24 +30,24 @@ import static java.util.Objects.isNull;
 public class UserService {
 
     private UserRepository userRepository;
-    private UserProfileRepository userProfileRepository;
-    private TranslatorProfileRepository translatorProfileRepository;
-    private RoleRepository roleRepository;
+    private UserProfileService userProfileService;
+    private TranslatorProfileService translatorProfileService;
+    private RoleService roleService;
     private PasswordEncoder passwordEncoder;
     private RefreshTokenService refreshTokenService;
     private JwtUtil jwtUtil;
 
     public UserService(UserRepository userRepository,
-                       UserProfileRepository userProfileRepository,
-                       TranslatorProfileRepository translatorProfileRepository,
-                       RoleRepository roleRepository,
+                       UserProfileService userProfileService,
+                       TranslatorProfileService translatorProfileService,
+                       RoleService roleService,
                        PasswordEncoder passwordEncoder,
                        RefreshTokenService refreshTokenService,
                        JwtUtil jwtUtil) {
         this.userRepository = userRepository;
-        this.userProfileRepository = userProfileRepository;
-        this.translatorProfileRepository = translatorProfileRepository;
-        this.roleRepository = roleRepository;
+        this.userProfileService = userProfileService;
+        this.translatorProfileService = translatorProfileService;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenService = refreshTokenService;
         this.jwtUtil = jwtUtil;
@@ -125,7 +124,7 @@ public class UserService {
 
         UserProfile userProfile= new UserProfile();
         userProfile.setIsFreeCallMade(false);
-        userProfileRepository.save(userProfile);
+        userProfileService.save(userProfile);
 
         user.setIsActive(true);
         user.setIsDebtor(false);
@@ -133,7 +132,7 @@ public class UserService {
         user.setTranslatorProfile(null);
 
         Set<Role> rolestoBD = user.getRoles();
-        rolestoBD.add(roleRepository.findByName(ERole.USER)
+        rolestoBD.add(roleService.findByName(ERole.USER)
             .orElseThrow(()-> new NotFoundByIdException("User -> Role.USER doesn't exist")));
         user.setRoles(rolestoBD);
 
@@ -259,7 +258,7 @@ public class UserService {
 
         UserProfile userProfile= new UserProfile();
         userProfile.setIsFreeCallMade(false);
-        userProfileRepository.save(userProfile);
+        userProfileService.save(userProfile);
 
         user.setIsActive(true);
         user.setIsDebtor(false);
@@ -267,7 +266,7 @@ public class UserService {
         user.setTranslatorProfile(null);
 
         Set<Role> rolestoBD = user.getRoles();
-        rolestoBD.add(roleRepository.findByName(ERole.ADMIN)
+        rolestoBD.add(roleService.findByName(ERole.ADMIN)
                 .orElseThrow(()-> new NotFoundByIdException("User -> Role.ADMIN doesn't exist")));
         user.setRoles(rolestoBD);
 
@@ -291,5 +290,26 @@ public class UserService {
 
     public void save(User user) {
         userRepository.save(user);
+    }
+
+
+    public Profile getProfile(User user) {
+        Profile profile = new Profile();
+
+        if(user.getUserProfile() != null) {
+            profile.setIsFreeCallMade(user.getUserProfile().getIsFreeCallMade());
+            profile.setSelfDescription("USER");
+        }
+        if (user.getTranslatorProfile() != null) {
+            profile.setEmail(user.getTranslatorProfile().getEmail());
+            profile.setLanguageList(user.getTranslatorProfile().getLanguageList());
+            profile.setThemeList(user.getTranslatorProfile().getThemeList());
+            profile.setDateOfBirth(user.getTranslatorProfile().getDateOfBirth());
+            profile.setIsOnline(user.getTranslatorProfile().getIsOnline());
+            profile.setIsAvailable(user.getTranslatorProfile().getIsAvailable());
+            profile.setLevelOfKorean(user.getTranslatorProfile().getLevelOfKorean());
+            profile.setSelfDescription("TRANSLATOR");
+        }
+        return profile;
     }
 }

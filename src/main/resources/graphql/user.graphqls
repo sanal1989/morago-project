@@ -1,7 +1,7 @@
 extend type Query{
     findAllUser: [User]
     findUserById(id: ID): User
-
+    currentUser:User
 }
 extend type  Mutation{
     registrationUser(userInput: UserInput): RefreshTokenResponse
@@ -28,24 +28,35 @@ type User{
     onBoardingStatus: Int
     totalRatings: Int
     roles: [Role]
-    userProfile: UserProfile
-    translatorProfile: TranslatorProfile
+    profile: Profile
 }
 
 input UserInput{
-#    firstName: String
-#    lastName: String
-#    apnToken: String
-#    fcmToken: String
+    firstName: String
+    lastName: String
+    apnToken: String
+    fcmToken: String
     password: String
     phone: String
-#    balance: Float
-#    ratings: Float
-#    isActive: Boolean
-#    isDebtor: Boolean
-#    onBoardingStatus: Int
-#    totalRatings: Int
-#    roles: [String]
-#    userProfile: Int
-#    translatorProfile: Int
+    balance: Float
+    ratings: Float
+    isActive: Boolean
+    isDebtor: Boolean
+    onBoardingStatus: Int
+    totalRatings: Int
+    roles: [String]
+    userProfile: Int
+    translatorProfile: Int
+}
+
+type Profile {
+    isFreeCallMade: String
+    dateOfBirth: String
+    email: String
+    isAvailable: Boolean
+    isOnline: Boolean
+    levelOfKorean: String
+    languages: [Language]
+    themes: [Theme]
+    selfDescription: String
 }

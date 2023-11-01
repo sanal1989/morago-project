@@ -8,6 +8,7 @@ import com.habsida.moragoproject.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -59,4 +60,7 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
+    public Optional<Role> findByName(ERole user) {
+        return roleRepository.findByName(user);
+    }
 }

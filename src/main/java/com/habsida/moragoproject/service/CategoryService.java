@@ -29,7 +29,9 @@ public class CategoryService {
     }
 
     public Category createCategory(CategoryInput categoryInput){
+
         Category category = new Category();
+
         if(!isNull(categoryInput.getIsActive())){
             category.setIsActive(categoryInput.getIsActive());
         }else {

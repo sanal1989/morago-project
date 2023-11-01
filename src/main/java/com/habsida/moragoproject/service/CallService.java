@@ -6,7 +6,6 @@ import com.habsida.moragoproject.model.enums.CallStatus;
 import com.habsida.moragoproject.model.input.CallInput;
 import com.habsida.moragoproject.repository.CallRepository;
 import com.habsida.moragoproject.repository.ThemeRepository;
-import com.habsida.moragoproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,13 +16,15 @@ import static java.util.Objects.isNull;
 public class CallService {
 
     CallRepository callRepository;
-    UserRepository userRepository;
-    ThemeRepository themeRepository;
+    UserService userService;
+    ThemeService themeService;
 
-    public CallService(CallRepository callRepository, UserRepository userRepository, ThemeRepository themeRepository) {
+    public CallService(CallRepository callRepository,
+                       UserService userService,
+                       ThemeService themeService) {
         this.callRepository = callRepository;
-        this.userRepository = userRepository;
-        this.themeRepository = themeRepository;
+        this.userService = userService;
+        this.themeService = themeService;
     }
 
     public List<Call> findAll(){
@@ -36,7 +37,9 @@ public class CallService {
     }
 
     public Call createCall(CallInput callInput){
+
         Call call = new Call();
+
         if(!isNull(callInput.getCallStatus()) && callInput.getCallStatus().isEmpty()){
             call.setCallStatus(CallStatus.valueOf(callInput.getCallStatus()));
         }else {
@@ -81,16 +84,13 @@ public class CallService {
             call.setUserHasRated(false);
         }
         if(!isNull(callInput.getCaller())){
-            call.setCaller(userRepository.findById(callInput.getCaller())
-                    .orElseThrow(()-> new NotFoundByIdException("Call -> User doesn't find by Id " + callInput.getCaller())));
+            call.setCaller(userService.findById(callInput.getCaller()));
         }
         if(!isNull(callInput.getAnswerer())){
-            call.setAnswerer(userRepository.findById(callInput.getAnswerer())
-                    .orElseThrow(()-> new NotFoundByIdException("Call -> User doesn't find by Id " + callInput.getAnswerer())));
+            call.setAnswerer(userService.findById(callInput.getAnswerer()));
         }
         if(!isNull(callInput.getTheme())){
-            call.setTheme(themeRepository.findById(callInput.getTheme())
-                    .orElseThrow(()-> new NotFoundByIdException("Call -> Theme doesn't find by Id " + callInput.getTheme())));
+            call.setTheme(themeService.findById(callInput.getTheme()));
         }
         return callRepository.save(call);
     }
@@ -105,7 +105,9 @@ public class CallService {
     }
 
     public Call updateCall(Long id, CallInput callInput){
+
         Call call = callRepository.findById(id).get();
+
         if(!isNull(callInput.getCallStatus()) && callInput.getCallStatus().isEmpty()){
             call.setCallStatus(CallStatus.valueOf(callInput.getCallStatus()));
         }else {

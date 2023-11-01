@@ -1,8 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.File;
-import com.habsida.moragoproject.service.FileService;
-import com.habsida.moragoproject.service.FileUtil;
+import com.habsida.moragoproject.configuration.utils.FileUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

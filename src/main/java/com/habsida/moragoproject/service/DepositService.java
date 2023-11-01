@@ -16,11 +16,11 @@ import static java.util.Objects.isNull;
 public class DepositService {
 
     DepositRepository depositRepository;
-    UserRepository userRepository;
+    UserService userService;
 
-    public DepositService(DepositRepository depositRepository, UserRepository userRepository) {
+    public DepositService(DepositRepository depositRepository, UserService userService) {
         this.depositRepository = depositRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Deposit> findAll(){
@@ -33,7 +33,9 @@ public class DepositService {
     }
 
     public Deposit createDeposit(DepositInput depositInput){
+
         Deposit deposit = new Deposit();
+
         if(!isNull(depositInput.getAccountHolder()) && !depositInput.getAccountHolder().isEmpty()){
             deposit.setAccountHolder(depositInput.getAccountHolder());
         }
@@ -56,8 +58,7 @@ public class DepositService {
             deposit.setStatus(EStatus.E100);
         }
         if(!isNull(depositInput.getUser())){
-            deposit.setUser(userRepository.findById(depositInput.getUser())
-                    .orElseThrow(()->new NotFoundByIdException("Deposit -> User doesn't find by id " + depositInput.getUser())));
+            deposit.setUser(userService.findById(depositInput.getUser()));
         }
         return depositRepository.save(deposit);
     }
@@ -72,7 +73,9 @@ public class DepositService {
     }
 
     public Deposit updateDeposit(Long id, DepositInput depositInput){
+
         Deposit deposit = depositRepository.findById(id).get();
+
         if(!isNull(depositInput.getAccountHolder()) && !depositInput.getAccountHolder().isEmpty()){
             deposit.setAccountHolder(depositInput.getAccountHolder());
         }

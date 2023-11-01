@@ -15,11 +15,11 @@ import static java.util.Objects.isNull;
 public class DebtorService {
 
     DebtorRepository debtorRepository;
-    UserRepository userRepository;
+    UserService userService;
 
-    public DebtorService(DebtorRepository debtorRepository, UserRepository userRepository) {
+    public DebtorService(DebtorRepository debtorRepository, UserService userService) {
         this.debtorRepository = debtorRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Debtor> findAll(){
@@ -32,7 +32,9 @@ public class DebtorService {
     }
 
     public Debtor createDebtor(DebtorInput debtorInput){
+
         Debtor debtor = new Debtor();
+
         if(!isNull(debtorInput.getAccountHolder()) && !debtorInput.getAccountHolder().isEmpty()){
             debtor.setAccountHolder(debtorInput.getAccountHolder());
         }
@@ -45,8 +47,7 @@ public class DebtorService {
             debtor.setIsPaid(false);
         }
         if(!isNull(debtorInput.getUser())){
-            debtor.setUser(userRepository.findById(debtorInput.getUser())
-                    .orElseThrow(()->new NotFoundByIdException("Debtor -> User doesn't find by Id " + debtorInput.getUser())));
+            debtor.setUser(userService.findById(debtorInput.getUser()));
         }
         return debtorRepository.save(debtor);
     }
@@ -61,7 +62,9 @@ public class DebtorService {
     }
 
     public Debtor updateDebtor(Long id, DebtorInput debtorInput){
+
         Debtor debtor = debtorRepository.findById(id).get();
+
         if(!isNull(debtorInput.getAccountHolder()) && !debtorInput.getAccountHolder().isEmpty()){
             debtor.setAccountHolder(debtorInput.getAccountHolder());
         }

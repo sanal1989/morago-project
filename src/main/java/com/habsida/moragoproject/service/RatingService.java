@@ -15,11 +15,11 @@ import static java.util.Objects.isNull;
 public class RatingService {
 
     RatingRepository ratingRepository;
-    UserRepository userRepository;
+    UserService userService;
 
-    public RatingService(RatingRepository ratingRepository, UserRepository userRepository) {
+    public RatingService(RatingRepository ratingRepository, UserService userService) {
         this.ratingRepository = ratingRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Rating> findAll(){
@@ -32,23 +32,22 @@ public class RatingService {
     }
 
     public Rating createRating(RatingInput ratingInput){
+
         Rating rating = new Rating();
+
         if(!isNull(ratingInput.getGrade())){
             rating.setGrade(ratingInput.getGrade());
         }else{
             rating.setGrade(0d);
         }
         if(!isNull(ratingInput.getUserGivesRating())){
-            rating.setUserGivesRating(userRepository.findById(ratingInput.getUserGivesRating())
-                    .orElseThrow(()->new NotFoundByIdException("Rating->User dont find By Id " +ratingInput.getUserGivesRating())));
+            rating.setUserGivesRating(userService.findById(ratingInput.getUserGivesRating()));
         }
         if(!isNull(ratingInput.getUserTakesRating())){
-            rating.setUserTakesRating(userRepository.findById(ratingInput.getUserTakesRating())
-                    .orElseThrow(()->new NotFoundByIdException("Rating->User dont find By Id " + ratingInput.getUserTakesRating())));
+            rating.setUserTakesRating(userService.findById(ratingInput.getUserTakesRating()));
         }
         if(!isNull(ratingInput.getUser())){
-            rating.setUser(userRepository.findById(ratingInput.getUser())
-                    .orElseThrow(()->new NotFoundByIdException("Rating->User dont find By Id " + ratingInput.getUser())));
+            rating.setUser(userService.findById(ratingInput.getUser()));
         }
         return ratingRepository.save(rating);
     }
@@ -70,12 +69,10 @@ public class RatingService {
             rating.setGrade(0d);
         }
         if(!isNull(ratingInput.getUserGivesRating())){
-            rating.setUserGivesRating(userRepository.findById(ratingInput.getUserGivesRating())
-                    .orElseThrow(()->new NotFoundByIdException("Rating->User dont find By Id " +ratingInput.getUserGivesRating())));
+            rating.setUserGivesRating(userService.findById(ratingInput.getUserGivesRating()));
         }
         if(!isNull(ratingInput.getUserTakesRating())){
-            rating.setUserTakesRating(userRepository.findById(ratingInput.getUserTakesRating())
-                    .orElseThrow(()->new NotFoundByIdException("Rating->User dont find By Id " +ratingInput.getUserTakesRating())));
+            rating.setUserTakesRating(userService.findById(ratingInput.getUserTakesRating()));
         }
         return ratingRepository.save(rating);
     }

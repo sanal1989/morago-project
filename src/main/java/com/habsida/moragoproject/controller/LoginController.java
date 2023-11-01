@@ -2,7 +2,7 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
-import com.habsida.moragoproject.configuration.security.JwtUtil;
+import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import com.habsida.moragoproject.service.RefreshTokenService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;

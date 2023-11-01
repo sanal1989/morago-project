@@ -4,7 +4,6 @@ import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Withdrawal;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.WithdrawalInput;
-import com.habsida.moragoproject.repository.UserRepository;
 import com.habsida.moragoproject.repository.WithdrawalRepository;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +15,11 @@ import static java.util.Objects.isNull;
 public class WithdrawalService {
 
     WithdrawalRepository withdrawalRepository;
-    UserRepository userRepository;
+    UserService userService;
 
-    public WithdrawalService(WithdrawalRepository withdrawalRepository, UserRepository userRepository) {
+    public WithdrawalService(WithdrawalRepository withdrawalRepository, UserService userService) {
         this.withdrawalRepository = withdrawalRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public List<Withdrawal> findAll(){
@@ -54,8 +53,7 @@ public class WithdrawalService {
             withdrawal.setSum(0d);
         }
         if(!isNull(withdrawalInput.getUser())){
-            withdrawal.setUser(userRepository.findById(withdrawalInput.getUser())
-                    .orElseThrow(()->new NotFoundByIdException("Withdrawal -> User doesn't find by Id " + withdrawalInput.getUser())));
+            withdrawal.setUser(userService.findById(withdrawalInput.getUser()));
         }
         return withdrawalRepository.save(withdrawal);
     }

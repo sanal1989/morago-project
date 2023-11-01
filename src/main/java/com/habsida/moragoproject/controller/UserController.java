@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.controller;
 
+import com.habsida.moragoproject.model.Profile;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.model.input.UserInput;
@@ -7,6 +8,7 @@ import com.habsida.moragoproject.service.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
@@ -52,5 +54,13 @@ public class UserController {
         return userService.updateUser(id, userInput);
     }
 
+    @QueryMapping
+    public User currentUser() {
+        return userService.currentUser();
+    }
 
+    @SchemaMapping(typeName = "User", field = "profile")
+    public Profile getProfile(User user) {
+        return userService.getProfile(user);
+    }
 }
