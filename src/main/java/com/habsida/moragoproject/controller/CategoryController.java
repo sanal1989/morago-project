@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Category;
+import com.habsida.moragoproject.model.entity.Coin;
 import com.habsida.moragoproject.model.input.CategoryInput;
 import com.habsida.moragoproject.service.CategoryService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class CategoryController {
     @QueryMapping
     public List<Category> findAllCategory(){
         return categoryService.findAll();
+    }
+
+    @QueryMapping
+    public List<Category> findAllCategoryPagination(@Argument int offset, @Argument int limit){
+        return categoryService.findAll(offset, limit);
     }
 
     @QueryMapping

@@ -1,5 +1,7 @@
 extend type Query{
     findAllNotification: [Notification]
+    findAllNotificationPagination(offset: Int,
+        limit: Int): [Notification]
     findNotificationById(id: ID): Notification
 }
 extend type  Mutation{

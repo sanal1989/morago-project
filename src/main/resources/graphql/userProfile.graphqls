@@ -1,6 +1,9 @@
 extend type Query{
     findAllUserProfile: [UserProfile]
+    findAllUserProfilePagination(offset: Int,
+        limit: Int): [UserProfile]
     findUserProfileById(id: ID): UserProfile
+
 }
 extend type  Mutation{
     createUserProfile(userProfileInput: UserProfileInput): UserProfile

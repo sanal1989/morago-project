@@ -1,6 +1,8 @@
 extend type Query{
     findAllCoin: [Coin]
     findCoinById(id: ID): Coin
+    findAllCoinPagination(offset: Int,
+        limit: Int): [Coin]
 }
 extend type  Mutation{
     createCoin(coinInput: CoinInput): Coin

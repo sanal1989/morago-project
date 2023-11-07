@@ -1,6 +1,8 @@
 extend type Query{
     findAllFile: [File]
     findFileById(id: ID): File
+    findAllFilePagination(offset: Int,
+        limit: Int): [File]
 }
 extend type  Mutation{
     createFile(fileInput: FileInput): File

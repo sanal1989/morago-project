@@ -1,8 +1,11 @@
 package com.habsida.moragoproject.controller;
 
+import com.habsida.moragoproject.model.ResponsePasswordReset;
+import com.habsida.moragoproject.model.entity.AppVersion;
 import com.habsida.moragoproject.model.entity.PasswordReset;
 import com.habsida.moragoproject.model.input.PasswordResetInput;
 import com.habsida.moragoproject.service.PasswordResetService;
+import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -12,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-@PreAuthorize("isAuthenticated()")
 public class PasswordResetController {
 
     PasswordResetService passwordResetService;
@@ -27,14 +29,14 @@ public class PasswordResetController {
     }
 
     @QueryMapping
+    public List<PasswordReset> findAllPasswordResetPagination(@Argument int offset, @Argument int limit){
+        return passwordResetService.findAll(offset, limit);
+    }
+    @QueryMapping
     public PasswordReset findPasswordResetById(@Argument Long id){
         return passwordResetService.findById(id);
     }
 
-    @MutationMapping
-    public PasswordReset createPasswordReset(@Argument PasswordResetInput passwordResetInput){
-        return passwordResetService.createPasswordReset(passwordResetInput);
-    }
 
     @MutationMapping
     public String deletePasswordResetById(@Argument Long id){
@@ -42,7 +44,21 @@ public class PasswordResetController {
     }
 
     @MutationMapping
-    public PasswordReset updatePasswordReset(@Argument Long id, @Argument PasswordResetInput passwordResetInput){
-        return passwordResetService.updatePasswordReset(id, passwordResetInput);
+    public ResponsePasswordReset resetPasswordGetHashCode(@Argument String phone){
+        return passwordResetService.createPasswordReset(phone);
+    }
+
+
+    @MutationMapping
+    public String generateTokenResetPassword(@Argument String hashCode,
+                                             @Argument Long id,
+                                             @Argument String time){
+        return passwordResetService.createPasswordResetToken(hashCode, time, id);
+    }
+
+    @MutationMapping
+    public void resetNewPassword(@Argument String token,
+                                 @Argument String password){
+        passwordResetService.resetNewPassword(token, password);
     }
 }

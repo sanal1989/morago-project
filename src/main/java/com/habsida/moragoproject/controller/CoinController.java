@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Coin;
+import com.habsida.moragoproject.model.entity.Debtor;
 import com.habsida.moragoproject.model.input.CoinInput;
 import com.habsida.moragoproject.service.CoinService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class CoinController {
     @QueryMapping
     public List<Coin> findAllCoin(){
         return coinService.findAll();
+    }
+
+    @QueryMapping
+    public List<Coin> findAllCoinPagination(@Argument int offset, @Argument int limit){
+        return coinService.findAll(offset, limit);
     }
 
     @QueryMapping

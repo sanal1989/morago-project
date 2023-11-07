@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Debtor;
+import com.habsida.moragoproject.model.entity.Deposit;
 import com.habsida.moragoproject.model.input.DebtorInput;
 import com.habsida.moragoproject.service.DebtorService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class DebtorController {
     @QueryMapping
     public List<Debtor> findAllDebtor(){
         return debtorService.findAll();
+    }
+
+    @QueryMapping
+    public List<Debtor> findAllDebtorPagination(@Argument int offset, @Argument int limit){
+        return debtorService.findAll(offset, limit);
     }
 
     @QueryMapping

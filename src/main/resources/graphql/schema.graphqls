@@ -19,9 +19,10 @@ type RefreshTokenResponse{
 }
 
 
-type ResetPasswordDTO{
-    hashCode:String
-    time: String
+type ResponsePasswordReset{
+    id: Int
+    localDateTime: String
+    hashCode: String
 }
 
 

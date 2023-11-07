@@ -8,6 +8,7 @@ import com.habsida.moragoproject.repository.RefreshTokenRepository;
 import com.habsida.moragoproject.repository.UserRepository;
 import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -26,7 +27,7 @@ public class RefreshTokenService {
     private Long refreshTokenDurationMs;
 
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository,
-                               UserService userService,
+                               @Lazy UserService userService,
                                JwtUtil jwtUtil) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userService = userService;

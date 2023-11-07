@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Role;
+import com.habsida.moragoproject.model.entity.Theme;
 import com.habsida.moragoproject.model.input.RoleInput;
 import com.habsida.moragoproject.service.RoleService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class RoleController {
     @QueryMapping
     public List<Role> findAllRole(){
         return roleService.findAll();
+    }
+
+    @QueryMapping
+    public List<Role> findAllRolePagination(@Argument int offset, @Argument int limit){
+        return roleService.findAll(offset, limit);
     }
 
     @QueryMapping

@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Notification;
+import com.habsida.moragoproject.model.entity.Rating;
 import com.habsida.moragoproject.model.input.NotificationInput;
 import com.habsida.moragoproject.service.NotificationService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class NotificationController {
     @QueryMapping
     public List<Notification> findAllNotification(){
         return notificationService.findAll();
+    }
+
+    @QueryMapping
+    public List<Notification> findAllNotificationPagination(@Argument int offset, @Argument int limit){
+        return notificationService.findAll(offset, limit);
     }
 
     @QueryMapping

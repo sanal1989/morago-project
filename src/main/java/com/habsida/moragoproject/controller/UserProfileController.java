@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.UserProfile;
+import com.habsida.moragoproject.model.entity.Withdrawal;
 import com.habsida.moragoproject.model.input.UserProfileInput;
 import com.habsida.moragoproject.service.UserProfileService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class UserProfileController {
     @QueryMapping
     public List<UserProfile> findAllUserProfile(){
         return userProfileService.findAll();
+    }
+
+    @QueryMapping
+    public List<UserProfile> findAllUserProfilePagination(@Argument int offset, @Argument int limit){
+        return userProfileService.findAll(offset, limit);
     }
 
     @QueryMapping

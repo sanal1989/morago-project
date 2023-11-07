@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Language;
+import com.habsida.moragoproject.model.entity.Notification;
 import com.habsida.moragoproject.model.input.LanguageInput;
 import com.habsida.moragoproject.service.LanguageService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class LanguageController {
     @QueryMapping
     public List<Language> findAllLanguage(){
         return languageService.findAll();
+    }
+
+    @QueryMapping
+    public List<Language> findAllLanguagePagination(@Argument int offset, @Argument int limit){
+        return languageService.findAll(offset, limit);
     }
 
     @QueryMapping

@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
+import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.input.FrequentlyAskedQuestionInput;
 import com.habsida.moragoproject.service.FrequentlyAskedQuestionService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -23,6 +24,11 @@ public class FrequentlyAskedQuestionController {
     @QueryMapping
     public List<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestion(){
         return frequentlyAskedQuestionService.findAll();
+    }
+
+    @QueryMapping
+    public List<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestionPagination(@Argument int offset, @Argument int limit){
+        return frequentlyAskedQuestionService.findAll(offset, limit);
     }
 
     @QueryMapping

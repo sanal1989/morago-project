@@ -6,15 +6,20 @@ import com.habsida.moragoproject.model.entity.PasswordReset;
 import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.input.PasswordResetInput;
 import com.habsida.moragoproject.repository.PasswordResetRepository;
+import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.habsida.moragoproject.model.ResponsePasswordReset;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-
 @Service
 public class PasswordResetService {
 
@@ -23,17 +28,27 @@ public class PasswordResetService {
     UserService userService;
     JwtUtil jwtUtil;
 
-    private Long expirationTime = 5l;
-
-    public PasswordResetService(PasswordResetRepository passwordResetRepository, PasswordEncoder passwordEncoder, UserService userService, JwtUtil jwtUtil) {
+    public PasswordResetService(PasswordResetRepository passwordResetRepository,
+                                PasswordEncoder passwordEncoder,
+                                UserService userService,
+                                JwtUtil jwtUtil) {
         this.passwordResetRepository = passwordResetRepository;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
 
+    private Long expirationTime = 5l;
+
     public List<PasswordReset> findAll(){
         return passwordResetRepository.findAll();
+    }
+
+    public List<PasswordReset> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<PasswordReset> pages =passwordResetRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public PasswordReset findById(Long id){
@@ -41,19 +56,19 @@ public class PasswordResetService {
                 .orElseThrow(()->new NotFoundByIdException("PasswordReset -> PasswordReset doesn't find by Id " + id));
     }
 
-    public PasswordReset createPasswordReset(PasswordResetInput passwordResetInput){
-        PasswordReset passwordReset = new PasswordReset();
-        if(!isNull(passwordResetInput.getPhone()) && !passwordResetInput.getPhone().isEmpty()){
-            passwordReset.setPhone(passwordResetInput.getPhone());
-        }
-//        if(!isNull(passwordResetInput.getToken()) && !passwordResetInput.getToken().isEmpty()){
-//            passwordReset.setToken(passwordResetInput.getToken());
+//    public PasswordReset createPasswordReset(PasswordResetInput passwordResetInput){
+//        PasswordReset passwordReset = new PasswordReset();
+//        if(!isNull(passwordResetInput.getPhone()) && !passwordResetInput.getPhone().isEmpty()){
+//            passwordReset.setPhone(passwordResetInput.getPhone());
 //        }
-        if(!isNull(passwordResetInput.getResetCode())){
-            passwordReset.setResetCode(passwordResetInput.getResetCode());
-        }
-        return passwordResetRepository.save(passwordReset);
-    }
+////        if(!isNull(passwordResetInput.getToken()) && !passwordResetInput.getToken().isEmpty()){
+////            passwordReset.setToken(passwordResetInput.getToken());
+////        }
+//        if(!isNull(passwordResetInput.getResetCode())){
+//            passwordReset.setResetCode(passwordResetInput.getResetCode());
+//        }
+//        return passwordResetRepository.save(passwordReset);
+//    }
 
     public String deletePasswordResetById(Long id){
         try{
@@ -80,7 +95,7 @@ public class PasswordResetService {
         return passwordResetRepository.save(passwordReset);
     }
 
-    public PasswordReset createCode(String phone){
+    public ResponsePasswordReset createPasswordReset(String phone){
         if(!userService.existsByPhone(phone)){
             throw new NotFoundByIdException("not fount by Phone");
         }
@@ -95,22 +110,26 @@ public class PasswordResetService {
         passwordReset.setUser(user);
 
         LocalDateTime localDateTime = LocalDateTime.now().plusMinutes(expirationTime);
-        passwordReset.setTime(localDateTime);
-        passwordReset.setToken(Integer.toString((phone + resetCode).hashCode()));
+
         passwordResetRepository.save(passwordReset);
-        return passwordReset;
+
+        ResponsePasswordReset responsePasswordReset = new ResponsePasswordReset();
+        responsePasswordReset.setId(passwordReset.getId());
+        responsePasswordReset.setLocalDateTime(localDateTime);
+        responsePasswordReset.setHashCode(Integer.toString((phone + resetCode + localDateTime.toString().substring(0,23) ).hashCode()));
+        return responsePasswordReset;
     }
 
 
-    public String createToken(String hashCode,Integer resetCode, Long id) {
+    public String createPasswordResetToken(String hashCode, String time, Long id) {
 
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-//        LocalDateTime localDateTime = LocalDateTime.parse(time.substring(0,23).replace("T", " "),formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        LocalDateTime localDateTime = LocalDateTime.parse(time.substring(0,23).replace("T", " "),formatter);
         PasswordReset passwordReset = passwordResetRepository.findById(id).get();
-        if(!LocalDateTime.now().isBefore(passwordReset.getTime())){
+        if(!LocalDateTime.now().isBefore(localDateTime)){
             throw new RuntimeException("time is expired");
         }
-        String newHashCode =  Integer.toString((passwordReset.getPhone() + resetCode).hashCode());
+        String newHashCode =  Integer.toString((passwordReset.getPhone() + passwordReset.getResetCode() + localDateTime.toString()).hashCode());
         System.out.println(newHashCode);
         System.out.println(hashCode);
         if(!newHashCode.equals(hashCode)){

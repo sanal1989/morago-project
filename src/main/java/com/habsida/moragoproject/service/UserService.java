@@ -4,10 +4,7 @@ import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.exception.UserAlreadyExistAuthenticationException;
 import com.habsida.moragoproject.model.Profile;
-import com.habsida.moragoproject.model.entity.RefreshToken;
-import com.habsida.moragoproject.model.entity.Role;
-import com.habsida.moragoproject.model.entity.User;
-import com.habsida.moragoproject.model.entity.UserProfile;
+import com.habsida.moragoproject.model.entity.*;
 import com.habsida.moragoproject.model.enums.ERole;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.model.input.UserInput;
@@ -15,6 +12,9 @@ import com.habsida.moragoproject.repository.RoleRepository;
 import com.habsida.moragoproject.repository.TranslatorProfileRepository;
 import com.habsida.moragoproject.repository.UserProfileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-
 @Service
 public class UserService {
 
@@ -37,13 +37,7 @@ public class UserService {
     private RefreshTokenService refreshTokenService;
     private JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository,
-                       UserProfileService userProfileService,
-                       TranslatorProfileService translatorProfileService,
-                       RoleService roleService,
-                       PasswordEncoder passwordEncoder,
-                       RefreshTokenService refreshTokenService,
-                       JwtUtil jwtUtil) {
+    public UserService(UserRepository userRepository, UserProfileService userProfileService, TranslatorProfileService translatorProfileService, RoleService roleService, PasswordEncoder passwordEncoder, RefreshTokenService refreshTokenService, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.userProfileService = userProfileService;
         this.translatorProfileService = translatorProfileService;
@@ -60,6 +54,13 @@ public class UserService {
     public User findById(Long id){
         return userRepository.findById(id)
                 .orElseThrow(()->new NotFoundByIdException("User -> User doesn't find by Id " + id));
+    }
+
+    public List<User> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<User> pages =userRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public User findByPhone(String phone){

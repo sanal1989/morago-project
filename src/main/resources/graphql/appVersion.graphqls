@@ -1,5 +1,7 @@
 extend type Query{
     findAllAppVersion: [AppVersion]
+    findAllAppVersionPagination(offset: Int,
+        limit: Int): [AppVersion]
     findAppVersionByEPlatform(platform: String): AppVersion
 }
 extend type  Mutation{

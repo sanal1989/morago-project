@@ -1,9 +1,11 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.AppVersion;
+import com.habsida.moragoproject.model.entity.Call;
 import com.habsida.moragoproject.model.enums.EPlatform;
 import com.habsida.moragoproject.model.input.AppVersionInput;
 import com.habsida.moragoproject.service.AppVersionService;
+import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -28,6 +30,10 @@ public class AppVersionController {
         return appVersionService.findAll();
     }
 
+    @QueryMapping
+    public List<AppVersion> findAllAppVersionPagination(@Argument int offset, @Argument int limit){
+        return appVersionService.findAll(offset, limit);
+    }
     @QueryMapping
     public AppVersion findAppVersionByEPlatform(EPlatform ePlatform){
         return appVersionService.findByEPlatform(ePlatform);

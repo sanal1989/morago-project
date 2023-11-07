@@ -3,12 +3,16 @@ package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
+import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.enums.FAQCategory;
 import com.habsida.moragoproject.model.input.FrequentlyAskedQuestionInput;
 import com.habsida.moragoproject.repository.FrequentlyAskedQuestionRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -23,6 +27,13 @@ public class FrequentlyAskedQuestionService {
 
     public List<FrequentlyAskedQuestion> findAll(){
         return frequentlyAskedQuestionRepository.findAll();
+    }
+
+    public List<FrequentlyAskedQuestion> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<FrequentlyAskedQuestion> pages = frequentlyAskedQuestionRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public FrequentlyAskedQuestion findById(Long id){

@@ -30,7 +30,8 @@ public class PasswordReset {
     private String phone;
     private Integer resetCode;
     private String token;
-    private LocalDateTime time;
-    @ManyToOne
+
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
+            fetch = FetchType.LAZY)
     User user;
 }

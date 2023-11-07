@@ -1,5 +1,7 @@
 extend type Query{
     findAllRole: [Role]
+    findAllRolePagination(offset: Int,
+        limit: Int): [Role]
     findRoleById(id: ID): Role
 }
 extend type  Mutation{

@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Deposit;
+import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.model.input.DepositInput;
 import com.habsida.moragoproject.service.DepositService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class DepositController {
     @QueryMapping
     public List<Deposit> findAllDeposit(){
         return depositService.findAll();
+    }
+
+    @QueryMapping
+    public List<Deposit> findAllDepositPagination(@Argument int offset, @Argument int limit){
+        return depositService.findAll(offset, limit);
     }
 
     @QueryMapping

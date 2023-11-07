@@ -1,5 +1,7 @@
 extend type Query{
     findAllCategory: [Category]
+    findAllCategoryPagination(offset: Int,
+        limit: Int): [Category]
     findCategoryById(id: ID): Category
 }
 extend type  Mutation{

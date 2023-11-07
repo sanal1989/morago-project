@@ -1,5 +1,6 @@
 package com.habsida.moragoproject.controller;
 
+import com.habsida.moragoproject.model.entity.PasswordReset;
 import com.habsida.moragoproject.model.entity.Withdrawal;
 import com.habsida.moragoproject.model.input.WithdrawalInput;
 import com.habsida.moragoproject.service.WithdrawalService;
@@ -22,11 +23,14 @@ public class WithdrawalController {
     }
 
     @QueryMapping
-
     public List<Withdrawal> findAllWithdrawalService(){
         return withdrawalService.findAll();
     }
 
+    @QueryMapping
+    public List<Withdrawal> findAllWithdrawalPagination(@Argument int offset, @Argument int limit){
+        return withdrawalService.findAll(offset, limit);
+    }
     @QueryMapping
     public Withdrawal findWithdrawalById(@Argument Long id){
         return withdrawalService.findById(id);

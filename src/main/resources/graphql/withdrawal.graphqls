@@ -1,5 +1,7 @@
 extend type Query{
     findAllWithdrawalService:[Withdrawal]
+    findAllWithdrawalPagination(offset: Int,
+        limit: Int): [Withdrawal]
     findWithdrawalById(id: ID): Withdrawal
 }
 extend type  Mutation{

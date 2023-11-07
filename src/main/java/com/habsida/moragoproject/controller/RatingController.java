@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Rating;
+import com.habsida.moragoproject.model.entity.Role;
 import com.habsida.moragoproject.model.input.RatingInput;
 import com.habsida.moragoproject.service.RatingService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class RatingController {
     @QueryMapping
     public List<Rating> findAllRating(){
         return ratingService.findAll();
+    }
+
+    @QueryMapping
+    public List<Rating> findAllRatingPagination(@Argument int offset, @Argument int limit){
+        return ratingService.findAll(offset, limit);
     }
 
     @QueryMapping

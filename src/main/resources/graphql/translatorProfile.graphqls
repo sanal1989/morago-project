@@ -1,5 +1,7 @@
 extend type Query{
     findAllTranslatorProfile: [TranslatorProfile]
+    findAllTranslatorProfilePagination(offset: Int,
+        limit: Int): [TranslatorProfile]
     findTranslatorProfileById(id: ID): TranslatorProfile
 }
 extend type  Mutation{

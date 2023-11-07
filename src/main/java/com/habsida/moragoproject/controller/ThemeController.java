@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Theme;
+import com.habsida.moragoproject.model.entity.TranslatorProfile;
 import com.habsida.moragoproject.model.input.ThemeInput;
 import com.habsida.moragoproject.service.ThemeService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class ThemeController {
     @QueryMapping
     public List<Theme> findAllTheme(){
         return themeService.findAll();
+    }
+
+    @QueryMapping
+    public List<Theme> findAllThemePagination(@Argument int offset, @Argument int limit){
+        return themeService.findAll(offset, limit);
     }
 
     @QueryMapping

@@ -1,6 +1,8 @@
 extend type Query{
     findAllDeposit: [Deposit]
     findDepositById(id: ID): Deposit
+    findAllDepositPagination(offset: Int,
+        limit: Int): [Deposit]
 }
 extend type  Mutation{
     createDeposit(depositInput:DepositInput): Deposit

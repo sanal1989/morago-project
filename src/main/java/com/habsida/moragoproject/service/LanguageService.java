@@ -2,12 +2,16 @@ package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Language;
+import com.habsida.moragoproject.model.entity.Notification;
 import com.habsida.moragoproject.model.input.LanguageInput;
 import com.habsida.moragoproject.repository.LanguagesRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -22,6 +26,13 @@ public class LanguageService {
 
     public List<Language> findAll(){
         return languagesRepository.findAll();
+    }
+
+    public List<Language> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<Language> pages = languagesRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public Language findById(Long id){

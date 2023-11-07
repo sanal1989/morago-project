@@ -1,5 +1,7 @@
 extend type Query{
     findAllTheme:[Theme]
+    findAllThemePagination(offset: Int,
+        limit: Int): [Theme]
     findThemeById(id: ID): Theme
 }
 extend type  Mutation{

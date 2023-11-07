@@ -4,15 +4,20 @@ import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Language;
 import com.habsida.moragoproject.model.entity.Theme;
 import com.habsida.moragoproject.model.entity.TranslatorProfile;
+import com.habsida.moragoproject.model.entity.UserProfile;
 import com.habsida.moragoproject.model.input.TranslatorProfileInput;
 import com.habsida.moragoproject.repository.FileRepository;
 import com.habsida.moragoproject.repository.LanguagesRepository;
 import com.habsida.moragoproject.repository.ThemeRepository;
 import com.habsida.moragoproject.repository.TranslatorProfileRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -27,7 +32,7 @@ public class TranslatorProfileService {
     public TranslatorProfileService(TranslatorProfileRepository translatorProfileRepository,
                                     LanguageService languageService,
                                     ThemeService themeService,
-                                    FileService fileService) {
+                                    @Lazy FileService fileService) {
         this.translatorProfileRepository = translatorProfileRepository;
         this.languageService = languageService;
         this.themeService = themeService;
@@ -41,6 +46,13 @@ public class TranslatorProfileService {
     public TranslatorProfile findById(Long id){
         return translatorProfileRepository.findById(id)
                 .orElseThrow(()->new NotFoundByIdException("TranslatorProfile->TranslatorProfile doesn't find by Id " + id));
+    }
+
+    public List<TranslatorProfile> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<TranslatorProfile> pages =translatorProfileRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public TranslatorProfile createTranslatorProfile(TranslatorProfileInput translatorProfileInput){

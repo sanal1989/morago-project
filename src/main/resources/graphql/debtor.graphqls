@@ -1,6 +1,8 @@
 extend type Query{
     findAllDebtor: [Debtor]
     findDebtorById(id: ID): Debtor
+    findAllDebtorPagination(offset: Int,
+        limit: Int): [Debtor]
 }
 extend type  Mutation{
     createDebtor(debtorInput: DebtorInput): Debtor

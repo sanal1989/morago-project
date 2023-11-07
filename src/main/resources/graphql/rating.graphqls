@@ -1,5 +1,7 @@
 extend type Query{
     findAllRating:[Rating]
+    findAllRatingPagination(offset: Int,
+        limit: Int): [Rating]
     findRatingById(id: ID): Rating
 }
 extend type  Mutation{

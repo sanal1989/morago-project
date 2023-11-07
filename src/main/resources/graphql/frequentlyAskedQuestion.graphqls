@@ -1,6 +1,8 @@
 extend type Query{
     findAllFrequentlyAskedQuestion: [FrequentlyAskedQuestion]
     findFrequentlyAskedQuestionById(id: ID): FrequentlyAskedQuestion
+    findAllFrequentlyAskedQuestionPagination(offset: Int,
+        limit: Int): [FrequentlyAskedQuestion]
 }
 extend type  Mutation{
     createFrequentlyAskedQuestion(frequentlyAskedQuestionInput: FrequentlyAskedQuestionInput): FrequentlyAskedQuestion

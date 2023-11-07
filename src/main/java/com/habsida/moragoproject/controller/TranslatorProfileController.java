@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.TranslatorProfile;
+import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.input.TranslatorProfileInput;
 import com.habsida.moragoproject.service.TranslatorProfileService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -24,6 +25,11 @@ public class TranslatorProfileController {
     @QueryMapping
     public List<TranslatorProfile> findAllTranslatorProfile(){
         return translatorProfileService.findAll();
+    }
+
+    @QueryMapping
+    public List<TranslatorProfile> findAllTranslatorProfilePagination(@Argument int offset, @Argument int limit){
+        return translatorProfileService.findAll(offset, limit);
     }
 
     @QueryMapping

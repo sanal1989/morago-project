@@ -2,6 +2,7 @@ package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.Profile;
 import com.habsida.moragoproject.model.entity.User;
+import com.habsida.moragoproject.model.entity.UserProfile;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.model.input.UserInput;
 import com.habsida.moragoproject.service.UserService;
@@ -27,6 +28,11 @@ public class UserController {
     @QueryMapping
     public List<User> findAllUser(){
         return userService.findAll();
+    }
+
+    @QueryMapping
+    public List<User> findAllUserPagination(@Argument int offset, @Argument int limit){
+        return userService.findAll(offset, limit);
     }
 
     @QueryMapping

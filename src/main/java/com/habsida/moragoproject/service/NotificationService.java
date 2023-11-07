@@ -2,12 +2,16 @@ package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Notification;
+import com.habsida.moragoproject.model.entity.Rating;
 import com.habsida.moragoproject.model.input.NotificationInput;
 import com.habsida.moragoproject.repository.NotificationRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -24,6 +28,13 @@ public class NotificationService {
 
     public List<Notification> findAll(){
         return notificationRepository.findAll();
+    }
+
+    public List<Notification> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<Notification> pages = notificationRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public Notification findById(Long id){

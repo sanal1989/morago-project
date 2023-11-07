@@ -23,7 +23,8 @@ public class JwtUtil {
     @Value("${jwt.refreshsecret}")
     private String refreshSecret;
 
-    private String refreshPasswordSecretKey = "fergereehegefsdfsdfsdsgdfgertert";
+    @Value("${jwt.refreshPasswordSecretKey}")
+    private String refreshPasswordSecretKey;
 
     @Value("#{new Long ('${jwt.jwtRefreshExpirationMs}')}")
     private Long refreshTokenDurationMs;

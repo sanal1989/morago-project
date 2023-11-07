@@ -2,13 +2,17 @@ package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Deposit;
+import com.habsida.moragoproject.model.entity.File;
 import com.habsida.moragoproject.model.enums.EStatus;
 import com.habsida.moragoproject.model.input.DepositInput;
 import com.habsida.moragoproject.repository.DepositRepository;
 import com.habsida.moragoproject.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -25,6 +29,13 @@ public class DepositService {
 
     public List<Deposit> findAll(){
         return depositRepository.findAll();
+    }
+
+    public List<Deposit> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<Deposit> pages = depositRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public Deposit findById(Long id){

@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.File;
+import com.habsida.moragoproject.model.entity.FrequentlyAskedQuestion;
 import com.habsida.moragoproject.model.input.FileInput;
 import com.habsida.moragoproject.service.FileService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -33,6 +34,11 @@ public class FileController {
     @QueryMapping
     public List<File> findAllFile(){
         return fileService.findAll();
+    }
+
+    @QueryMapping
+    public List<File> findAllFilePagination(@Argument int offset, @Argument int limit){
+        return fileService.findAll(offset, limit);
     }
 
     @QueryMapping

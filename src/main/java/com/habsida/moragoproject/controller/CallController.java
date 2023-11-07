@@ -1,6 +1,7 @@
 package com.habsida.moragoproject.controller;
 
 import com.habsida.moragoproject.model.entity.Call;
+import com.habsida.moragoproject.model.entity.Category;
 import com.habsida.moragoproject.model.input.CallInput;
 import com.habsida.moragoproject.service.CallService;
 import com.habsida.moragoproject.service.ThemeService;
@@ -18,18 +19,19 @@ import java.util.List;
 public class CallController {
 
     CallService callService;
-    UserService userService;
-    ThemeService themeService;
 
-    public CallController(CallService callService, UserService userService, ThemeService themeService) {
+    public CallController(CallService callService) {
         this.callService = callService;
-        this.userService = userService;
-        this.themeService = themeService;
     }
 
     @QueryMapping
     public List<Call> findAllCall(){
         return callService.findAll();
+    }
+
+    @QueryMapping
+    public List<Call> findAllCallPagination(@Argument int offset, @Argument int limit){
+        return callService.findAll(offset, limit);
     }
 
     @QueryMapping

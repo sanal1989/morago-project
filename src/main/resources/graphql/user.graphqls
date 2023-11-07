@@ -1,5 +1,7 @@
 extend type Query{
     findAllUser: [User]
+    findAllUserPagination(offset: Int,
+        limit: Int): [User]
     findUserById(id: ID): User
     currentUser:User
 }

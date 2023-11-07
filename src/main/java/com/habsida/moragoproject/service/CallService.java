@@ -2,13 +2,18 @@ package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.NotFoundByIdException;
 import com.habsida.moragoproject.model.entity.Call;
+import com.habsida.moragoproject.model.entity.Category;
 import com.habsida.moragoproject.model.enums.CallStatus;
 import com.habsida.moragoproject.model.input.CallInput;
 import com.habsida.moragoproject.repository.CallRepository;
 import com.habsida.moragoproject.repository.ThemeRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -20,7 +25,7 @@ public class CallService {
     ThemeService themeService;
 
     public CallService(CallRepository callRepository,
-                       UserService userService,
+                       @Lazy UserService userService,
                        ThemeService themeService) {
         this.callRepository = callRepository;
         this.userService = userService;
@@ -29,6 +34,13 @@ public class CallService {
 
     public List<Call> findAll(){
         return callRepository.findAll();
+    }
+
+    public List<Call> findAll(int offset, int limit){
+        if(offset < 0) offset = 0;
+        if(limit < 0) limit = 5;
+        Page<Call> pages = callRepository.findAll(PageRequest.of(offset, limit));
+        return pages.stream().collect(Collectors.toList());
     }
 
     public Call findById(Long id){

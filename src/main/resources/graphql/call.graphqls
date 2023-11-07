@@ -1,6 +1,8 @@
 extend type Query{
     findAllCall: [Call]
     findCallById(id: ID): Call
+    findAllCallPagination(offset: Int,
+        limit: Int): [Call]
 }
 extend type  Mutation{
     createCall(callInput:CallInput): Call
