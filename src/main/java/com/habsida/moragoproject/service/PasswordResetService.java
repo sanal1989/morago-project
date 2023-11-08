@@ -143,6 +143,6 @@ public class PasswordResetService {
         String phone = jwtUtil.getPhoneFromRefreshPasswordToken(token);
         User user = userService.findByPhone(phone);
         user.setPassword(passwordEncoder.encode(password));
-        userService.save(user);
+        userService.createUser(user);
     }
 }
