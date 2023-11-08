@@ -8,11 +8,7 @@ import com.habsida.moragoproject.model.entity.*;
 import com.habsida.moragoproject.model.enums.ERole;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.model.input.UserInput;
-import com.habsida.moragoproject.repository.RoleRepository;
-import com.habsida.moragoproject.repository.TranslatorProfileRepository;
-import com.habsida.moragoproject.repository.UserProfileRepository;
 import com.habsida.moragoproject.repository.UserRepository;
-import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -90,64 +86,37 @@ public class UserService {
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
         }
-        if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
-            user.setApnToken(userInput.getApnToken());
-        }
-        if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
-            user.setFcmToken(userInput.getFcmToken());
-        }
         if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
             user.setPassword(passwordEncoder.encode(userInput.getPassword()));
         }
         if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
         }
-        if(!isNull(userInput.getBalance())){
-            user.setBalance(userInput.getBalance());
-        }else {
-            user.setBalance(0d);
-        }
-        if(!isNull(userInput.getRatings())){
-            user.setRatings(userInput.getRatings());
-        }else {
-            user.setRatings(0d);
-        }
-        if(!isNull(userInput.getOnBoardingStatus())){
-            user.setOnBoardingStatus(userInput.getOnBoardingStatus());
-        }else {
-            user.setOnBoardingStatus(0);
-        }
-        if(!isNull(userInput.getTotalRatings())){
-            user.setTotalRatings(userInput.getTotalRatings());
-        }else {
-            user.setTotalRatings(0);
-        }
-
-        UserProfile userProfile= new UserProfile();
-        userProfile.setIsFreeCallMade(false);
-        userProfileService.save(userProfile);
-
+        user.setBalance(0d);
+        user.setRatings(0d);
+        user.setOnBoardingStatus(0);
+        user.setTotalRatings(0);
         user.setIsActive(true);
         user.setIsDebtor(false);
+
+        UserProfile userProfile = new UserProfile();
+        userProfile.setIsFreeCallMade(false);
+        userProfileService.createUserProfile(userProfile);
+
         user.setUserProfile(userProfile);
-        user.setTranslatorProfile(null);
 
         Set<Role> rolestoBD = user.getRoles();
         rolestoBD.add(roleService.findByName(ERole.USER)
             .orElseThrow(()-> new NotFoundByIdException("User -> Role.USER doesn't exist")));
         user.setRoles(rolestoBD);
 
-        //
-        User userDB = userRepository.save(user);
-        //
-
+        userRepository.save(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInput.getPhone());
-        userDB.setRefreshToken(refreshToken);
 
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
         refreshTokenResponse.setRefreshToken(refreshToken.getToken());
         refreshTokenResponse.setAccessToken(jwtUtil.generateToken(userInput.getPhone(), true));
-        userRepository.save(userDB);
+
 
         return refreshTokenResponse;
     }
@@ -175,36 +144,6 @@ public class UserService {
         if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
             user.setPhone(userInput.getPhone());
         }
-        if(!isNull(userInput.getBalance())){
-            user.setBalance(userInput.getBalance());
-        }else {
-            user.setBalance(0d);
-        }
-        if(!isNull(userInput.getRatings())){
-            user.setRatings(userInput.getRatings());
-        }else {
-            user.setRatings(0d);
-        }
-        if(!isNull(userInput.getIsActive())){
-            user.setIsActive(userInput.getIsActive());
-        }else {
-            user.setIsActive(true);
-        }
-        if(!isNull(userInput.getIsDebtor())){
-            user.setIsDebtor(userInput.getIsDebtor());
-        }else {
-            user.setIsDebtor(false);
-        }
-        if(!isNull(userInput.getOnBoardingStatus())){
-            user.setOnBoardingStatus(userInput.getOnBoardingStatus());
-        }else {
-            user.setOnBoardingStatus(0);
-        }
-        if(!isNull(userInput.getTotalRatings())){
-            user.setTotalRatings(userInput.getTotalRatings());
-        }else {
-            user.setTotalRatings(0);
-        }
         return userRepository.save(user);
     }
 
@@ -224,45 +163,17 @@ public class UserService {
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
         }
-        if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
-            user.setApnToken(userInput.getApnToken());
-        }
-        if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
-            user.setFcmToken(userInput.getFcmToken());
-        }
-        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
-            user.setPassword(passwordEncoder.encode(userInput.getPassword()));
-        }
-        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
-            user.setPhone(userInput.getPhone());
-        }
-        if(!isNull(userInput.getBalance())){
-            user.setBalance(userInput.getBalance());
-        }else {
-            user.setBalance(0d);
-        }
-        if(!isNull(userInput.getRatings())){
-            user.setRatings(userInput.getRatings());
-        }else {
-            user.setRatings(0d);
-        }
-        if(!isNull(userInput.getOnBoardingStatus())){
-            user.setOnBoardingStatus(userInput.getOnBoardingStatus());
-        }else {
-            user.setOnBoardingStatus(0);
-        }
-        if(!isNull(userInput.getTotalRatings())){
-            user.setTotalRatings(userInput.getTotalRatings());
-        }else {
-            user.setTotalRatings(0);
-        }
+        user.setBalance(0d);
+        user.setRatings(0d);
+        user.setOnBoardingStatus(0);
+        user.setTotalRatings(0);
+        user.setIsActive(true);
+        user.setIsDebtor(false);
 
         UserProfile userProfile= new UserProfile();
         userProfile.setIsFreeCallMade(false);
-        userProfileService.save(userProfile);
+        userProfileService.createUserProfile(userProfile);
 
-        user.setIsActive(true);
-        user.setIsDebtor(false);
         user.setUserProfile(userProfile);
         user.setTranslatorProfile(null);
 
@@ -271,14 +182,15 @@ public class UserService {
                 .orElseThrow(()-> new NotFoundByIdException("User -> Role.ADMIN doesn't exist")));
         user.setRoles(rolestoBD);
 
-        User userDB = userRepository.save(user);
-
+        userRepository.save(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInput.getPhone());
+
+
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
         refreshTokenResponse.setRefreshToken(refreshToken.getToken());
         refreshTokenResponse.setAccessToken(jwtUtil.generateToken(userInput.getPhone(), true));
-        userDB.setRefreshToken(refreshToken);
-        userRepository.save(userDB);
+
+
         return refreshTokenResponse;
     }
 
@@ -289,8 +201,9 @@ public class UserService {
         return user;
     }
 
-    public void save(User user) {
+    public void createUser(User user) {
         userRepository.save(user);
+
     }
 
 
@@ -312,5 +225,11 @@ public class UserService {
             profile.setSelfDescription("TRANSLATOR");
         }
         return profile;
+    }
+
+    public void deleteCurrentUser(){
+        User user = currentUser();
+        user.setIsDelete(true);
+        user.setIsActive(false);
     }
 }

@@ -11,6 +11,7 @@ extend type  Mutation{
     deleteUserById(id: ID): String
     updateUser(id: ID
         userInput: UserInput): User
+    deleteCurrentUser: Boolean
 }
 
 type User{

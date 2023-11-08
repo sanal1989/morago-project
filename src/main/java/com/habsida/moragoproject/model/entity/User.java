@@ -30,6 +30,7 @@ public class User extends AbstractAuditable{
     private String phone;
     private Double ratings;
     private Integer totalRatings;
+    private Boolean isDelete;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},
             fetch = FetchType.EAGER)
@@ -45,8 +46,8 @@ public class User extends AbstractAuditable{
     @OneToOne(cascade = CascadeType.ALL)
     private TranslatorProfile translatorProfile = new TranslatorProfile();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private RefreshToken refreshToken;
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private RefreshToken refreshToken;
 
     @Override
     public String toString() {

@@ -60,6 +60,12 @@ public class UserController {
         return userService.updateUser(id, userInput);
     }
 
+    @MutationMapping
+    public boolean deleteCurrentUser() {
+        userService.deleteCurrentUser();
+        return true;
+    }
+
     @QueryMapping
     public User currentUser() {
         return userService.currentUser();

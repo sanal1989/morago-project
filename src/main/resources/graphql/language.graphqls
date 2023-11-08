@@ -1,8 +1,8 @@
 extend type Query{
     findAllLanguage: [Language]
-    findAllCategoryPagination(offset: Int,
+    findAllLanguagePagination(offset: Int,
         limit: Int): [Language]
-    findAllLanguagePagination(id: ID): Language
+    findLanguageById(id: ID): Language
 }
 extend type  Mutation{
     createLanguage(languageInput:LanguageInput): Language

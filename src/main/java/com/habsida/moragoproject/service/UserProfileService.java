@@ -1,7 +1,6 @@
 package com.habsida.moragoproject.service;
 
 import com.habsida.moragoproject.exception.NotFoundByIdException;
-import com.habsida.moragoproject.model.entity.User;
 import com.habsida.moragoproject.model.entity.UserProfile;
 import com.habsida.moragoproject.model.input.UserProfileInput;
 import com.habsida.moragoproject.repository.UserProfileRepository;
@@ -39,16 +38,6 @@ public class UserProfileService {
                 .orElseThrow(()->new NotFoundByIdException("UserProfile -> UserProfile doesn't find by Id " + id));
     }
 
-    public UserProfile createUserProfile(UserProfileInput userProfileInput){
-        UserProfile userProfile = new UserProfile();
-        if(!isNull(userProfileInput.getIsFreeCallMade())){
-            userProfile.setIsFreeCallMade(userProfileInput.getIsFreeCallMade());
-        }else{
-            userProfile.setIsFreeCallMade(false);
-        }
-        return userProfileRepository.save(userProfile);
-    }
-
     public String deleteUserProfileById(Long id){
         try{
             userProfileRepository.deleteById(id);
@@ -58,17 +47,7 @@ public class UserProfileService {
         return "UserProfile with Id "+id+" deleted";
     }
 
-    public UserProfile updateUserProfile(Long id, UserProfileInput userProfileInput){
-        UserProfile userProfile = userProfileRepository.findById(id).get();
-        if(isNull(userProfileInput.getIsFreeCallMade())){
-            userProfile.setIsFreeCallMade(userProfileInput.getIsFreeCallMade());
-        }else{
-            userProfile.setIsFreeCallMade(false);
-        }
-        return userProfileRepository.save(userProfile);
-    }
-
-    public void save(UserProfile userProfile) {
+    public void createUserProfile(UserProfile userProfile) {
         userProfileRepository.save(userProfile);
     }
 }

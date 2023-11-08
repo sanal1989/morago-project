@@ -37,18 +37,4 @@ public class UserProfileController {
         return userProfileService.findById(id);
     }
 
-    @MutationMapping
-    public UserProfile createUserProfile(@Argument UserProfileInput userProfileInput){
-        return userProfileService.createUserProfile(userProfileInput);
-    }
-
-    @MutationMapping
-    public String deleteUserProfileById(@Argument Long id){
-        return userProfileService.deleteUserProfileById(id);
-    }
-
-    @MutationMapping
-    public UserProfile updateUserProfile(@Argument Long id, @Argument UserProfileInput userProfileInput){
-        return userProfileService.updateUserProfile(id, userProfileInput);
-    }
 }
