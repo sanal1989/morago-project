@@ -28,8 +28,8 @@ type Theme{
 
 input ThemeInput{
     description: String
-    isActive: Boolean
-    isPopular: Boolean
+#    isActive: Boolean
+#    isPopular: Boolean
     koreanTitle: String
     name: String
     nightPrice: Float

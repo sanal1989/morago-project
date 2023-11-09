@@ -30,9 +30,9 @@ input TranslatorProfileInput{
     dateOfBirth: String
     email: String
     levelOfKorean: String
-    isAvailable: Boolean
-    isOnline: Boolean
-    isActive: Boolean
+#    isAvailable: Boolean
+#    isOnline: Boolean
+#    isActive: Boolean
     languageList:[String]
     themeList: [String]
     file: Int

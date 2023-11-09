@@ -37,19 +37,19 @@ type User{
 input UserInput{
     firstName: String
     lastName: String
-    apnToken: String
-    fcmToken: String
     password: String
     phone: String
-    balance: Float
-    ratings: Float
-    isActive: Boolean
-    isDebtor: Boolean
-    onBoardingStatus: Int
-    totalRatings: Int
-    roles: [String]
-    userProfile: Int
-    translatorProfile: Int
+#    apnToken: String
+#    fcmToken: String
+#    balance: Float
+#    ratings: Float
+#    isActive: Boolean
+#    isDebtor: Boolean
+#    onBoardingStatus: Int
+#    totalRatings: Int
+#    roles: [String]
+#    userProfile: Int
+#    translatorProfile: Int
 }
 
 type Profile {
