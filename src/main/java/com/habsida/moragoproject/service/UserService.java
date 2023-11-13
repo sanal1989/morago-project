@@ -147,6 +147,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public RefreshTokenResponse createAdmin(UserInput userInput) {
         String userPhone = userInput.getPhone();
         userPhone = userPhone.replaceAll(" ","");
@@ -162,6 +163,12 @@ public class UserService {
         }
         if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
             user.setLastName(userInput.getLastName());
+        }
+        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
+            user.setPassword(passwordEncoder.encode(userInput.getPassword()));
+        }
+        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
+            user.setPhone(userInput.getPhone());
         }
         user.setBalance(0d);
         user.setRatings(0d);
@@ -185,11 +192,9 @@ public class UserService {
         userRepository.save(user);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userInput.getPhone());
 
-
         RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
         refreshTokenResponse.setRefreshToken(refreshToken.getToken());
         refreshTokenResponse.setAccessToken(jwtUtil.generateToken(userInput.getPhone(), true));
-
 
         return refreshTokenResponse;
     }
