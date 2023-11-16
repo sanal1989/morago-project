@@ -71,4 +71,9 @@ public class RefreshTokenService {
         refreshToken.setToken(jwtUtil.generateToken(refreshToken.getUser().getPhone(), false));
         return refreshTokenRepository.save(refreshToken);
     }
+
+    public boolean deleteById(Long id){
+        refreshTokenRepository.deleteById(id);
+        return true;
+    }
 }

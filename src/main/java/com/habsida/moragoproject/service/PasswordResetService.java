@@ -130,19 +130,11 @@ public class PasswordResetService {
             throw new RuntimeException("time is expired");
         }
         String newHashCode =  Integer.toString((passwordReset.getPhone() + passwordReset.getResetCode() + localDateTime.toString()).hashCode());
-        System.out.println(newHashCode);
-        System.out.println(hashCode);
         if(!newHashCode.equals(hashCode)){
             throw new RuntimeException("hash code doesn't equals");
         }
         return jwtUtil.generateTokenResetPassword(passwordReset.getPhone());
     }
 
-    public void resetNewPassword(String token, String password) {
-        jwtUtil.validateRefreshPasswordToken(token);
-        String phone = jwtUtil.getPhoneFromRefreshPasswordToken(token);
-        User user = userService.findByPhone(phone);
-        user.setPassword(passwordEncoder.encode(password));
-        userService.createUser(user);
-    }
+
 }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 @Controller
-//@PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 public class UserController {
 
     UserService userService;
@@ -41,23 +41,26 @@ public class UserController {
     }
 
     @MutationMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteUserById(@Argument Long id){
         return userService.deleteUserById(id);
     }
 
     @MutationMapping
+    @PreAuthorize("isAnonymous()")
     public RefreshTokenResponse registrationUser(@Argument UserInput userInput){
         return userService.createUser(userInput);
     }
 
     @MutationMapping
+    @PreAuthorize("isAnonymous()")
     public RefreshTokenResponse registrationAdmin(@Argument UserInput userInput){
         return userService.createAdmin(userInput);
     }
 
     @MutationMapping
-    public User updateUser(@Argument Long id, @Argument UserInput userInput ){
-        return userService.updateUser(id, userInput);
+    public User updateUserName(@Argument String firstName, @Argument String lastName ){
+        return userService.updateUserName(firstName, lastName);
     }
 
     @MutationMapping
@@ -75,4 +78,37 @@ public class UserController {
     public Profile getProfile(User user) {
         return userService.getProfile(user);
     }
+
+    @MutationMapping
+    public void resetNewPassword(@Argument String token,
+                                 @Argument String password){
+        userService.resetNewPassword(token, password);
+    }
+
+    @MutationMapping
+    public Boolean updatePhone(@Argument String phone,
+                                 @Argument String password){
+        return userService.updatePhone(phone, password);
+    }
+
+    @MutationMapping
+    public Boolean addApnToken(@Argument String apnToken){
+        return userService.addApnToken(apnToken);
+    }
+
+    @MutationMapping
+    public Boolean deleteApnToken(){
+        return userService.deleteApnToken();
+    }
+
+    @MutationMapping
+    public Boolean addFcmToken(@Argument String fcmToken){
+        return userService.addFcmToken(fcmToken);
+    }
+
+    @MutationMapping
+    public Boolean deleteFcmToken(){
+        return userService.deleteFcmToken();
+    }
 }
+

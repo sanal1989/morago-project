@@ -6,12 +6,21 @@ extend type Query{
     currentUser:User
 }
 extend type  Mutation{
-    registrationUser(userInput: UserInput): RefreshTokenResponse
-    registrationAdmin(userInput: UserInput): RefreshTokenResponse
+    registrationUser(userInput: UserInput !): RefreshTokenResponse
+    registrationAdmin(userInput: UserInput !): RefreshTokenResponse
     deleteUserById(id: ID): String
-    updateUser(id: ID
-        userInput: UserInput): User
+    updateUserName(firstName: String
+        lastName: String): User
+    updatePhone(phone: String !
+        password: String !): Boolean
     deleteCurrentUser: Boolean
+    resetNewPassword(token: String !
+        password: String !):String
+    addApnToken(apnToken: String !): Boolean
+    deleteApnToken: Boolean
+    addFcmToken(fcmToken: String !): Boolean
+    deleteFcmToken: Boolean
+
 }
 
 type User{
@@ -22,7 +31,6 @@ type User{
     lastName: String
     apnToken: String
     fcmToken: String
-    password: String
     phone: String
     balance: Float
     ratings: Float
@@ -35,10 +43,10 @@ type User{
 }
 
 input UserInput{
-    firstName: String
-    lastName: String
-    password: String
-    phone: String
+    firstName: String!
+    lastName: String!
+    password: String!
+    phone: String!
 #    apnToken: String
 #    fcmToken: String
 #    balance: Float

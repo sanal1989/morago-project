@@ -70,34 +70,23 @@ public class UserService {
 
     @Transactional
     public RefreshTokenResponse createUser(UserInput userInput){
-        String userPhone = userInput.getPhone();
-        userPhone = userPhone.replaceAll(" ","");
-        userPhone = userPhone.replaceAll("-","");
-        userPhone = userPhone.replaceAll("_","");
-        userInput.setPhone(userPhone);
+        userInput.setPhone(checkPhone(userInput.getPhone()));
         if(userRepository.existsByPhone(userInput.getPhone())){
             throw new UserAlreadyExistAuthenticationException("Phone already exist");
         }
 
         User user = new User();
-        if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
-            user.setFirstName(userInput.getFirstName());
-        }
-        if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
-            user.setLastName(userInput.getLastName());
-        }
-        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
-            user.setPassword(passwordEncoder.encode(userInput.getPassword()));
-        }
-        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
-            user.setPhone(userInput.getPhone());
-        }
+        user.setFirstName(userInput.getFirstName());
+        user.setLastName(userInput.getLastName());
+        user.setPassword(passwordEncoder.encode(userInput.getPassword()));
+        user.setPhone(userInput.getPhone());
         user.setBalance(0d);
         user.setRatings(0d);
         user.setOnBoardingStatus(0);
         user.setTotalRatings(0);
         user.setIsActive(true);
         user.setIsDebtor(false);
+        user.setTranslatorProfile(null);
 
         UserProfile userProfile = new UserProfile();
         userProfile.setIsFreeCallMade(false);
@@ -123,6 +112,8 @@ public class UserService {
 
     public String deleteUserById(Long id){
         try{
+            RefreshToken refreshToken = refreshTokenService.findByPhone(userRepository.findById(id).get().getPhone());
+            refreshTokenService.deleteById(refreshToken.getId());
             userRepository.deleteById(id);
         }catch (Exception e){
             throw  new NotFoundByIdException(e.getMessage());
@@ -130,59 +121,30 @@ public class UserService {
         return "User with Id "+id+" deleted";
     }
 
-    public User updateUser(Long id, UserInput userInput){
-        User user = userRepository.findById(id).get();
-        if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
-            user.setLastName(userInput.getLastName());
-        }
-        if(!isNull(userInput.getApnToken()) && !userInput.getApnToken().isEmpty()){
-            user.setApnToken(userInput.getApnToken());
-        }
-        if(!isNull(userInput.getFcmToken()) && !userInput.getFcmToken().isEmpty()){
-            user.setFcmToken(userInput.getFcmToken());
-        }
-        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
-            user.setPhone(userInput.getPhone());
-        }
-        return userRepository.save(user);
-    }
-
     @Transactional
     public RefreshTokenResponse createAdmin(UserInput userInput) {
-        String userPhone = userInput.getPhone();
-        userPhone = userPhone.replaceAll(" ","");
-        userPhone = userPhone.replaceAll("-","");
-        userPhone = userPhone.replaceAll("_","");
-        userInput.setPhone(userPhone);
+        userInput.setPhone(checkPhone(userInput.getPhone()));
         if(userRepository.existsByPhone(userInput.getPhone())){
             throw new UserAlreadyExistAuthenticationException("Phone already exist");
         }
         User user = new User();
-        if(!isNull(userInput.getFirstName()) && !userInput.getFirstName().isEmpty()){
-            user.setFirstName(userInput.getFirstName());
-        }
-        if(!isNull(userInput.getLastName()) && !userInput.getLastName().isEmpty()){
-            user.setLastName(userInput.getLastName());
-        }
-        if(!isNull(userInput.getPassword()) && !userInput.getPassword().isEmpty()){
-            user.setPassword(passwordEncoder.encode(userInput.getPassword()));
-        }
-        if(!isNull(userInput.getPhone()) && !userInput.getPhone().isEmpty()){
-            user.setPhone(userInput.getPhone());
-        }
+        user.setFirstName(userInput.getFirstName());
+        user.setLastName(userInput.getLastName());
+        user.setPassword(passwordEncoder.encode(userInput.getPassword()));
+        user.setPhone(userInput.getPhone());
         user.setBalance(0d);
         user.setRatings(0d);
         user.setOnBoardingStatus(0);
         user.setTotalRatings(0);
         user.setIsActive(true);
         user.setIsDebtor(false);
+        user.setTranslatorProfile(null);
 
         UserProfile userProfile= new UserProfile();
         userProfile.setIsFreeCallMade(false);
         userProfileService.createUserProfile(userProfile);
 
         user.setUserProfile(userProfile);
-        user.setTranslatorProfile(null);
 
         Set<Role> rolestoBD = user.getRoles();
         rolestoBD.add(roleService.findByName(ERole.ADMIN)
@@ -205,12 +167,6 @@ public class UserService {
         User user = userRepository.findByPhone(currentPrincipalName).get();
         return user;
     }
-
-    public void createUser(User user) {
-        userRepository.save(user);
-
-    }
-
 
     public Profile getProfile(User user) {
         Profile profile = new Profile();
@@ -236,5 +192,67 @@ public class UserService {
         User user = currentUser();
         user.setIsDelete(true);
         user.setIsActive(false);
+        userRepository.save(user);
+    }
+
+    public static String checkPhone(String phone){
+        return phone.replaceAll("[ |_|-]","");
+    }
+
+    public void resetNewPassword(String token, String password) {
+        jwtUtil.validateRefreshPasswordToken(token);
+        String phone = jwtUtil.getPhoneFromRefreshPasswordToken(token);
+        User user = userRepository.findByPhone(phone).get();
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    public User updateUserName(String firstName, String lastName) {
+        User user = currentUser();
+        if(!isNull(firstName) && !firstName.isEmpty()){
+            user.setFirstName(firstName);
+        }
+        if(!isNull(lastName) && !lastName.isEmpty()){
+            user.setLastName(lastName);
+        }
+        return userRepository.save(user);
+    }
+
+    public Boolean updatePhone(String phone, String password) {
+        User user = currentUser();
+        if(passwordEncoder.matches(password,user.getPassword())){
+            user.setPhone(checkPhone(phone));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean addApnToken(String apnToken) {
+        User user = currentUser();
+        user.setApnToken(apnToken);
+        userRepository.save(user);
+        return true;
+    }
+
+    public Boolean deleteApnToken() {
+        User user = currentUser();
+        user.setApnToken(null);
+        userRepository.save(user);
+        return true;
+    }
+
+    public Boolean addFcmToken(String fcmToken) {
+        User user = currentUser();
+        user.setFcmToken(fcmToken);
+        userRepository.save(user);
+        return true;
+    }
+
+    public Boolean deleteFcmToken() {
+        User user = currentUser();
+        user.setFcmToken(null);
+        userRepository.save(user);
+        return true;
     }
 }

@@ -5,6 +5,7 @@ import com.habsida.moragoproject.model.entity.AppVersion;
 import com.habsida.moragoproject.model.entity.PasswordReset;
 import com.habsida.moragoproject.model.input.PasswordResetInput;
 import com.habsida.moragoproject.service.PasswordResetService;
+import com.habsida.moragoproject.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -45,7 +46,7 @@ public class PasswordResetController {
 
     @MutationMapping
     public ResponsePasswordReset resetPasswordGetHashCode(@Argument String phone){
-        return passwordResetService.createPasswordReset(phone);
+        return passwordResetService.createPasswordReset(UserService.checkPhone(phone));
     }
 
 
@@ -56,9 +57,5 @@ public class PasswordResetController {
         return passwordResetService.createPasswordResetToken(hashCode, time, id);
     }
 
-    @MutationMapping
-    public void resetNewPassword(@Argument String token,
-                                 @Argument String password){
-        passwordResetService.resetNewPassword(token, password);
-    }
+
 }

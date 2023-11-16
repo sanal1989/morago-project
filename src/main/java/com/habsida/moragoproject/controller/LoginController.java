@@ -4,6 +4,7 @@ import com.habsida.moragoproject.model.entity.RefreshToken;
 import com.habsida.moragoproject.model.input.RefreshTokenResponse;
 import com.habsida.moragoproject.configuration.utils.JwtUtil;
 import com.habsida.moragoproject.service.RefreshTokenService;
+import com.habsida.moragoproject.service.UserService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,7 @@ public class LoginController {
     @PreAuthorize("isAnonymous()")
     public RefreshTokenResponse login(@Argument String phone, @Argument String password) {
         try {
+            phone = UserService.checkPhone(phone);
             RefreshTokenResponse refreshTokenResponse = new RefreshTokenResponse();
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(phone, password)
