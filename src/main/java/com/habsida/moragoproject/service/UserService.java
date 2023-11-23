@@ -85,6 +85,7 @@ public class UserService {
         user.setOnBoardingStatus(0);
         user.setTotalRatings(0);
         user.setIsActive(true);
+        user.setIsDelete(false);
         user.setIsDebtor(false);
         user.setTranslatorProfile(null);
 
@@ -137,6 +138,7 @@ public class UserService {
         user.setOnBoardingStatus(0);
         user.setTotalRatings(0);
         user.setIsActive(true);
+        user.setIsDelete(false);
         user.setIsDebtor(false);
         user.setTranslatorProfile(null);
 

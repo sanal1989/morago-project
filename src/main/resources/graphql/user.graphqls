@@ -36,6 +36,7 @@ type User{
     ratings: Float
     isActive: Boolean
     isDebtor: Boolean
+    isDelete: Boolean
     onBoardingStatus: Int
     totalRatings: Int
     roles: [Role]
